@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Admin Panel — MAG-CITY Errands</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+  :root { --black:#0a0a0a; --orange:#FF6B2B; --cream:#FFF8F2; --gray:#888; --border:#e8e0d8; --green:#22c55e; --blue:#3b82f6; --yellow:#f59e0b; --red:#ef4444; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:#111; font-family:'DM Sans',sans-serif; color:#fff; min-height:100vh; }
+
+  .login-screen { display:flex; align-items:center; justify-content:center; min-height:100vh; background:#111; }
+  .login-box { background:#1a1a1a; border:1px solid #333; border-radius:20px; padding:48px 40px; width:100%; max-width:400px; text-align:center; }
+  .login-box .logo { font-family:'Bebas Neue',sans-serif; font-size:36px; color:var(--orange); letter-spacing:3px; margin-bottom:8px; }
+  .login-box p { color:#888; margin-bottom:32px; }
+  .login-box input { width:100%; padding:14px 16px; background:#0a0a0a; border:2px solid #333; border-radius:10px; color:#fff; font-family:'DM Sans',sans-serif; font-size:15px; outline:none; margin-bottom:16px; transition:border-color .2s; }
+  .login-box input:focus { border-color:var(--orange); }
+  .login-btn { width:100%; padding:16px; background:var(--orange); color:#fff; border:none; border-radius:10px; font-family:'Bebas Neue',sans-serif; font-size:20px; letter-spacing:2px; cursor:pointer; transition:background .2s; }
+  .login-btn:hover { background:#e05520; }
+  .login-error { color:var(--red); font-size:14px; margin-top:12px; display:none; }
+
+  .dashboard { display:none; }
+  .topbar { background:#1a1a1a; border-bottom:1px solid #333; padding:16px 32px; display:flex; align-items:center; justify-content:space-between; }
+  .topbar .logo { font-family:'Bebas Neue',sans-serif; font-size:24px; color:var(--orange); letter-spacing:2px; }
+  .topbar-right { display:flex; gap:16px; align-items:center; }
+  .logout-btn { background:none; border:1px solid #444; color:#aaa; padding:8px 16px; border-radius:8px; cursor:pointer; font-size:13px; transition:all .2s; }
+  .logout-btn:hover { border-color:var(--red); color:var(--red); }
+
+  .stats-bar { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; padding:24px 32px; background:#151515; border-bottom:1px solid #333; }
+  .stat { background:#1a1a1a; border:1px solid #333; border-radius:12px; padding:20px; }
+  .stat-num { font-family:'Bebas Neue',sans-serif; font-size:36px; color:var(--orange); }
+  .stat-label { font-size:12px; color:#888; text-transform:uppercase; letter-spacing:.5px; margin-top:4px; }
+
+  .main { padding:24px 32px; }
+  .section-head { display:flex; align-items:center; justify-content:space-between; margin-bottom:20px; flex-wrap:wrap; gap:12px; }
+  .section-head h2 { font-family:'Bebas Neue',sans-serif; font-size:24px; letter-spacing:2px; color:var(--orange); }
+  .filter-tabs { display:flex; gap:8px; flex-wrap:wrap; }
+  .tab { padding:8px 16px; border-radius:20px; border:1px solid #333; background:none; color:#888; font-size:13px; cursor:pointer; transition:all .2s; }
+  .tab.active { background:var(--orange); border-color:var(--orange); color:#fff; }
+
+  .orders-grid { display:flex; flex-direction:column; gap:12px; }
+  .order-row { background:#1a1a1a; border:1px solid #333; border-radius:14px; padding:20px 24px; display:grid; grid-template-columns:160px 1fr 1fr 140px 160px; align-items:center; gap:16px; transition:border-color .2s; }
+  .order-row:hover { border-color:#555; }
+
+  .tracking-badge { font-family:'Bebas Neue',sans-serif; font-size:16px; color:var(--orange); letter-spacing:2px; }
+  .customer-name { font-weight:600; font-size:15px; }
+  .customer-phone { font-size:13px; color:#888; margin-top:2px; }
+  .address-text { font-size:13px; color:#aaa; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+
+  .status-select { background:#0a0a0a; border:1px solid #444; color:#fff; padding:8px 12px; border-radius:8px; font-family:'DM Sans',sans-serif; font-size:13px; outline:none; cursor:pointer; width:100%; }
+  .status-select:focus { border-color:var(--orange); }
+
+  .update-btn { padding:10px 20px; background:var(--orange); color:#fff; border:none; border-radius:8px; font-family:'Bebas Neue',sans-serif; font-size:14px; letter-spacing:1px; cursor:pointer; transition:background .2s; width:100%; }
+  .update-btn:hover { background:#e05520; }
+  .update-btn.saved { background:var(--green); }
+
+  .badge { padding:4px 10px; border-radius:20px; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.5px; }
+  .badge-Pending { background:rgba(245,158,11,.2); color:var(--yellow); }
+  .badge-PickedUp { background:rgba(59,130,246,.2); color:var(--blue); }
+  .badge-OnTheWay { background:rgba(59,130,246,.2); color:var(--blue); }
+  .badge-Delivered { background:rgba(34,197,94,.2); color:var(--green); }
+
+  .empty-state { text-align:center; padding:80px 20px; color:#555; }
+  .empty-state .icon { font-size:48px; margin-bottom:16px; }
+
+  .search-input { background:#1a1a1a; border:1px solid #333; color:#fff; padding:10px 16px; border-radius:10px; font-family:'DM Sans',sans-serif; font-size:14px; outline:none; width:240px; transition:border-color .2s; }
+  .search-input:focus { border-color:var(--orange); }
+  .search-input::placeholder { color:#555; }
+
+  .loading { text-align:center; padding:60px; color:#555; font-size:32px; }
+
+  @media(max-width:900px) {
+    .order-row { grid-template-columns:1fr 1fr; }
+    .stats-bar { grid-template-columns:1fr 1fr; }
+    .main { padding:16px; }
+    .topbar { padding:14px 16px; }
+  }
+  @media(max-width:600px) {
+    .order-row { grid-template-columns:1fr; }
+    .stats-bar { grid-template-columns:1fr 1fr; padding:16px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="login-screen" id="loginScreen">
+  <div class="login-box">
+    <div class="logo">MAG-CITY</div>
+    <p>Admin Panel — Staff Only</p>
+    <input type="text" id="adminUser" placeholder="Username"/>
+    <input type="password" id="adminPass" placeholder="Password" onkeydown="if(event.key==='Enter')login()"/>
+    <button class="login-btn" onclick="login()">LOGIN</button>
+    <div class="login-error" id="loginError">❌ Invalid credentials</div>
+  </div>
+</div>
+
+<div class="dashboard" id="dashboard">
+  <div class="topbar">
+    <div class="logo">MAG-CITY Admin</div>
+    <div class="topbar-right">
+      <input type="text" class="search-input" id="searchInput" placeholder="Search tracking / name..." oninput="filterOrders()"/>
+      <button class="logout-btn" onclick="logout()">Logout</button>
+    </div>
+  </div>
+
+  <div class="stats-bar">
+    <div class="stat"><div class="stat-num" id="statTotal">0</div><div class="stat-label">Total Orders</div></div>
+    <div class="stat"><div class="stat-num" id="statPending" style="color:var(--yellow)">0</div><div class="stat-label">Pending</div></div>
+    <div class="stat"><div class="stat-num" id="statActive" style="color:var(--blue)">0</div><div class="stat-label">Active</div></div>
+    <div class="stat"><div class="stat-num" id="statDelivered" style="color:var(--green)">0</div><div class="stat-label">Delivered</div></div>
+  </div>
+
+  <div class="main">
+    <div class="section-head">
+      <h2>📦 Orders</h2>
+      <div class="filter-tabs">
+        <button class="tab active" onclick="setFilter('All',this)">All</button>
+        <button class="tab" onclick="setFilter('Pending',this)">Pending</button>
+        <button class="tab" onclick="setFilter('Picked Up',this)">Picked Up</button>
+        <button class="tab" onclick="setFilter('On The Way',this)">On The Way</button>
+        <button class="tab" onclick="setFilter('Delivered',this)">Delivered</button>
+      </div>
+    </div>
+    <div class="orders-grid" id="ordersGrid">
+      <div class="loading">🔄 Loading orders...</div>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getFirestore, collection, getDocs, doc, updateDoc, orderBy, query } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyDyWMcMx6tqYHxumN3sPImoDUaTeAkNHCU",
+    authDomain: "mag-city-errands.firebaseapp.com",
+    projectId: "mag-city-errands",
+    storageBucket: "mag-city-errands.firebasestorage.app",
+    messagingSenderId: "315623986569",
+    appId: "1:315623986569:web:ba7200af8ca50abc5f3d58"
+  };
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  const ADMIN_USER = 'magcity';
+  const ADMIN_PASS = 'admin1234';
+
+  let allOrders = [];
+  let currentFilter = 'All';
+
+  window.login = function() {
+    const u = document.getElementById('adminUser').value;
+    const p = document.getElementById('adminPass').value;
+    if (u === ADMIN_USER && p === ADMIN_PASS) {
+      document.getElementById('loginScreen').style.display = 'none';
+      document.getElementById('dashboard').style.display = 'block';
+      loadOrders();
+    } else {
+      document.getElementById('loginError').style.display = 'block';
+    }
+  };
+
+  window.logout = function() {
+    document.getElementById('loginScreen').style.display = 'flex';
+    document.getElementById('dashboard').style.display = 'none';
+  };
+
+  async function loadOrders() {
+    try {
+      const q = query(collection(db, 'orders'), orderBy('createdAt', 'desc'));
+      const snap = await getDocs(q);
+      allOrders = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      updateStats();
+      renderOrders();
+    } catch(e) {
+      document.getElementById('ordersGrid').innerHTML = `<div class="empty-state"><div class="icon">⚠️</div><p>${e.message}</p></div>`;
+    }
+  }
+
+  function updateStats() {
+    document.getElementById('statTotal').textContent = allOrders.length;
+    document.getElementById('statPending').textContent = allOrders.filter(o => o.status === 'Pending').length;
+    document.getElementById('statActive').textContent = allOrders.filter(o => o.status === 'Picked Up' || o.status === 'On The Way').length;
+    document.getElementById('statDelivered').textContent = allOrders.filter(o => o.status === 'Delivered').length;
+  }
+
+  window.setFilter = function(f, btn) {
+    currentFilter = f;
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    btn.classList.add('active');
+    renderOrders();
+  };
+
+  window.filterOrders = function() { renderOrders(); };
+
+  function renderOrders() {
+    const search = (document.getElementById('searchInput').value || '').toLowerCase();
+    let orders = allOrders;
+    if (currentFilter !== 'All') orders = orders.filter(o => o.status === currentFilter);
+    if (search) orders = orders.filter(o =>
+      (o.trackingNumber||'').toLowerCase().includes(search) ||
+      (o.customerName||'').toLowerCase().includes(search) ||
+      (o.customerPhone||'').toLowerCase().includes(search)
+    );
+
+    if (!orders.length) {
+      document.getElementById('ordersGrid').innerHTML = `<div class="empty-state"><div class="icon">📭</div><p>No orders found</p></div>`;
+      return;
+    }
+
+    document.getElementById('ordersGrid').innerHTML = orders.map(o => `
+      <div class="order-row" id="row-${o.id}">
+        <div>
+          <div class="tracking-badge">${o.trackingNumber}</div>
+          <div style="margin-top:6px"><span class="badge badge-${(o.status||'').replace(/\s/g,'')}">${o.status}</span></div>
+          <div style="font-size:12px;color:#666;margin-top:4px">${o.serviceType||''} · ${o.packageSize||''}</div>
+        </div>
+        <div>
+          <div class="customer-name">${o.customerName}</div>
+          <div class="customer-phone">${o.customerPhone}</div>
+          ${o.customerEmail ? `<div class="customer-phone">${o.customerEmail}</div>` : ''}
+        </div>
+        <div>
+          <div style="font-size:11px;color:#666;text-transform:uppercase;letter-spacing:.5px">From</div>
+          <div class="address-text">${o.pickupAddress}</div>
+          <div style="font-size:11px;color:#666;text-transform:uppercase;letter-spacing:.5px;margin-top:8px">To</div>
+          <div class="address-text">${o.deliveryAddress}</div>
+        </div>
+        <div>
+          <select class="status-select" id="sel-${o.id}">
+            <option ${o.status==='Pending'?'selected':''}>Pending</option>
+            <option ${o.status==='Picked Up'?'selected':''}>Picked Up</option>
+            <option ${o.status==='On The Way'?'selected':''}>On The Way</option>
+            <option ${o.status==='Delivered'?'selected':''}>Delivered</option>
+          </select>
+        </div>
+        <div>
+          <button class="update-btn" id="btn-${o.id}" onclick="updateStatus('${o.id}')">UPDATE STATUS</button>
+          <div style="font-size:12px;color:#555;margin-top:8px;text-align:center">${o.packageDescription||''}</div>
+        </div>
+      </div>`).join('');
+  }
+
+  window.updateStatus = async function(orderId) {
+    const newStatus = document.getElementById('sel-' + orderId).value;
+    const btn = document.getElementById('btn-' + orderId);
+    btn.textContent = 'SAVING...';
+    btn.disabled = true;
+
+    try {
+      const order = allOrders.find(o => o.id === orderId);
+      const history = order.statusHistory || [];
+      history.push({ status: newStatus, time: new Date().toISOString(), note: 'Updated by admin' });
+
+      await updateDoc(doc(db, 'orders', orderId), {
+        status: newStatus,
+        statusHistory: history,
+        updatedAt: new Date().toISOString()
+      });
+
+      order.status = newStatus;
+      order.statusHistory = history;
+      updateStats();
+
+      btn.textContent = '✅ SAVED';
+      btn.classList.add('saved');
+      setTimeout(() => {
+        btn.textContent = 'UPDATE STATUS';
+        btn.classList.remove('saved');
+        btn.disabled = false;
+      }, 2000);
+    } catch(e) {
+      btn.textContent = 'ERROR';
+      btn.disabled = false;
+      alert('Failed to update: ' + e.message);
+    }
+  };
+</script>
+</body>
+</html>

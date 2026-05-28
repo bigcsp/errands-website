@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Place Order — MAG-CITY Errands</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --black: #0a0a0a;
+    --orange: #FF6B2B;
+    --orange-dark: #e05520;
+    --cream: #FFF8F2;
+    --gray: #888;
+    --border: #e8e0d8;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background: var(--cream); font-family: 'DM Sans', sans-serif; color: var(--black); min-height: 100vh; }
+
+  header {
+    background: var(--black);
+    padding: 18px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .logo { font-family: 'Bebas Neue', sans-serif; font-size: 28px; color: var(--orange); letter-spacing: 2px; }
+  .nav-link { color: #ccc; text-decoration: none; font-size: 14px; transition: color .2s; }
+  .nav-link:hover { color: var(--orange); }
+
+  .hero {
+    background: var(--black);
+    padding: 60px 40px 80px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(255,107,43,0.15) 0%, transparent 70%);
+    top: -100px; left: 50%; transform: translateX(-50%);
+  }
+  .hero h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(48px, 8vw, 80px); color: #fff; letter-spacing: 3px; line-height: 1; }
+  .hero h1 span { color: var(--orange); }
+  .hero p { color: #aaa; margin-top: 12px; font-size: 16px; }
+
+  .form-wrap {
+    max-width: 700px;
+    margin: -40px auto 60px;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+    padding: 48px;
+    position: relative;
+    z-index: 2;
+  }
+
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    letter-spacing: 2px;
+    color: var(--orange);
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--border);
+  }
+
+  .form-group { margin-bottom: 20px; }
+  label { display: block; font-size: 13px; font-weight: 600; color: #555; margin-bottom: 6px; text-transform: uppercase; letter-spacing: .5px; }
+  input, select, textarea {
+    width: 100%;
+    padding: 14px 16px;
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    color: var(--black);
+    background: var(--cream);
+    transition: border-color .2s, box-shadow .2s;
+    outline: none;
+  }
+  input:focus, select:focus, textarea:focus {
+    border-color: var(--orange);
+    box-shadow: 0 0 0 4px rgba(255,107,43,0.1);
+    background: #fff;
+  }
+  textarea { resize: vertical; min-height: 90px; }
+
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+  .divider { height: 1px; background: var(--border); margin: 32px 0; }
+
+  .submit-btn {
+    width: 100%;
+    padding: 18px;
+    background: var(--orange);
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: background .2s, transform .1s;
+    margin-top: 8px;
+  }
+  .submit-btn:hover { background: var(--orange-dark); transform: translateY(-2px); }
+  .submit-btn:active { transform: translateY(0); }
+  .submit-btn:disabled { background: #ccc; cursor: not-allowed; transform: none; }
+
+  .modal-overlay {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.7);
+    z-index: 100;
+    align-items: center;
+    justify-content: center;
+  }
+  .modal-overlay.show { display: flex; }
+  .modal {
+    background: #fff;
+    border-radius: 20px;
+    padding: 48px 40px;
+    max-width: 440px;
+    width: 90%;
+    text-align: center;
+    animation: popIn .3s ease;
+  }
+  @keyframes popIn { from { transform: scale(.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+  .modal-icon { font-size: 56px; margin-bottom: 16px; }
+  .modal h2 { font-family: 'Bebas Neue', sans-serif; font-size: 32px; letter-spacing: 2px; color: var(--black); }
+  .modal p { color: var(--gray); margin: 8px 0 24px; font-size: 15px; }
+  .tracking-display {
+    background: var(--black);
+    color: var(--orange);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    letter-spacing: 4px;
+    padding: 18px 24px;
+    border-radius: 12px;
+    margin: 20px 0;
+  }
+  .copy-btn {
+    background: var(--cream);
+    border: 2px solid var(--border);
+    padding: 10px 24px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    transition: all .2s;
+  }
+  .copy-btn:hover { border-color: var(--orange); color: var(--orange); }
+  .modal-close {
+    display: block;
+    width: 100%;
+    padding: 14px;
+    background: var(--orange);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    letter-spacing: 2px;
+    cursor: pointer;
+  }
+
+  .spinner { display: none; width: 20px; height: 20px; border: 3px solid rgba(255,255,255,0.4); border-top-color: #fff; border-radius: 50%; animation: spin .7s linear infinite; margin: 0 auto; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  @media(max-width:600px) {
+    .form-wrap { padding: 28px 20px; margin: -20px 16px 40px; }
+    .row { grid-template-columns: 1fr; }
+    header { padding: 16px 20px; }
+    .hero { padding: 40px 20px 60px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">MAG-CITY Errands</div>
+  <a href="track.html" class="nav-link">Track Order →</a>
+</header>
+
+<div class="hero">
+  <h1>PLACE YOUR <span>ORDER</span></h1>
+  <p>Fast, reliable delivery across the city</p>
+</div>
+
+<div class="form-wrap">
+  <div class="section-title">📦 Package Details</div>
+  <div class="form-group">
+    <label>Package Description</label>
+    <textarea id="packageDesc" placeholder="What are we picking up? e.g. Documents, groceries, parcel..."></textarea>
+  </div>
+  <div class="row">
+    <div class="form-group">
+      <label>Package Size</label>
+      <select id="packageSize">
+        <option value="">Select size</option>
+        <option value="Small">Small (fits in a bag)</option>
+        <option value="Medium">Medium (shoebox size)</option>
+        <option value="Large">Large (big box)</option>
+        <option value="Extra Large">Extra Large (furniture/bulk)</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Service Type</label>
+      <select id="serviceType">
+        <option value="">Select service</option>
+        <option value="Express">Express (1-2 hrs)</option>
+        <option value="Standard">Standard (Same day)</option>
+        <option value="Scheduled">Scheduled</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+  <div class="section-title">📍 Pickup & Delivery</div>
+  <div class="form-group">
+    <label>Pickup Address</label>
+    <input type="text" id="pickupAddress" placeholder="Enter full pickup address"/>
+  </div>
+  <div class="form-group">
+    <label>Delivery Address</label>
+    <input type="text" id="deliveryAddress" placeholder="Enter full delivery address"/>
+  </div>
+
+  <div class="divider"></div>
+  <div class="section-title">👤 Your Details</div>
+  <div class="row">
+    <div class="form-group">
+      <label>Full Name</label>
+      <input type="text" id="customerName" placeholder="Your full name"/>
+    </div>
+    <div class="form-group">
+      <label>Phone Number</label>
+      <input type="tel" id="customerPhone" placeholder="+234 800 000 0000"/>
+    </div>
+  </div>
+  <div class="form-group">
+    <label>Email (optional)</label>
+    <input type="email" id="customerEmail" placeholder="your@email.com"/>
+  </div>
+  <div class="form-group">
+    <label>Special Instructions</label>
+    <textarea id="instructions" placeholder="Any special instructions for the delivery rider..."></textarea>
+  </div>
+
+  <button class="submit-btn" id="submitBtn" onclick="placeOrder()">
+    <span id="btnText">PLACE ORDER</span>
+    <div class="spinner" id="spinner"></div>
+  </button>
+</div>
+
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <div class="modal-icon">🎉</div>
+    <h2>Order Placed!</h2>
+    <p>Your tracking number is:</p>
+    <div class="tracking-display" id="trackingDisplay">-</div>
+    <button class="copy-btn" onclick="copyTracking()">📋 Copy Tracking Number</button>
+    <p style="font-size:13px; color:#aaa; margin-bottom:16px;">Save this number to track your order</p>
+    <button class="modal-close" onclick="closeModal()">TRACK MY ORDER</button>
+  </div>
+</div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyDyWMcMx6tqYHxumN3sPImoDUaTeAkNHCU",
+    authDomain: "mag-city-errands.firebaseapp.com",
+    projectId: "mag-city-errands",
+    storageBucket: "mag-city-errands.firebasestorage.app",
+    messagingSenderId: "315623986569",
+    appId: "1:315623986569:web:ba7200af8ca50abc5f3d58"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  function generateTrackingNumber() {
+    const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+    let code = 'MAG-';
+    for (let i = 0; i < 8; i++) code += chars[Math.floor(Math.random() * chars.length)];
+    return code;
+  }
+
+  window.placeOrder = async function() {
+    const name = document.getElementById('customerName').value.trim();
+    const phone = document.getElementById('customerPhone').value.trim();
+    const pickup = document.getElementById('pickupAddress').value.trim();
+    const delivery = document.getElementById('deliveryAddress').value.trim();
+    const desc = document.getElementById('packageDesc').value.trim();
+    const size = document.getElementById('packageSize').value;
+    const service = document.getElementById('serviceType').value;
+
+    if (!name || !phone || !pickup || !delivery || !desc || !size || !service) {
+      alert('Please fill in all required fields.');
+      return;
+    }
+
+    const btn = document.getElementById('submitBtn');
+    const btnText = document.getElementById('btnText');
+    const spinner = document.getElementById('spinner');
+    btn.disabled = true;
+    btnText.style.display = 'none';
+    spinner.style.display = 'block';
+
+    try {
+      const trackingNumber = generateTrackingNumber();
+      await addDoc(collection(db, 'orders'), {
+        trackingNumber,
+        customerName: name,
+        customerPhone: phone,
+        customerEmail: document.getElementById('customerEmail').value.trim(),
+        pickupAddress: pickup,
+        deliveryAddress: delivery,
+        packageDescription: desc,
+        packageSize: size,
+        serviceType: service,
+        instructions: document.getElementById('instructions').value.trim(),
+        status: 'Pending',
+        statusHistory: [{ status: 'Pending', time: new Date().toISOString(), note: 'Order placed by customer' }],
+        createdAt: serverTimestamp()
+      });
+
+      document.getElementById('trackingDisplay').textContent = trackingNumber;
+      document.getElementById('modalOverlay').classList.add('show');
+      window._lastTracking = trackingNumber;
+    } catch (err) {
+      alert('Error placing order. Please try again.\n' + err.message);
+    } finally {
+      btn.disabled = false;
+      btnText.style.display = 'block';
+      spinner.style.display = 'none';
+    }
+  };
+
+  window.copyTracking = function() {
+    navigator.clipboard.writeText(window._lastTracking || '');
+    const btn = document.querySelector('.copy-btn');
+    btn.textContent = '✅ Copied!';
+    setTimeout(() => btn.textContent = '📋 Copy Tracking Number', 2000);
+  };
+
+  window.closeModal = function() {
+    window.location.href = 'track.html?tracking=' + window._lastTracking;
+  };
+</script>
+</body>
+</html>

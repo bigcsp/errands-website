@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Track Order — MAG-CITY Errands</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+  :root { --black:#0a0a0a; --orange:#FF6B2B; --cream:#FFF8F2; --gray:#888; --border:#e8e0d8; --green:#22c55e; --blue:#3b82f6; --yellow:#f59e0b; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--cream); font-family:'DM Sans',sans-serif; color:var(--black); min-height:100vh; }
+
+  header { background:var(--black); padding:18px 40px; display:flex; align-items:center; justify-content:space-between; }
+  .logo { font-family:'Bebas Neue',sans-serif; font-size:28px; color:var(--orange); letter-spacing:2px; }
+  .nav-link { color:#ccc; text-decoration:none; font-size:14px; transition:color .2s; }
+  .nav-link:hover { color:var(--orange); }
+
+  .hero { background:var(--black); padding:60px 40px 80px; text-align:center; }
+  .hero h1 { font-family:'Bebas Neue',sans-serif; font-size:clamp(48px,8vw,80px); color:#fff; letter-spacing:3px; }
+  .hero h1 span { color:var(--orange); }
+  .hero p { color:#aaa; margin-top:12px; }
+
+  .search-wrap {
+    max-width:600px; margin:-40px auto 40px;
+    background:#fff; border-radius:16px;
+    box-shadow:0 20px 60px rgba(0,0,0,0.1);
+    padding:36px; position:relative; z-index:2;
+  }
+  .search-wrap h2 { font-family:'Bebas Neue',sans-serif; font-size:24px; letter-spacing:2px; margin-bottom:20px; }
+  .search-row { display:flex; gap:12px; }
+  .search-row input {
+    flex:1; padding:14px 16px; border:2px solid var(--border);
+    border-radius:10px; font-family:'DM Sans',sans-serif; font-size:15px;
+    outline:none; background:var(--cream); text-transform:uppercase;
+    letter-spacing:2px; transition:border-color .2s;
+  }
+  .search-row input:focus { border-color:var(--orange); background:#fff; }
+  .search-btn {
+    padding:14px 24px; background:var(--orange); color:#fff; border:none;
+    border-radius:10px; font-family:'Bebas Neue',sans-serif; font-size:18px;
+    letter-spacing:1px; cursor:pointer; transition:background .2s; white-space:nowrap;
+  }
+  .search-btn:hover { background:#e05520; }
+
+  .result-wrap { max-width:700px; margin:0 auto 60px; display:none; }
+  .result-wrap.show { display:block; }
+
+  .order-card { background:#fff; border-radius:16px; box-shadow:0 10px 40px rgba(0,0,0,0.08); overflow:hidden; margin-bottom:20px; }
+  .order-header {
+    background:var(--black); padding:24px 32px;
+    display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;
+  }
+  .tracking-num { font-family:'Bebas Neue',sans-serif; font-size:28px; color:var(--orange); letter-spacing:3px; }
+  .status-badge { padding:8px 18px; border-radius:30px; font-size:13px; font-weight:700; letter-spacing:1px; text-transform:uppercase; }
+  .status-Pending { background:rgba(245,158,11,0.2); color:var(--yellow); }
+  .status-PickedUp { background:rgba(59,130,246,0.2); color:var(--blue); }
+  .status-OnTheWay { background:rgba(59,130,246,0.2); color:var(--blue); }
+  .status-Delivered { background:rgba(34,197,94,0.2); color:var(--green); }
+
+  .order-body { padding:32px; }
+
+  .progress-steps { display:flex; align-items:center; margin-bottom:36px; }
+  .step { display:flex; flex-direction:column; align-items:center; flex:1; position:relative; }
+  .step-circle {
+    width:40px; height:40px; border-radius:50%; border:3px solid var(--border);
+    background:#fff; display:flex; align-items:center; justify-content:center;
+    font-size:16px; position:relative; z-index:1; transition:all .3s;
+  }
+  .step.done .step-circle { background:var(--green); border-color:var(--green); }
+  .step.active .step-circle { background:var(--orange); border-color:var(--orange); animation:pulse 1.5s infinite; }
+  @keyframes pulse { 0%,100%{box-shadow:0 0 0 0 rgba(255,107,43,0.4)} 50%{box-shadow:0 0 0 8px rgba(255,107,43,0)} }
+  .step-label { font-size:11px; font-weight:600; margin-top:8px; color:var(--gray); text-align:center; text-transform:uppercase; letter-spacing:.5px; }
+  .step.done .step-label, .step.active .step-label { color:var(--black); }
+  .step-line { flex:1; height:3px; background:var(--border); margin:0 4px; margin-bottom:20px; transition:background .3s; }
+  .step-line.done { background:var(--green); }
+
+  .info-grid { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+  .info-item label { font-size:12px; font-weight:700; color:var(--gray); text-transform:uppercase; letter-spacing:.5px; display:block; margin-bottom:4px; }
+  .info-item p { font-size:15px; font-weight:500; }
+  .divider { height:1px; background:var(--border); margin:24px 0; }
+
+  .timeline-title { font-family:'Bebas Neue',sans-serif; font-size:20px; letter-spacing:2px; margin-bottom:20px; color:var(--orange); }
+  .timeline { list-style:none; }
+  .timeline li { display:flex; gap:16px; padding-bottom:20px; position:relative; }
+  .timeline li:not(:last-child)::before { content:''; position:absolute; left:11px; top:24px; bottom:0; width:2px; background:var(--border); }
+  .tl-dot { width:24px; height:24px; border-radius:50%; background:var(--orange); flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:12px; margin-top:2px; }
+  .tl-content { flex:1; }
+  .tl-status { font-weight:700; font-size:15px; }
+  .tl-note { font-size:13px; color:var(--gray); margin-top:2px; }
+  .tl-time { font-size:12px; color:#bbb; margin-top:4px; }
+
+  .error-msg { text-align:center; padding:48px; background:#fff; border-radius:16px; box-shadow:0 10px 40px rgba(0,0,0,0.08); }
+  .error-msg .icon { font-size:48px; margin-bottom:16px; }
+  .error-msg h3 { font-family:'Bebas Neue',sans-serif; font-size:28px; letter-spacing:2px; }
+  .error-msg p { color:var(--gray); margin-top:8px; }
+
+  @media(max-width:600px) {
+    .search-wrap { margin:-20px 16px 30px; padding:24px 20px; }
+    .search-row { flex-direction:column; }
+    .result-wrap { margin:0 16px 40px; }
+    .order-header { flex-direction:column; }
+    .info-grid { grid-template-columns:1fr; }
+    .order-body { padding:20px; }
+    header { padding:16px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">MAG-CITY Errands</div>
+  <a href="order.html" class="nav-link">Place Order →</a>
+</header>
+
+<div class="hero">
+  <h1>TRACK YOUR <span>ORDER</span></h1>
+  <p>Enter your tracking number to see live updates</p>
+</div>
+
+<div class="search-wrap">
+  <h2>Enter Tracking Number</h2>
+  <div class="search-row">
+    <input type="text" id="trackInput" placeholder="MAG-XXXXXXXX" oninput="this.value=this.value.toUpperCase()" onkeydown="if(event.key==='Enter')trackOrder()"/>
+    <button class="search-btn" onclick="trackOrder()">TRACK</button>
+  </div>
+</div>
+
+<div class="result-wrap" id="resultWrap"></div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getFirestore, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyDyWMcMx6tqYHxumN3sPImoDUaTeAkNHCU",
+    authDomain: "mag-city-errands.firebaseapp.com",
+    projectId: "mag-city-errands",
+    storageBucket: "mag-city-errands.firebasestorage.app",
+    messagingSenderId: "315623986569",
+    appId: "1:315623986569:web:ba7200af8ca50abc5f3d58"
+  };
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  const steps = ['Pending','Picked Up','On The Way','Delivered'];
+  const stepIcons = ['📋','📦','🚴','✅'];
+
+  function statusIndex(status) {
+    if (status === 'Pending') return 0;
+    if (status === 'Picked Up') return 1;
+    if (status === 'On The Way') return 2;
+    if (status === 'Delivered') return 3;
+    return 0;
+  }
+
+  function formatTime(iso) {
+    if (!iso) return '';
+    const d = new Date(iso);
+    return d.toLocaleString('en-NG', { dateStyle:'medium', timeStyle:'short' });
+  }
+
+  function renderResult(order) {
+    const si = statusIndex(order.status);
+    let stepsHTML = '';
+    steps.forEach((s, i) => {
+      if (i > 0) stepsHTML += `<div class="step-line ${i <= si ? 'done' : ''}"></div>`;
+      const cls = i < si ? 'done' : i === si ? 'active' : '';
+      stepsHTML += `<div class="step ${cls}"><div class="step-circle">${i < si ? '✓' : stepIcons[i]}</div><div class="step-label">${s}</div></div>`;
+    });
+
+    const history = order.statusHistory || [];
+    let timelineHTML = history.slice().reverse().map(h => `
+      <li>
+        <div class="tl-dot">📍</div>
+        <div class="tl-content">
+          <div class="tl-status">${h.status}</div>
+          <div class="tl-note">${h.note || ''}</div>
+          <div class="tl-time">${formatTime(h.time)}</div>
+        </div>
+      </li>`).join('');
+
+    document.getElementById('resultWrap').innerHTML = `
+      <div class="order-card">
+        <div class="order-header">
+          <div class="tracking-num">${order.trackingNumber}</div>
+          <div class="status-badge status-${order.status.replace(/\s/g,'')}">${order.status}</div>
+        </div>
+        <div class="order-body">
+          <div class="progress-steps">${stepsHTML}</div>
+          <div class="info-grid">
+            <div class="info-item"><label>Customer</label><p>${order.customerName}</p></div>
+            <div class="info-item"><label>Phone</label><p>${order.customerPhone}</p></div>
+            <div class="info-item"><label>Service</label><p>${order.serviceType}</p></div>
+            <div class="info-item"><label>Package Size</label><p>${order.packageSize}</p></div>
+            <div class="info-item"><label>Pickup</label><p>${order.pickupAddress}</p></div>
+            <div class="info-item"><label>Delivery</label><p>${order.deliveryAddress}</p></div>
+          </div>
+          ${order.packageDescription ? `<div class="divider"></div><div class="info-item"><label>Package Details</label><p>${order.packageDescription}</p></div>` : ''}
+          <div class="divider"></div>
+          <div class="timeline-title">📋 Status History</div>
+          <ul class="timeline">${timelineHTML || '<li><div class="tl-dot">📋</div><div class="tl-content"><div class="tl-status">Order Placed</div></div></li>'}</ul>
+        </div>
+      </div>`;
+    document.getElementById('resultWrap').classList.add('show');
+  }
+
+  window.trackOrder = async function() {
+    const tracking = document.getElementById('trackInput').value.trim().toUpperCase();
+    if (!tracking) { alert('Please enter a tracking number'); return; }
+
+    const wrap = document.getElementById('resultWrap');
+    wrap.classList.add('show');
+    wrap.innerHTML = `<div class="error-msg"><div class="icon">🔍</div><h3>Searching...</h3><p>Looking up your order</p></div>`;
+
+    try {
+      const q = query(collection(db, 'orders'), where('trackingNumber', '==', tracking));
+      const snap = await getDocs(q);
+      if (snap.empty) {
+        wrap.innerHTML = `<div class="error-msg"><div class="icon">❌</div><h3>Not Found</h3><p>No order found with tracking number <strong>${tracking}</strong>.<br>Please check and try again.</p></div>`;
+      } else {
+        renderResult(snap.docs[0].data());
+      }
+    } catch (err) {
+      wrap.innerHTML = `<div class="error-msg"><div class="icon">⚠️</div><h3>Error</h3><p>${err.message}</p></div>`;
+    }
+  };
+
+  const params = new URLSearchParams(window.location.search);
+  const t = params.get('tracking');
+  if (t) { document.getElementById('trackInput').value = t; window.trackOrder(); }
+</script>
+</body>
+</html>
