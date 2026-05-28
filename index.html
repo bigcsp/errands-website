@@ -21,12 +21,11 @@
   <nav class="navbar">
 
     <a href="index.html" style="text-decoration:none; color:inherit;">
-  <div class="nav-logo">
-    <span class="logo-dot"></span>
-    Errands
-  </div>
-</a>
-    </div>
+      <div class="nav-logo">
+        <span class="logo-dot"></span>
+        Errands
+      </div>
+    </a>
 
     <ul class="nav-links">
       <li><a href="#services">Services</a></li>
@@ -65,7 +64,6 @@
     <p>Real-time bike delivery for businesses and individuals.
        Track every package live, from pickup to your door.</p>
 
-    <!-- Tracking input + button → goes to track.html -->
     <div class="track-box">
       <input
         type="text"
@@ -75,7 +73,6 @@
       <button class="track-btn" onclick="goTrack()">Track now</button>
     </div>
 
-    <!-- Place order button -->
     <div style="margin-top: 16px;">
       <a href="order.html" style="
         display: inline-block;
@@ -270,7 +267,6 @@
         <span class="riders-count">10+</span>
       </div>
 
-      <!-- Track & Order buttons in map section -->
       <div style="display:flex; gap:12px; margin-top:24px; flex-wrap:wrap;">
         <a href="order.html" style="background:#FF6B2B;color:#fff;padding:12px 28px;border-radius:30px;text-decoration:none;font-weight:700;font-size:15px;">📦 Place Order</a>
         <a href="track.html" style="background:#fff;color:#0a0a0a;padding:12px 28px;border-radius:30px;text-decoration:none;font-weight:700;font-size:15px;border:2px solid #0a0a0a;">🔍 Track Order</a>
@@ -304,7 +300,6 @@
         <div class="contact-card">✉️ hello@errands.com</div>
         <div class="contact-card">🕐 Mon – Sat, 7am – 9pm</div>
       </div>
-      <!-- CTA buttons in contact section -->
       <div style="display:flex; gap:12px; justify-content:center; margin-top:32px; flex-wrap:wrap;">
         <a href="order.html" style="background:#FF6B2B;color:#fff;padding:14px 36px;border-radius:50px;text-decoration:none;font-weight:700;font-size:16px;">📦 Place an Order</a>
         <a href="track.html" style="background:#fff;color:#0a0a0a;padding:14px 36px;border-radius:50px;text-decoration:none;font-weight:700;font-size:16px;border:2px solid #0a0a0a;">🔍 Track an Order</a>
@@ -340,7 +335,6 @@
 
   <script src="main.js"></script>
 
-  <!-- Tracking from homepage → redirects to track.html -->
   <script>
     function goTrack() {
       const val = document.getElementById('trackInput').value.trim().toUpperCase();
@@ -351,6 +345,33 @@
       if (e.key === 'Enter') goTrack();
     });
   </script>
+
+  <!-- WhatsApp Float Button -->
+  <a href="https://wa.me/2348139220395?text=Hello!%20I%20want%20to%20place%20a%20delivery%20order"
+     target="_blank"
+     style="
+       position: fixed;
+       bottom: 30px;
+       right: 30px;
+       background: #25D366;
+       color: #fff;
+       width: 60px;
+       height: 60px;
+       border-radius: 50%;
+       display: flex;
+       align-items: center;
+       justify-content: center;
+       font-size: 30px;
+       text-decoration: none;
+       box-shadow: 0 4px 20px rgba(37,211,102,0.5);
+       z-index: 9999;
+       transition: transform 0.2s;
+     "
+     onmouseover="this.style.transform='scale(1.1)'"
+     onmouseout="this.style.transform='scale(1)'"
+     title="Chat with us on WhatsApp">
+    💬
+  </a>
 
 </body>
 </html>
