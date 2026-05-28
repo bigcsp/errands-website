@@ -2,17 +2,12 @@
 <html lang="en">
 <head>
 
-  <!-- ============================================================
-       META & PAGE SETUP
-       ============================================================ -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Errands — Your City. Delivered Fast.</title>
 
-  <!-- Stylesheet -->
   <link rel="stylesheet" href="style.css" />
 
-  <!-- Google Fonts: Syne (display/headings) + DM Sans (body) -->
   <link
     href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700&family=DM+Sans:wght@300;400;500&display=swap"
     rel="stylesheet"
@@ -22,19 +17,14 @@
 <body>
 
 
-  <!-- ============================================================
-    1. NAVBAR
-       Logo | Nav links | CTA button | Hamburger (mobile)
-       ============================================================ -->
+  <!-- 1. NAVBAR -->
   <nav class="navbar">
 
-    <!-- Logo -->
     <div class="nav-logo">
       <span class="logo-dot"></span>
       Errands
     </div>
 
-    <!-- Desktop navigation links -->
     <ul class="nav-links">
       <li><a href="#services">Services</a></li>
       <li><a href="#how">How it works</a></li>
@@ -42,84 +32,77 @@
       <li><a href="#contact">Contact</a></li>
     </ul>
 
-    <!-- Desktop CTA button -->
-    <button class="nav-btn">Get started</button>
+    <button class="nav-btn" onclick="window.location.href='order.html'">Place Order</button>
 
-    <!-- Mobile hamburger icon (hidden on desktop) -->
     <button class="hamburger" id="hamburger">&#9776;</button>
 
   </nav>
 
 
-  <!-- ============================================================
-    2. MOBILE MENU
-       Dropdown links revealed when hamburger is tapped
-       ============================================================ -->
+  <!-- 2. MOBILE MENU -->
   <div class="mobile-menu" id="mobileMenu">
     <a href="#services">Services</a>
     <a href="#how">How it works</a>
     <a href="#track">Track</a>
     <a href="#contact">Contact</a>
-    <a href="#" class="mobile-cta">Get started</a>
+    <a href="order.html" class="mobile-cta">Place Order</a>
   </div>
 
 
-  <!-- ============================================================
-    3. HERO
-       Headline | Sub-copy | Tracking input box | Sample numbers
-       ============================================================ -->
+  <!-- 3. HERO -->
   <section class="hero" id="track">
 
-    <!-- Live delivery tag -->
     <div class="hero-tag">
       <span class="pulse-dot"></span>
       Live bike delivery — city wide
     </div>
 
-    <!-- Main headline -->
     <h1>Your city.<br /><span class="accent">Delivered fast.</span></h1>
 
-    <!-- Sub-copy -->
     <p>Real-time bike delivery for businesses and individuals.
        Track every package live, from pickup to your door.</p>
 
-    <!-- Tracking input + button -->
+    <!-- Tracking input + button → goes to track.html -->
     <div class="track-box">
       <input
         type="text"
         id="trackInput"
-        placeholder="Enter your tracking number..."
+        placeholder="Enter your tracking number e.g MAG-XXXXXXXX"
       />
-      <button class="track-btn" onclick="trackPackage()">Track now</button>
+      <button class="track-btn" onclick="goTrack()">Track now</button>
     </div>
 
-    <!-- Clickable sample tracking numbers -->
+    <!-- Place order button -->
+    <div style="margin-top: 16px;">
+      <a href="order.html" style="
+        display: inline-block;
+        background: #FF6B2B;
+        color: #fff;
+        padding: 14px 36px;
+        border-radius: 50px;
+        font-family: 'Syne', sans-serif;
+        font-weight: 700;
+        font-size: 16px;
+        text-decoration: none;
+        letter-spacing: 0.5px;
+        transition: background 0.2s;
+      ">📦 Place an Order</a>
+    </div>
+
     <p class="track-hint">
-      Try:
-      <span onclick="fillTracking('ERR-00423')">ERR-00423</span>
-      or
-      <span onclick="fillTracking('ERR-00891')">ERR-00891</span>
+      Enter your MAG- tracking number above to track your order
     </p>
 
   </section>
 
 
-  <!-- ============================================================
-    4. TRACKING RESULT
-       Empty by default — filled by JS when user tracks a package
-       Placed directly below hero so the result appears near the input
-       ============================================================ -->
+  <!-- 4. TRACKING RESULT -->
   <div class="tracking-result" id="trackingResult"></div>
 
 
-  <!-- ============================================================
-    5. STATS BAR
-       Key numbers: deliveries, on-time rate, avg time, active riders
-       data-target drives the animated counter in main.js
-       ============================================================ -->
+  <!-- 5. STATS BAR -->
   <div class="stats-bar">
 
-    <!-- Stat 1: Deliveries daily -->
     <div class="stat">
       <div class="stat-number-row">
         <span class="stat-num" data-target="100">0</span>
@@ -130,7 +113,6 @@
 
     <div class="stat-divider"></div>
 
-    <!-- Stat 2: On-time rate -->
     <div class="stat">
       <div class="stat-number-row">
         <span class="stat-num" data-target="98">0</span>
@@ -141,7 +123,6 @@
 
     <div class="stat-divider"></div>
 
-    <!-- Stat 3: Average delivery time (static — no counter animation) -->
     <div class="stat">
       <div class="stat-number-row">
         <span class="stat-num">30</span>
@@ -152,7 +133,6 @@
 
     <div class="stat-divider"></div>
 
-    <!-- Stat 4: Active riders -->
     <div class="stat">
       <div class="stat-number-row">
         <span class="stat-num" data-target="10">0</span>
@@ -164,10 +144,7 @@
   </div>
 
 
-  <!-- ============================================================
-    6. SERVICES
-       Four cards: Express delivery, Live tracking, Business plans, Safe handling
-       ============================================================ -->
+  <!-- 6. SERVICES -->
   <section class="section" id="services">
 
     <div class="section-header">
@@ -178,7 +155,6 @@
 
     <div class="services-grid">
 
-      <!-- Card 1 -->
       <div class="service-card">
         <div class="service-icon">⚡</div>
         <h3>Express delivery</h3>
@@ -186,7 +162,6 @@
         <span class="card-tag">Most popular</span>
       </div>
 
-      <!-- Card 2 — featured (orange border) -->
       <div class="service-card featured">
         <div class="service-icon">📍</div>
         <h3>Live tracking</h3>
@@ -194,14 +169,12 @@
         <span class="card-tag">New</span>
       </div>
 
-      <!-- Card 3 -->
       <div class="service-card">
         <div class="service-icon">🏪</div>
         <h3>Business plans</h3>
         <p>Bulk delivery solutions for shops and businesses. Volume discounts available.</p>
       </div>
 
-      <!-- Card 4 -->
       <div class="service-card">
         <div class="service-icon">🛡️</div>
         <h3>Safe handling</h3>
@@ -213,10 +186,7 @@
   </section>
 
 
-  <!-- ============================================================
-    7. HOW IT WORKS
-       Four numbered steps explaining the delivery process
-       ============================================================ -->
+  <!-- 7. HOW IT WORKS -->
   <section class="how-section" id="how">
 
     <div class="section-header">
@@ -231,6 +201,7 @@
         <div class="step-num">01</div>
         <h3>Book a pickup</h3>
         <p>Enter your pickup and drop-off location online. Takes less than 2 minutes.</p>
+        <a href="order.html" style="display:inline-block;margin-top:12px;background:#FF6B2B;color:#fff;padding:10px 24px;border-radius:30px;text-decoration:none;font-weight:600;font-size:14px;">Book Now →</a>
       </div>
 
       <div class="step">
@@ -243,6 +214,7 @@
         <div class="step-num">03</div>
         <h3>Track live</h3>
         <p>Watch every move on the map until delivery is complete.</p>
+        <a href="track.html" style="display:inline-block;margin-top:12px;background:#0a0a0a;color:#fff;padding:10px 24px;border-radius:30px;text-decoration:none;font-weight:600;font-size:14px;">Track Order →</a>
       </div>
 
       <div class="step">
@@ -256,27 +228,20 @@
   </section>
 
 
-  <!-- ============================================================
-    8. LIVE MAP SECTION
-       LEFT  — delivery status info panel
-       RIGHT — embedded Google Map (Magodo GRA Phase II, Lagos)
-       ============================================================ -->
+  <!-- 8. LIVE MAP SECTION -->
   <section class="map-section">
 
-    <!-- LEFT: info panel -->
     <div class="map-info">
 
       <div class="section-tag">Live tracking</div>
       <h2>See your rider in real time</h2>
       <p>No more guessing. Know exactly where your package is at every moment.</p>
 
-      <!-- Live status badge -->
       <div class="status-badge">
         <span class="status-dot"></span>
         Rider on the way
       </div>
 
-      <!-- Delivery details table -->
       <div class="status-details">
         <div class="status-row">
           <span>Rider</span>
@@ -291,22 +256,25 @@
           <strong>ERR-00423</strong>
         </div>
         <div class="status-row">
-          <!-- ETA counts down in real time via main.js -->
           <span>ETA</span>
           <strong id="eta">4 mins</strong>
         </div>
       </div>
 
-      <!-- Active riders indicator -->
       <div class="active-riders-pill">
         <span class="riders-dot"></span>
         <span class="riders-label">Active riders right now</span>
         <span class="riders-count">10+</span>
       </div>
 
+      <!-- Track & Order buttons in map section -->
+      <div style="display:flex; gap:12px; margin-top:24px; flex-wrap:wrap;">
+        <a href="order.html" style="background:#FF6B2B;color:#fff;padding:12px 28px;border-radius:30px;text-decoration:none;font-weight:700;font-size:15px;">📦 Place Order</a>
+        <a href="track.html" style="background:#fff;color:#0a0a0a;padding:12px 28px;border-radius:30px;text-decoration:none;font-weight:700;font-size:15px;border:2px solid #0a0a0a;">🔍 Track Order</a>
+      </div>
+
     </div>
 
-    <!-- RIGHT: Google Maps embed -->
     <div class="map-mock">
       <iframe
         src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d31705.788591582404!2d3.3768797!3d6.619124199999999!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x103b93a899b7c9b7%3A0x8630de71dbc44ffd!2sMagodo%20GRA%20Phase%20II%2C%20Ikosi%20Ketu%2C%20Ikeja%20105102%2C%20Lagos%2C%20Nigeria!5e0!3m2!1sen!2sus!4v1779926456872!5m2!1sen!2sus"
@@ -322,10 +290,7 @@
   </section>
 
 
-  <!-- ============================================================
-    9. CONTACT
-       Three contact method cards: phone, email, hours
-       ============================================================ -->
+  <!-- 9. CONTACT -->
   <section class="contact-section" id="contact">
     <div class="contact-inner">
       <div class="section-tag">Get in touch</div>
@@ -336,14 +301,16 @@
         <div class="contact-card">✉️ hello@errands.com</div>
         <div class="contact-card">🕐 Mon – Sat, 7am – 9pm</div>
       </div>
+      <!-- CTA buttons in contact section -->
+      <div style="display:flex; gap:12px; justify-content:center; margin-top:32px; flex-wrap:wrap;">
+        <a href="order.html" style="background:#FF6B2B;color:#fff;padding:14px 36px;border-radius:50px;text-decoration:none;font-weight:700;font-size:16px;">📦 Place an Order</a>
+        <a href="track.html" style="background:#fff;color:#0a0a0a;padding:14px 36px;border-radius:50px;text-decoration:none;font-weight:700;font-size:16px;border:2px solid #0a0a0a;">🔍 Track an Order</a>
+      </div>
     </div>
   </section>
 
 
-  <!-- ============================================================
-    10. FOOTER
-        Logo + tagline | Nav links | Copyright line
-        ============================================================ -->
+  <!-- 10. FOOTER -->
   <footer class="footer">
 
     <div class="footer-left">
@@ -358,6 +325,9 @@
       <a href="#">Privacy</a>
       <a href="#">Terms</a>
       <a href="#">Careers</a>
+      <a href="order.html">Place Order</a>
+      <a href="track.html">Track Order</a>
+      <a href="admin.html">Admin</a>
     </div>
 
     <p class="footer-copy">© 2026 Errands. All rights reserved.</p>
@@ -365,11 +335,19 @@
   </footer>
 
 
-  <!-- ============================================================
-    SCRIPTS
-    Loaded at the bottom so the DOM is fully ready before JS runs
-    ============================================================ -->
   <script src="main.js"></script>
+
+  <!-- Tracking from homepage → redirects to track.html -->
+  <script>
+    function goTrack() {
+      const val = document.getElementById('trackInput').value.trim().toUpperCase();
+      if (!val) { alert('Please enter a tracking number'); return; }
+      window.location.href = 'track.html?tracking=' + val;
+    }
+    document.getElementById('trackInput').addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') goTrack();
+    });
+  </script>
 
 </body>
 </html>
