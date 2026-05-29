@@ -1,0 +1,22 @@
+{
+  "name": "MAG-CITY Errands",
+  "short_name": "Errands",
+  "description": "Fast city delivery — track and place orders",
+  "start_url": "/errands-website/index.html",
+  "display": "standalone",
+  "background_color": "#0a0a0a",
+  "theme_color": "#FF6B2B",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
