@@ -2,34 +2,53 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<a href="index.html" style="text-decoration:none;"><div class="logo">MAG-CITY</div></a>
+<title>Admin Panel - MAG-CITY Errands</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 <style>
-  :root { --black:#0a0a0a; --orange:#FF6B2B; --cream:#FFF8F2; --gray:#888; --border:#e8e0d8; --green:#22c55e; --blue:#3b82f6; --yellow:#f59e0b; --red:#ef4444; }
+  :root { --black:#0a0a0a; --orange:#FF6B2B; --cream:#FFF8F2; --gray:#888; --border:#e8e0d8; --green:#22c55e; --blue:#3b82f6; --yellow:#f59e0b; --red:#ef4444; --purple:#a855f7; }
   * { margin:0; padding:0; box-sizing:border-box; }
-  body { background:#981f1f; font-family:'DM Sans',sans-serif; color:#fff; min-height:100vh; }
+  body { background:#111; font-family:'DM Sans',sans-serif; color:#fff; min-height:100vh; }
 
-  .login-screen { display:flex; align-items:center; justify-content:center; min-height:100vh; background:#111; }
-  .login-box { background:#1a1a1a; border:1px solid #333; border-radius:20px; padding:48px 40px; width:100%; max-width:400px; text-align:center; }
-  .login-box .logo { font-family:'Bebas Neue',sans-serif; font-size:36px; color:var(--orange); letter-spacing:3px; margin-bottom:8px; }
-  .login-box p { color:#888; margin-bottom:32px; }
-  .login-box input { width:100%; padding:14px 16px; background:#0a0a0a; border:2px solid #333; border-radius:10px; color:#fff; font-family:'DM Sans',sans-serif; font-size:15px; outline:none; margin-bottom:16px; transition:border-color .2s; }
+  .login-screen { display:flex; align-items:center; justify-content:center; min-height:100vh; background:linear-gradient(135deg,#0a0a0a 0%,#1a0a00 100%); }
+  .login-box { background:#1a1a1a; border:1px solid #333; border-radius:24px; padding:48px 40px; width:100%; max-width:420px; text-align:center; box-shadow:0 20px 60px rgba(0,0,0,0.5); }
+  .login-logo { font-family:'Bebas Neue',sans-serif; font-size:42px; color:var(--orange); letter-spacing:4px; margin-bottom:4px; }
+  .login-sub { color:#555; font-size:13px; margin-bottom:32px; text-transform:uppercase; letter-spacing:2px; }
+  .login-box input { width:100%; padding:14px 16px; background:#0a0a0a; border:2px solid #333; border-radius:12px; color:#fff; font-family:'DM Sans',sans-serif; font-size:15px; outline:none; margin-bottom:14px; transition:border-color .2s; }
   .login-box input:focus { border-color:var(--orange); }
-  .login-btn { width:100%; padding:16px; background:var(--orange); color:#fff; border:none; border-radius:10px; font-family:'Bebas Neue',sans-serif; font-size:20px; letter-spacing:2px; cursor:pointer; transition:background .2s; }
+  .login-btn { width:100%; padding:16px; background:var(--orange); color:#fff; border:none; border-radius:12px; font-family:'Bebas Neue',sans-serif; font-size:22px; letter-spacing:2px; cursor:pointer; transition:background .2s; }
   .login-btn:hover { background:#e05520; }
   .login-error { color:var(--red); font-size:14px; margin-top:12px; display:none; }
 
   .dashboard { display:none; }
-  .topbar { background:#1a1a1a; border-bottom:1px solid #333; padding:16px 32px; display:flex; align-items:center; justify-content:space-between; }
-  .topbar .logo { font-family:'Bebas Neue',sans-serif; font-size:24px; color:var(--orange); letter-spacing:2px; }
-  .topbar-right { display:flex; gap:16px; align-items:center; }
+
+  .topbar { background:#1a1a1a; border-bottom:1px solid #333; padding:14px 32px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; position:sticky; top:0; z-index:100; }
+  .topbar-left { display:flex; align-items:center; gap:20px; }
+  .logo { font-family:'Bebas Neue',sans-serif; font-size:24px; color:var(--orange); letter-spacing:2px; text-decoration:none; }
+  .topbar-nav { display:flex; gap:8px; }
+  .topbar-nav a { color:#aaa; text-decoration:none; font-size:13px; padding:8px 16px; border-radius:8px; border:1px solid #333; transition:all .2s; }
+  .topbar-nav a:hover { border-color:var(--orange); color:var(--orange); }
+  .topbar-nav a.active { background:var(--orange); color:#fff; border-color:var(--orange); }
+  .topbar-right { display:flex; gap:12px; align-items:center; }
+  .search-input { background:#0a0a0a; border:1px solid #333; color:#fff; padding:10px 16px; border-radius:10px; font-family:'DM Sans',sans-serif; font-size:14px; outline:none; width:220px; transition:border-color .2s; }
+  .search-input:focus { border-color:var(--orange); }
+  .search-input::placeholder { color:#555; }
   .logout-btn { background:none; border:1px solid #444; color:#aaa; padding:8px 16px; border-radius:8px; cursor:pointer; font-size:13px; transition:all .2s; }
   .logout-btn:hover { border-color:var(--red); color:var(--red); }
 
   .stats-bar { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; padding:24px 32px; background:#151515; border-bottom:1px solid #333; }
-  .stat { background:#1a1a1a; border:1px solid #333; border-radius:12px; padding:20px; }
-  .stat-num { font-family:'Bebas Neue',sans-serif; font-size:36px; color:var(--orange); }
+  .stat { background:#1a1a1a; border:1px solid #333; border-radius:14px; padding:20px; position:relative; overflow:hidden; transition:border-color .2s; }
+  .stat:hover { border-color:#555; }
+  .stat::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; background:var(--orange); }
+  .stat.green::before { background:var(--green); }
+  .stat.blue::before { background:var(--blue); }
+  .stat.yellow::before { background:var(--yellow); }
+  .stat-num { font-family:'Bebas Neue',sans-serif; font-size:38px; color:var(--orange); }
+  .stat.green .stat-num { color:var(--green); }
+  .stat.blue .stat-num { color:var(--blue); }
+  .stat.yellow .stat-num { color:var(--yellow); }
   .stat-label { font-size:12px; color:#888; text-transform:uppercase; letter-spacing:.5px; margin-top:4px; }
 
   .main { padding:24px 32px; }
@@ -38,19 +57,17 @@
   .filter-tabs { display:flex; gap:8px; flex-wrap:wrap; }
   .tab { padding:8px 16px; border-radius:20px; border:1px solid #333; background:none; color:#888; font-size:13px; cursor:pointer; transition:all .2s; }
   .tab.active { background:var(--orange); border-color:var(--orange); color:#fff; }
+  .tab:hover:not(.active) { border-color:#555; color:#ccc; }
 
   .orders-grid { display:flex; flex-direction:column; gap:12px; }
   .order-row { background:#1a1a1a; border:1px solid #333; border-radius:14px; padding:20px 24px; display:grid; grid-template-columns:160px 1fr 1fr 140px 160px; align-items:center; gap:16px; transition:border-color .2s; }
   .order-row:hover { border-color:#555; }
-
   .tracking-badge { font-family:'Bebas Neue',sans-serif; font-size:16px; color:var(--orange); letter-spacing:2px; }
   .customer-name { font-weight:600; font-size:15px; }
   .customer-phone { font-size:13px; color:#888; margin-top:2px; }
   .address-text { font-size:13px; color:#aaa; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
-
-  .status-select { background:#0a0a0a; border:1px solid #444; color:#fff; padding:8px 12px; border-radius:8px; font-family:'DM Sans',sans-serif; font-size:13px; outline:none; cursor:pointer; width:100%; }
+  .status-select { background:#0a0a0a; border:1px solid #444; color:#fff; padding:8px 12px; border-radius:8px; font-family:'DM Sans',sans-serif; font-size:13px; outline:none; cursor:pointer; width:100%; transition:border-color .2s; }
   .status-select:focus { border-color:var(--orange); }
-
   .update-btn { padding:10px 20px; background:var(--orange); color:#fff; border:none; border-radius:8px; font-family:'Bebas Neue',sans-serif; font-size:14px; letter-spacing:1px; cursor:pointer; transition:background .2s; width:100%; }
   .update-btn:hover { background:#e05520; }
   .update-btn.saved { background:var(--green); }
@@ -63,62 +80,85 @@
 
   .empty-state { text-align:center; padding:80px 20px; color:#555; }
   .empty-state .icon { font-size:48px; margin-bottom:16px; }
+  .loading { text-align:center; padding:60px; color:#555; font-size:24px; }
 
-  .search-input { background:#1a1a1a; border:1px solid #333; color:#fff; padding:10px 16px; border-radius:10px; font-family:'DM Sans',sans-serif; font-size:14px; outline:none; width:240px; transition:border-color .2s; }
-  .search-input:focus { border-color:var(--orange); }
-  .search-input::placeholder { color:#555; }
-
-  .loading { text-align:center; padding:60px; color:#555; font-size:32px; }
+  .refresh-btn { background:none; border:1px solid #444; color:#aaa; padding:8px 16px; border-radius:8px; cursor:pointer; font-size:13px; transition:all .2s; display:flex; align-items:center; gap:6px; }
+  .refresh-btn:hover { border-color:var(--green); color:var(--green); }
 
   @media(max-width:900px) {
     .order-row { grid-template-columns:1fr 1fr; }
     .stats-bar { grid-template-columns:1fr 1fr; }
     .main { padding:16px; }
     .topbar { padding:14px 16px; }
+    .search-input { width:160px; }
   }
   @media(max-width:600px) {
     .order-row { grid-template-columns:1fr; }
     .stats-bar { grid-template-columns:1fr 1fr; padding:16px; }
+    .topbar-nav { display:none; }
   }
 </style>
-<!-- EmailJS -->
-<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
-<script>
-  emailjs.init("W2WT7AXD61e1PGM7z");
-</script>
 </head>
 <body>
 
+<!-- Login Screen -->
 <div class="login-screen" id="loginScreen">
   <div class="login-box">
-    <div class="logo">MAG-CITY</div>
-    <p>Admin Panel â€” Staff Only</p>
-    <input type="text" id="adminUser" placeholder="Username"/>
+    <div class="login-logo">MAG-CITY</div>
+    <div class="login-sub">Admin Panel - Staff Only</div>
+    <input type="text" id="adminUser" placeholder="Username" autocomplete="off"/>
     <input type="password" id="adminPass" placeholder="Password" onkeydown="if(event.key==='Enter')login()"/>
     <button class="login-btn" onclick="login()">LOGIN</button>
-    <div class="login-error" id="loginError">âŒ Invalid credentials</div>
+    <div class="login-error" id="loginError">Invalid credentials. Try again.</div>
   </div>
 </div>
 
+<!-- Dashboard -->
 <div class="dashboard" id="dashboard">
+
+  <!-- Topbar -->
   <div class="topbar">
-    <div class="logo">MAG-CITY Admin</div>
+    <div class="topbar-left">
+      <a href="index.html" class="logo">MAG-CITY</a>
+      <div class="topbar-nav">
+        <a href="admin.html" class="active">Orders</a>
+        <a href="stats.html">Statistics</a>
+        <a href="index.html">Website</a>
+      </div>
+    </div>
     <div class="topbar-right">
       <input type="text" class="search-input" id="searchInput" placeholder="Search tracking / name..." oninput="filterOrders()"/>
+      <button class="refresh-btn" onclick="loadOrders()">
+        <i class="fa fa-rotate-right"></i> Refresh
+      </button>
       <button class="logout-btn" onclick="logout()">Logout</button>
     </div>
   </div>
 
+  <!-- Stats Bar -->
   <div class="stats-bar">
-    <div class="stat"><div class="stat-num" id="statTotal">0</div><div class="stat-label">Total Orders</div></div>
-    <div class="stat"><div class="stat-num" id="statPending" style="color:var(--yellow)">0</div><div class="stat-label">Pending</div></div>
-    <div class="stat"><div class="stat-num" id="statActive" style="color:var(--blue)">0</div><div class="stat-label">Active</div></div>
-    <div class="stat"><div class="stat-num" id="statDelivered" style="color:var(--green)">0</div><div class="stat-label">Delivered</div></div>
+    <div class="stat">
+      <div class="stat-num" id="statTotal">0</div>
+      <div class="stat-label">Total Orders</div>
+    </div>
+    <div class="stat yellow">
+      <div class="stat-num" id="statPending">0</div>
+      <div class="stat-label">Pending</div>
+    </div>
+    <div class="stat blue">
+      <div class="stat-num" id="statActive">0</div>
+      <div class="stat-label">Active</div>
+    </div>
+    <div class="stat green">
+      <div class="stat-num" id="statDelivered">0</div>
+      <div class="stat-label">Delivered</div>
+    </div>
   </div>
 
+  <!-- Orders -->
   <div class="main">
     <div class="section-head">
-      <h2>ðŸ“¦ Orders</h2>
+      <h2>All Orders</h2>
       <div class="filter-tabs">
         <button class="tab active" onclick="setFilter('All',this)">All</button>
         <button class="tab" onclick="setFilter('Pending',this)">Pending</button>
@@ -128,10 +168,14 @@
       </div>
     </div>
     <div class="orders-grid" id="ordersGrid">
-      <div class="loading">ðŸ”„ Loading orders...</div>
+      <div class="loading">Loading orders...</div>
     </div>
   </div>
 </div>
+
+<!-- EmailJS -->
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+<script>emailjs.init("W2WT7AXD61e1PGM7z");</script>
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
@@ -145,11 +189,12 @@
     messagingSenderId: "315623986569",
     appId: "1:315623986569:web:ba7200af8ca50abc5f3d58"
   };
+
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
 
- const ADMIN_USER = 'MAG-CITY-ADMIN';
-const ADMIN_PASS = 'Eizabeth@12';
+  const ADMIN_USER = 'MAG-CITY-ADMIN';
+  const ADMIN_PASS = 'Eizabeth@12';
 
   let allOrders = [];
   let currentFilter = 'All';
@@ -171,7 +216,8 @@ const ADMIN_PASS = 'Eizabeth@12';
     document.getElementById('dashboard').style.display = 'none';
   };
 
-  async function loadOrders() {
+  window.loadOrders = async function() {
+    document.getElementById('ordersGrid').innerHTML = '<div class="loading">Loading orders...</div>';
     try {
       const q = query(collection(db, 'orders'), orderBy('createdAt', 'desc'));
       const snap = await getDocs(q);
@@ -179,9 +225,9 @@ const ADMIN_PASS = 'Eizabeth@12';
       updateStats();
       renderOrders();
     } catch(e) {
-      document.getElementById('ordersGrid').innerHTML = `<div class="empty-state"><div class="icon">âš ï¸</div><p>${e.message}</p></div>`;
+      document.getElementById('ordersGrid').innerHTML = `<div class="empty-state"><div class="icon">Warning</div><p>${e.message}</p></div>`;
     }
-  }
+  };
 
   function updateStats() {
     document.getElementById('statTotal').textContent = allOrders.length;
@@ -210,7 +256,7 @@ const ADMIN_PASS = 'Eizabeth@12';
     );
 
     if (!orders.length) {
-      document.getElementById('ordersGrid').innerHTML = `<div class="empty-state"><div class="icon">ðŸ“­</div><p>No orders found</p></div>`;
+      document.getElementById('ordersGrid').innerHTML = `<div class="empty-state"><div class="icon">No orders found</div></div>`;
       return;
     }
 
@@ -219,17 +265,17 @@ const ADMIN_PASS = 'Eizabeth@12';
         <div>
           <div class="tracking-badge">${o.trackingNumber}</div>
           <div style="margin-top:6px"><span class="badge badge-${(o.status||'').replace(/\s/g,'')}">${o.status}</span></div>
-          <div style="font-size:12px;color:#666;margin-top:4px">${o.serviceType||''} Â· ${o.packageSize||''}</div>
+          <div style="font-size:12px;color:#555;margin-top:4px">${o.serviceType||''} - ${o.packageSize||''}</div>
         </div>
         <div>
           <div class="customer-name">${o.customerName}</div>
           <div class="customer-phone">${o.customerPhone}</div>
-          ${o.customerEmail ? `<div class="customer-phone">${o.customerEmail}</div>` : ''}
+          <div class="customer-phone" style="color:#555">${o.customerEmail||''}</div>
         </div>
         <div>
-          <div style="font-size:11px;color:#666;text-transform:uppercase;letter-spacing:.5px">From</div>
+          <div style="font-size:11px;color:#555;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">From</div>
           <div class="address-text">${o.pickupAddress}</div>
-          <div style="font-size:11px;color:#666;text-transform:uppercase;letter-spacing:.5px;margin-top:8px">To</div>
+          <div style="font-size:11px;color:#555;text-transform:uppercase;letter-spacing:.5px;margin-top:8px;margin-bottom:4px">To</div>
           <div class="address-text">${o.deliveryAddress}</div>
         </div>
         <div>
@@ -242,7 +288,7 @@ const ADMIN_PASS = 'Eizabeth@12';
         </div>
         <div>
           <button class="update-btn" id="btn-${o.id}" onclick="updateStatus('${o.id}')">UPDATE STATUS</button>
-          <div style="font-size:12px;color:#555;margin-top:8px;text-align:center">${o.packageDescription||''}</div>
+          <div style="font-size:11px;color:#555;margin-top:8px;text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${o.packageDescription||''}</div>
         </div>
       </div>`).join('');
   }
@@ -258,7 +304,12 @@ const ADMIN_PASS = 'Eizabeth@12';
       const history = order.statusHistory || [];
       history.push({ status: newStatus, time: new Date().toISOString(), note: 'Updated by admin' });
 
-      // Send status update email
+      await updateDoc(doc(db, 'orders', orderId), {
+        status: newStatus,
+        statusHistory: history,
+        updatedAt: new Date().toISOString()
+      });
+
       if (order.customerEmail) {
         emailjs.send("service_7hfaifj", "template_5qrwptc", {
           customer_name: order.customerName,
@@ -268,20 +319,14 @@ const ADMIN_PASS = 'Eizabeth@12';
           pickup: order.pickupAddress,
           delivery: order.deliveryAddress,
           service_type: order.serviceType
-        }).then(() => console.log("Status email sent")).catch(err => console.log("Email error:", err));
+        }).then(() => console.log("Email sent")).catch(err => console.log("Email error:", err));
       }
-
-      await updateDoc(doc(db, 'orders', orderId), {
-        status: newStatus,
-        statusHistory: history,
-        updatedAt: new Date().toISOString()
-      });
 
       order.status = newStatus;
       order.statusHistory = history;
       updateStats();
 
-      btn.textContent = 'âœ… SAVED';
+      btn.textContent = 'SAVED!';
       btn.classList.add('saved');
       setTimeout(() => {
         btn.textContent = 'UPDATE STATUS';
@@ -291,11 +336,15 @@ const ADMIN_PASS = 'Eizabeth@12';
     } catch(e) {
       btn.textContent = 'ERROR';
       btn.disabled = false;
-      alert('Failed to update: ' + e.message);
+      alert('Failed: ' + e.message);
     }
   };
 </script>
+
+<!-- WhatsApp -->
+<a href="https://wa.me/2348139220395?text=Hello!%20I%20want%20to%20place%20a%20delivery%20order" target="_blank" style="position:fixed;bottom:30px;right:30px;background:#25D366;color:#fff;width:62px;height:62px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:34px;text-decoration:none;box-shadow:0 4px 20px rgba(37,211,102,0.5);z-index:9999;" title="Chat with us on WhatsApp">
+  <i class="fa-brands fa-whatsapp"></i>
+</a>
+
 </body>
 </html>
-
-
