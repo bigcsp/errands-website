@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
@@ -81,17 +81,22 @@
     .stats-bar { grid-template-columns:1fr 1fr; padding:16px; }
   }
 </style>
+<!-- EmailJS -->
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+<script>
+  emailjs.init("W2WT7AXD61e1PGM7z");
+</script>
 </head>
 <body>
 
 <div class="login-screen" id="loginScreen">
   <div class="login-box">
     <div class="logo">MAG-CITY</div>
-    <p>Admin Panel — Staff Only</p>
+    <p>Admin Panel â€” Staff Only</p>
     <input type="text" id="adminUser" placeholder="Username"/>
     <input type="password" id="adminPass" placeholder="Password" onkeydown="if(event.key==='Enter')login()"/>
     <button class="login-btn" onclick="login()">LOGIN</button>
-    <div class="login-error" id="loginError">❌ Invalid credentials</div>
+    <div class="login-error" id="loginError">âŒ Invalid credentials</div>
   </div>
 </div>
 
@@ -113,7 +118,7 @@
 
   <div class="main">
     <div class="section-head">
-      <h2>📦 Orders</h2>
+      <h2>ðŸ“¦ Orders</h2>
       <div class="filter-tabs">
         <button class="tab active" onclick="setFilter('All',this)">All</button>
         <button class="tab" onclick="setFilter('Pending',this)">Pending</button>
@@ -123,7 +128,7 @@
       </div>
     </div>
     <div class="orders-grid" id="ordersGrid">
-      <div class="loading">🔄 Loading orders...</div>
+      <div class="loading">ðŸ”„ Loading orders...</div>
     </div>
   </div>
 </div>
@@ -174,7 +179,7 @@ const ADMIN_PASS = 'Eizabeth@12';
       updateStats();
       renderOrders();
     } catch(e) {
-      document.getElementById('ordersGrid').innerHTML = `<div class="empty-state"><div class="icon">⚠️</div><p>${e.message}</p></div>`;
+      document.getElementById('ordersGrid').innerHTML = `<div class="empty-state"><div class="icon">âš ï¸</div><p>${e.message}</p></div>`;
     }
   }
 
@@ -205,7 +210,7 @@ const ADMIN_PASS = 'Eizabeth@12';
     );
 
     if (!orders.length) {
-      document.getElementById('ordersGrid').innerHTML = `<div class="empty-state"><div class="icon">📭</div><p>No orders found</p></div>`;
+      document.getElementById('ordersGrid').innerHTML = `<div class="empty-state"><div class="icon">ðŸ“­</div><p>No orders found</p></div>`;
       return;
     }
 
@@ -214,7 +219,7 @@ const ADMIN_PASS = 'Eizabeth@12';
         <div>
           <div class="tracking-badge">${o.trackingNumber}</div>
           <div style="margin-top:6px"><span class="badge badge-${(o.status||'').replace(/\s/g,'')}">${o.status}</span></div>
-          <div style="font-size:12px;color:#666;margin-top:4px">${o.serviceType||''} · ${o.packageSize||''}</div>
+          <div style="font-size:12px;color:#666;margin-top:4px">${o.serviceType||''} Â· ${o.packageSize||''}</div>
         </div>
         <div>
           <div class="customer-name">${o.customerName}</div>
@@ -253,6 +258,19 @@ const ADMIN_PASS = 'Eizabeth@12';
       const history = order.statusHistory || [];
       history.push({ status: newStatus, time: new Date().toISOString(), note: 'Updated by admin' });
 
+      // Send status update email
+      if (order.customerEmail) {
+        emailjs.send("service_7hfaifj", "template_5qrwptc", {
+          customer_name: order.customerName,
+          email: order.customerEmail,
+          tracking_number: order.trackingNumber,
+          status: newStatus,
+          pickup: order.pickupAddress,
+          delivery: order.deliveryAddress,
+          service_type: order.serviceType
+        }).then(() => console.log("Status email sent")).catch(err => console.log("Email error:", err));
+      }
+
       await updateDoc(doc(db, 'orders', orderId), {
         status: newStatus,
         statusHistory: history,
@@ -263,7 +281,7 @@ const ADMIN_PASS = 'Eizabeth@12';
       order.statusHistory = history;
       updateStats();
 
-      btn.textContent = '✅ SAVED';
+      btn.textContent = 'âœ… SAVED';
       btn.classList.add('saved');
       setTimeout(() => {
         btn.textContent = 'UPDATE STATUS';

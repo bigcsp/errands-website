@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
@@ -178,12 +178,17 @@
     .hero { padding: 40px 20px 60px; }
   }
 </style>
+<!-- EmailJS -->
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+<script>
+  emailjs.init("W2WT7AXD61e1PGM7z");
+</script>
 </head>
 <body>
 
 <header>
   <div class="logo">MAG-CITY Errands</div>
-  <a href="track.html" class="nav-link">Track Order →</a>
+  <a href="track.html" class="nav-link">Track Order â†’</a>
 </header>
 
 <div class="hero">
@@ -192,7 +197,7 @@
 </div>
 
 <div class="form-wrap">
-  <div class="section-title">📦 Package Details</div>
+  <div class="section-title">ðŸ“¦ Package Details</div>
   <div class="form-group">
     <label>Package Description</label>
     <textarea id="packageDesc" placeholder="What are we picking up? e.g. Documents, groceries, parcel..."></textarea>
@@ -220,7 +225,7 @@
   </div>
 
   <div class="divider"></div>
-  <div class="section-title">📍 Pickup & Delivery</div>
+  <div class="section-title">ðŸ“ Pickup & Delivery</div>
   <div class="form-group">
     <label>Pickup Address</label>
     <input type="text" id="pickupAddress" placeholder="Enter full pickup address"/>
@@ -231,7 +236,7 @@
   </div>
 
   <div class="divider"></div>
-  <div class="section-title">👤 Your Details</div>
+  <div class="section-title">ðŸ‘¤ Your Details</div>
   <div class="row">
     <div class="form-group">
       <label>Full Name</label>
@@ -259,11 +264,11 @@
 
 <div class="modal-overlay" id="modalOverlay">
   <div class="modal">
-    <div class="modal-icon">🎉</div>
+    <div class="modal-icon">ðŸŽ‰</div>
     <h2>Order Placed!</h2>
     <p>Your tracking number is:</p>
     <div class="tracking-display" id="trackingDisplay">-</div>
-    <button class="copy-btn" onclick="copyTracking()">📋 Copy Tracking Number</button>
+    <button class="copy-btn" onclick="copyTracking()">ðŸ“‹ Copy Tracking Number</button>
     <p style="font-size:13px; color:#aaa; margin-bottom:16px;">Save this number to track your order</p>
     <button class="modal-close" onclick="closeModal()">TRACK MY ORDER</button>
   </div>
@@ -315,6 +320,21 @@
 
     try {
       const trackingNumber = generateTrackingNumber();
+      const trackingNumber = generateTrackingNumber();
+
+      // Send confirmation email
+      if (document.getElementById("customerEmail").value.trim()) {
+        emailjs.send("service_7hfaifj", "template_5qrwptc", {
+          customer_name: name,
+          email: document.getElementById("customerEmail").value.trim(),
+          tracking_number: trackingNumber,
+          status: "Order Confirmed",
+          pickup: pickup,
+          delivery: delivery,
+          service_type: service
+        }).then(() => console.log("Email sent")).catch(err => console.log("Email error:", err));
+      }
+
       await addDoc(collection(db, 'orders'), {
         trackingNumber,
         customerName: name,
@@ -346,8 +366,8 @@
   window.copyTracking = function() {
     navigator.clipboard.writeText(window._lastTracking || '');
     const btn = document.querySelector('.copy-btn');
-    btn.textContent = '✅ Copied!';
-    setTimeout(() => btn.textContent = '📋 Copy Tracking Number', 2000);
+    btn.textContent = 'âœ… Copied!';
+    setTimeout(() => btn.textContent = 'ðŸ“‹ Copy Tracking Number', 2000);
   };
 
   window.closeModal = function() {
