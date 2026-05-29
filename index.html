@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 
@@ -7,48 +7,35 @@
   <title>Errands — Your City. Delivered Fast.</title>
 
   <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
   <link rel="manifest" href="manifest.json" />
-<meta name="theme-color" content="#FF6B2B" />
-<meta name="mobile-web-app-capable" content="yes" />
-<meta name="apple-mobile-web-app-capable" content="yes" />
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-<meta name="apple-mobile-web-app-title" content="Errands" />
-<link rel="apple-touch-icon" href="icon-192.png" />
-
-  <link
-    href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700&family=DM+Sans:wght@300;400;500&display=swap"
-    rel="stylesheet"
-  />
+  <meta name="theme-color" content="#FF6B2B" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Errands" />
+  <link rel="apple-touch-icon" href="icon-192.png" />
 
 </head>
 <body>
 
-
-  <!-- 1. NAVBAR -->
   <nav class="navbar">
-
     <a href="index.html" style="text-decoration:none; color:inherit;">
       <div class="nav-logo">
         <span class="logo-dot"></span>
         Errands
       </div>
     </a>
-
     <ul class="nav-links">
       <li><a href="#services">Services</a></li>
       <li><a href="#how">How it works</a></li>
       <li><a href="#track">Track</a></li>
       <li><a href="#contact">Contact</a></li>
     </ul>
-
     <button class="nav-btn" onclick="window.location.href='order.html'">Place Order</button>
-
     <button class="hamburger" id="hamburger">&#9776;</button>
-
   </nav>
 
-
-  <!-- 2. MOBILE MENU -->
   <div class="mobile-menu" id="mobileMenu">
     <a href="#services">Services</a>
     <a href="#how">How it works</a>
@@ -57,59 +44,26 @@
     <a href="order.html" class="mobile-cta">Place Order</a>
   </div>
 
-
-  <!-- 3. HERO -->
   <section class="hero" id="track">
-
     <div class="hero-tag">
       <span class="pulse-dot"></span>
       Live bike delivery — city wide
     </div>
-
     <h1>Your city.<br /><span class="accent">Delivered fast.</span></h1>
-
-    <p>Real-time bike delivery for businesses and individuals.
-       Track every package live, from pickup to your door.</p>
-
+    <p>Real-time bike delivery for businesses and individuals. Track every package live, from pickup to your door.</p>
     <div class="track-box">
-      <input
-        type="text"
-        id="trackInput"
-        placeholder="Enter your tracking number e.g MAG-XXXXXXXX"
-      />
+      <input type="text" id="trackInput" placeholder="Enter your tracking number e.g MAG-XXXXXXXX"/>
       <button class="track-btn" onclick="goTrack()">Track now</button>
     </div>
-
     <div style="margin-top: 16px;">
-      <a href="order.html" style="
-        display: inline-block;
-        background: #FF6B2B;
-        color: #fff;
-        padding: 14px 36px;
-        border-radius: 50px;
-        font-family: 'Syne', sans-serif;
-        font-weight: 700;
-        font-size: 16px;
-        text-decoration: none;
-        letter-spacing: 0.5px;
-        transition: background 0.2s;
-      ">📦 Place an Order</a>
+      <a href="order.html" style="display:inline-block;background:#FF6B2B;color:#fff;padding:14px 36px;border-radius:50px;font-family:'Syne',sans-serif;font-weight:700;font-size:16px;text-decoration:none;letter-spacing:0.5px;transition:background 0.2s;">📦 Place an Order</a>
     </div>
-
-    <p class="track-hint">
-      Enter your MAG- tracking number above to track your order
-    </p>
-
+    <p class="track-hint">Enter your MAG- tracking number above to track your order</p>
   </section>
 
-
-  <!-- 4. TRACKING RESULT -->
   <div class="tracking-result" id="trackingResult"></div>
 
-
-  <!-- 5. STATS BAR -->
   <div class="stats-bar">
-
     <div class="stat">
       <div class="stat-number-row">
         <span class="stat-num" data-target="100">0</span>
@@ -117,9 +71,7 @@
       </div>
       <span class="stat-label">Deliveries daily</span>
     </div>
-
     <div class="stat-divider"></div>
-
     <div class="stat">
       <div class="stat-number-row">
         <span class="stat-num" data-target="98">0</span>
@@ -127,9 +79,7 @@
       </div>
       <span class="stat-label">On-time rate</span>
     </div>
-
     <div class="stat-divider"></div>
-
     <div class="stat">
       <div class="stat-number-row">
         <span class="stat-num">30</span>
@@ -137,9 +87,7 @@
       </div>
       <span class="stat-label">Avg delivery time</span>
     </div>
-
     <div class="stat-divider"></div>
-
     <div class="stat">
       <div class="stat-number-row">
         <span class="stat-num" data-target="10">0</span>
@@ -147,161 +95,107 @@
       </div>
       <span class="stat-label">Active riders</span>
     </div>
-
   </div>
 
-
-  <!-- 6. SERVICES -->
   <section class="section" id="services">
-
     <div class="section-header">
       <div class="section-tag">What we offer</div>
       <h2>Built for speed</h2>
       <p>Everything your business needs for fast, reliable last-mile delivery.</p>
     </div>
-
     <div class="services-grid">
-
       <div class="service-card">
         <div class="service-icon">⚡</div>
         <h3>Express delivery</h3>
         <p>Same-day delivery across the city within hours. No waiting, no delays.</p>
         <span class="card-tag">Most popular</span>
       </div>
-
       <div class="service-card featured">
         <div class="service-icon">📍</div>
         <h3>Live tracking</h3>
         <p>Watch your rider move in real time on the map. Know exactly where your package is.</p>
         <span class="card-tag">New</span>
       </div>
-
       <div class="service-card">
         <div class="service-icon">🏪</div>
         <h3>Business plans</h3>
         <p>Bulk delivery solutions for shops and businesses. Volume discounts available.</p>
       </div>
-
       <div class="service-card">
         <div class="service-icon">🛡️</div>
         <h3>Safe handling</h3>
         <p>Every package handled with care. Insured deliveries for your peace of mind.</p>
       </div>
-
     </div>
-
   </section>
 
-
-  <!-- 7. HOW IT WORKS -->
   <section class="how-section" id="how">
-
     <div class="section-header">
       <div class="section-tag">How it works</div>
       <h2>Simple as 1, 2, 3</h2>
       <p>Get your delivery rolling in minutes.</p>
     </div>
-
     <div class="steps-grid">
-
       <div class="step">
         <div class="step-num">01</div>
         <h3>Book a pickup</h3>
         <p>Enter your pickup and drop-off location online. Takes less than 2 minutes.</p>
         <a href="order.html" style="display:inline-block;margin-top:12px;background:#FF6B2B;color:#fff;padding:10px 24px;border-radius:30px;text-decoration:none;font-weight:600;font-size:14px;">Book Now →</a>
       </div>
-
       <div class="step">
         <div class="step-num">02</div>
         <h3>Rider assigned</h3>
         <p>A nearby rider gets assigned instantly and heads to your location.</p>
       </div>
-
       <div class="step">
         <div class="step-num">03</div>
         <h3>Track live</h3>
         <p>Watch every move on the map until delivery is complete.</p>
         <a href="track.html" style="display:inline-block;margin-top:12px;background:#0a0a0a;color:#fff;padding:10px 24px;border-radius:30px;text-decoration:none;font-weight:600;font-size:14px;">Track Order →</a>
       </div>
-
       <div class="step">
         <div class="step-num">04</div>
         <h3>Delivered!</h3>
         <p>You and the sender both get a confirmation. Package delivered safely.</p>
       </div>
-
     </div>
-
   </section>
 
-
-  <!-- 8. LIVE MAP SECTION -->
   <section class="map-section">
-
     <div class="map-info">
-
       <div class="section-tag">Live tracking</div>
       <h2>See your rider in real time</h2>
       <p>No more guessing. Know exactly where your package is at every moment.</p>
-
       <div class="status-badge">
         <span class="status-dot"></span>
         Rider on the way
       </div>
-
       <div class="status-details">
-        <div class="status-row">
-          <span>Rider</span>
-          <strong>Sunday O.</strong>
-        </div>
-        <div class="status-row">
-          <span>From</span>
-          <strong>Magodo Phase 2 Gateway, Lagos</strong>
-        </div>
-        <div class="status-row">
-          <span>Package</span>
-          <strong>ERR-00423</strong>
-        </div>
-        <div class="status-row">
-          <span>ETA</span>
-          <strong id="eta">4 mins</strong>
-        </div>
+        <div class="status-row"><span>Rider</span><strong>Sunday O.</strong></div>
+        <div class="status-row"><span>From</span><strong>Magodo Phase 2 Gateway, Lagos</strong></div>
+        <div class="status-row"><span>Package</span><strong>ERR-00423</strong></div>
+        <div class="status-row"><span>ETA</span><strong id="eta">4 mins</strong></div>
       </div>
-
       <div class="active-riders-pill">
         <span class="riders-dot"></span>
         <span class="riders-label">Active riders right now</span>
         <span class="riders-count">10+</span>
       </div>
-
       <div style="display:flex; gap:12px; margin-top:24px; flex-wrap:wrap;">
         <a href="order.html" style="background:#FF6B2B;color:#fff;padding:12px 28px;border-radius:30px;text-decoration:none;font-weight:700;font-size:15px;">📦 Place Order</a>
         <a href="track.html" style="background:#fff;color:#0a0a0a;padding:12px 28px;border-radius:30px;text-decoration:none;font-weight:700;font-size:15px;border:2px solid #0a0a0a;">🔍 Track Order</a>
       </div>
-
     </div>
-
     <div class="map-mock">
-      <iframe
-        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d31705.788591582404!2d3.3768797!3d6.619124199999999!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x103b93a899b7c9b7%3A0x8630de71dbc44ffd!2sMagodo%20GRA%20Phase%20II%2C%20Ikosi%20Ketu%2C%20Ikeja%20105102%2C%20Lagos%2C%20Nigeria!5e0!3m2!1sen!2sus!4v1779926456872!5m2!1sen!2sus"
-        width="100%"
-        height="100%"
-        style="border:0; border-radius:16px;"
-        allowfullscreen=""
-        loading="lazy"
-        referrerpolicy="no-referrer-when-downgrade">
-      </iframe>
+      <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d31705.788591582404!2d3.3768797!3d6.619124199999999!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x103b93a899b7c9b7%3A0x8630de71dbc44ffd!2sMagodo%20GRA%20Phase%20II%2C%20Ikosi%20Ketu%2C%20Ikeja%20105102%2C%20Lagos%2C%20Nigeria!5e0!3m2!1sen!2sus!4v1779926456872!5m2!1sen!2sus" width="100%" height="100%" style="border:0; border-radius:16px;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
     </div>
-
   </section>
 
-
-  <!-- 9. CONTACT -->
   <section class="contact-section" id="contact">
     <div class="contact-inner">
       <div class="section-tag">Get in touch</div>
       <h2>Ready to get started?</h2>
-      <p>Reach out and we'll get your first delivery sorted today.</p>
+      <p>Reach out and we will get your first delivery sorted today.</p>
       <div class="contact-methods">
         <div class="contact-card">📞 +234 800 ERRANDS</div>
         <div class="contact-card">✉️ hello@errands.com</div>
@@ -314,18 +208,11 @@
     </div>
   </section>
 
-
-  <!-- 10. FOOTER -->
   <footer class="footer">
-
     <div class="footer-left">
-      <div class="footer-logo">
-        <span class="logo-dot"></span>
-        Errands
-      </div>
+      <div class="footer-logo"><span class="logo-dot"></span>Errands</div>
       <p>Your city. Delivered fast.</p>
     </div>
-
     <div class="footer-links">
       <a href="#">Privacy</a>
       <a href="#">Terms</a>
@@ -334,90 +221,129 @@
       <a href="track.html">Track Order</a>
       <a href="admin.html">Admin</a>
     </div>
-
     <p class="footer-copy">© 2026 Errands. All rights reserved.</p>
-
   </footer>
 
-<!-- Install App Button -->
-<div id="installBanner" style="
-  display: none;
-  position: fixed;
-  bottom: 100px;
-  right: 24px;
-  background: #0a0a0a;
-  border: 2px solid #FF6B2B;
-  border-radius: 16px;
-  padding: 16px 20px;
-  z-index: 9998;
-  max-width: 260px;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.3);
-">
-  <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
-    <img src="icon-192.png" width="40" height="40" style="border-radius:10px;"/>
+  <!-- Install App Button -->
+  <div id="installFixed" style="position:fixed;bottom:100px;left:24px;background:#0a0a0a;border:2px solid #FF6B2B;border-radius:50px;padding:12px 20px;z-index:9998;cursor:pointer;box-shadow:0 4px 20px rgba(255,107,43,0.3);display:flex;align-items:center;gap:10px;" onclick="showInstallGuide()">
+    <span style="font-size:22px;">📲</span>
     <div>
-      <div style="color:#fff; font-weight:700; font-size:15px;">MAG-CITY Errands</div>
-      <div style="color:#aaa; font-size:12px;">Install our free app</div>
+      <div style="color:#FF6B2B;font-weight:700;font-size:13px;">Install App</div>
+      <div style="color:#aaa;font-size:11px;">Tap to add to home screen</div>
     </div>
   </div>
-  <p style="color:#aaa; font-size:13px; margin-bottom:14px; line-height:1.5;">
-    📲 Add to your home screen for faster access to place and track orders anytime!
-  </p>
-  <button id="installBtn" style="
-    width: 100%;
-    padding: 12px;
-    background: #FF6B2B;
-    color: #fff;
-    border: none;
-    border-radius: 10px;
-    font-family: 'Syne', sans-serif;
-    font-weight: 700;
-    font-size: 15px;
-    cursor: pointer;
-    margin-bottom: 8px;
-  ">
-    📥 Install App — It's Free!
-  </button>
-  <button onclick="document.getElementById('installBanner').style.display='none'" style="
-    width: 100%;
-    padding: 10px;
-    background: none;
-    color: #888;
-    border: 1px solid #333;
-    border-radius: 10px;
-    font-size: 13px;
-    cursor: pointer;
-  ">
-    Maybe later
-  </button>
-</div>
 
-<!-- Fixed Install Button (always visible) -->
-<div id="installFixed" style="
-  display: none;
-  position: fixed;
-  bottom: 100px;
-  left: 24px;
-  background: #0a0a0a;
-  border: 2px solid #FF6B2B;
-  border-radius: 50px;
-  padding: 12px 20px;
-  z-index: 9998;
-  cursor: pointer;
-  box-shadow: 0 4px 20px rgba(255,107,43,0.3);
-  display: flex;
-  align-items: center;
-  gap: 10px;
-" onclick="document.getElementById('installBanner').style.display='block'">
-  <span style="font-size:22px;">📲</span>
-  <div>
-    <div style="color:#FF6B2B; font-weight:700; font-size:13px;">Install App</div>
-    <div style="color:#aaa; font-size:11px;">Tap to add to home screen</div>
+  <!-- Universal Install Guide Popup -->
+  <div id="installGuide" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:99999;align-items:center;justify-content:center;padding:20px;">
+    <div style="background:#1a1a1a;border:2px solid #FF6B2B;border-radius:20px;padding:32px 24px;max-width:340px;width:100%;text-align:center;">
+      <img src="icon-192.png" width="70" height="70" style="border-radius:16px;margin-bottom:16px;"/>
+      <h3 style="color:#fff;font-size:20px;margin-bottom:8px;">Install MAG-CITY App</h3>
+      <p style="color:#aaa;font-size:13px;margin-bottom:24px;">Follow the steps below for your device</p>
+      <div id="androidSteps" style="display:none;">
+        <div style="background:#0a0a0a;border-radius:12px;padding:16px;margin-bottom:12px;text-align:left;">
+          <div style="color:#FF6B2B;font-weight:700;margin-bottom:12px;">📱 Android (Chrome)</div>
+          <div style="color:#ccc;font-size:13px;line-height:2;">
+            1️⃣ Tap the <strong style="color:#fff;">3 dots ⋮</strong> menu at top right<br/>
+            2️⃣ Tap <strong style="color:#fff;">"Add to Home screen"</strong><br/>
+            3️⃣ Tap <strong style="color:#fff;">"Add"</strong> to confirm<br/>
+            ✅ App icon appears on your home screen!
+          </div>
+        </div>
+      </div>
+      <div id="iosSteps" style="display:none;">
+        <div style="background:#0a0a0a;border-radius:12px;padding:16px;margin-bottom:12px;text-align:left;">
+          <div style="color:#FF6B2B;font-weight:700;margin-bottom:12px;">🍎 iPhone / iPad (Safari)</div>
+          <div style="color:#ccc;font-size:13px;line-height:2;">
+            1️⃣ Tap the <strong style="color:#fff;">Share button ⬆️</strong> at the bottom<br/>
+            2️⃣ Scroll down and tap <strong style="color:#fff;">"Add to Home Screen"</strong><br/>
+            3️⃣ Tap <strong style="color:#fff;">"Add"</strong> to confirm<br/>
+            ✅ App icon appears on your home screen!
+          </div>
+        </div>
+      </div>
+      <div id="desktopSteps" style="display:none;">
+        <div style="background:#0a0a0a;border-radius:12px;padding:16px;margin-bottom:12px;text-align:left;">
+          <div style="color:#FF6B2B;font-weight:700;margin-bottom:12px;">💻 Desktop (Chrome)</div>
+          <div style="color:#ccc;font-size:13px;line-height:2;">
+            1️⃣ Look for <strong style="color:#fff;">install icon ⊕</strong> in address bar<br/>
+            2️⃣ Click it and select <strong style="color:#fff;">"Install"</strong><br/>
+            ✅ App opens like a desktop application!
+          </div>
+        </div>
+      </div>
+      <button id="installNowBtn" style="width:100%;padding:14px;background:#FF6B2B;color:#fff;border:none;border-radius:12px;font-weight:700;font-size:15px;cursor:pointer;margin-bottom:10px;display:none;">📥 Install Now</button>
+      <button onclick="document.getElementById('installGuide').style.display='none'" style="width:100%;padding:12px;background:none;color:#888;border:1px solid #333;border-radius:12px;font-size:14px;cursor:pointer;">Close</button>
+    </div>
   </div>
-</div>
+
+  <!-- WhatsApp Float Button -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <a href="https://wa.me/2348000000000?text=Hello!%20I%20want%20to%20place%20a%20delivery%20order" target="_blank" style="position:fixed;bottom:30px;right:30px;background:#25D366;color:#fff;width:62px;height:62px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:34px;text-decoration:none;box-shadow:0 4px 20px rgba(37,211,102,0.5);z-index:9999;transition:transform 0.2s,box-shadow 0.2s;" onmouseover="this.style.transform='scale(1.1)';this.style.boxShadow='0 6px 28px rgba(37,211,102,0.7)'" onmouseout="this.style.transform='scale(1)';this.style.boxShadow='0 4px 20px rgba(37,211,102,0.5)'" title="Chat with us on WhatsApp">
+    <i class="fa-brands fa-whatsapp"></i>
+  </a>
+
   <script src="main.js"></script>
 
   <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/errands-website/sw.js')
+          .then(() => console.log('SW registered'))
+          .catch(err => console.log('SW error:', err));
+      });
+    }
+
+    let deferredPrompt;
+
+    function getDevice() {
+      const ua = navigator.userAgent;
+      if (/iPad|iPhone|iPod/.test(ua)) return 'ios';
+      if (/android/i.test(ua)) return 'android';
+      return 'desktop';
+    }
+
+    function showInstallGuide() {
+      const guide = document.getElementById('installGuide');
+      guide.style.display = 'flex';
+      const device = getDevice();
+      if (device === 'ios') {
+        document.getElementById('iosSteps').style.display = 'block';
+        document.getElementById('androidSteps').style.display = 'none';
+        document.getElementById('desktopSteps').style.display = 'none';
+      } else if (device === 'android') {
+        document.getElementById('androidSteps').style.display = 'block';
+        document.getElementById('iosSteps').style.display = 'none';
+        document.getElementById('desktopSteps').style.display = 'none';
+      } else {
+        document.getElementById('desktopSteps').style.display = 'block';
+        document.getElementById('iosSteps').style.display = 'none';
+        document.getElementById('androidSteps').style.display = 'none';
+      }
+      if (deferredPrompt) {
+        document.getElementById('installNowBtn').style.display = 'block';
+      }
+    }
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+    });
+
+    document.getElementById('installNowBtn').addEventListener('click', async () => {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        const result = await deferredPrompt.userChoice;
+        if (result.outcome === 'accepted') {
+          document.getElementById('installGuide').style.display = 'none';
+        }
+        deferredPrompt = null;
+      }
+    });
+
+    window.addEventListener('appinstalled', () => {
+      document.getElementById('installFixed').style.display = 'none';
+    });
+
     function goTrack() {
       const val = document.getElementById('trackInput').value.trim().toUpperCase();
       if (!val) { alert('Please enter a tracking number'); return; }
@@ -427,60 +353,6 @@
       if (e.key === 'Enter') goTrack();
     });
   </script>
-
-  <!-- WhatsApp Float Button -->
-  <a href="https://wa.me/2348139220395?text=Hello!%20I%20want%20to%20place%20a%20delivery%20order"
-     target="_blank"
-     style="
-       position: fixed;
-       bottom: 30px;
-       right: 30px;
-       background: #25D366;
-       color: #fff;
-       width: 60px;
-       height: 60px;
-       border-radius: 50%;
-       display: flex;
-       align-items: center;
-       justify-content: center;
-       font-size: 30px;
-       text-decoration: none;
-       box-shadow: 0 4px 20px rgba(37,211,102,0.5);
-       z-index: 9999;
-       transition: transform 0.2s;
-     "
-     onmouseover="this.style.transform='scale(1.1)'"
-     onmouseout="this.style.transform='scale(1)'"
-     title="Chat with us on WhatsApp">
-    <!-- WhatsApp Float Button with Real Icon -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
-
-<a href="https://wa.me/2348000000000?text=Hello!%20I%20want%20to%20place%20a%20delivery%20order"
-   target="_blank"
-   style="
-     position: fixed;
-     bottom: 30px;
-     right: 30px;
-     background: #25D366;
-     color: #fff;
-     width: 62px;
-     height: 62px;
-     border-radius: 50%;
-     display: flex;
-     align-items: center;
-     justify-content: center;
-     font-size: 34px;
-     text-decoration: none;
-     box-shadow: 0 4px 20px rgba(37,211,102,0.5);
-     z-index: 9999;
-     transition: transform 0.2s, box-shadow 0.2s;
-   "
-   onmouseover="this.style.transform='scale(1.1)';this.style.boxShadow='0 6px 28px rgba(37,211,102,0.7)'"
-   onmouseout="this.style.transform='scale(1)';this.style.boxShadow='0 4px 20px rgba(37,211,102,0.5)'"
-   title="Chat with us on WhatsApp">
-  <i class="fa-brands fa-whatsapp"></i>
-</a>
-  
 
 </body>
 </html>
