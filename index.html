@@ -339,7 +339,82 @@
 
   </footer>
 
+<!-- Install App Button -->
+<div id="installBanner" style="
+  display: none;
+  position: fixed;
+  bottom: 100px;
+  right: 24px;
+  background: #0a0a0a;
+  border: 2px solid #FF6B2B;
+  border-radius: 16px;
+  padding: 16px 20px;
+  z-index: 9998;
+  max-width: 260px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+">
+  <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
+    <img src="icon-192.png" width="40" height="40" style="border-radius:10px;"/>
+    <div>
+      <div style="color:#fff; font-weight:700; font-size:15px;">MAG-CITY Errands</div>
+      <div style="color:#aaa; font-size:12px;">Install our free app</div>
+    </div>
+  </div>
+  <p style="color:#aaa; font-size:13px; margin-bottom:14px; line-height:1.5;">
+    📲 Add to your home screen for faster access to place and track orders anytime!
+  </p>
+  <button id="installBtn" style="
+    width: 100%;
+    padding: 12px;
+    background: #FF6B2B;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    cursor: pointer;
+    margin-bottom: 8px;
+  ">
+    📥 Install App — It's Free!
+  </button>
+  <button onclick="document.getElementById('installBanner').style.display='none'" style="
+    width: 100%;
+    padding: 10px;
+    background: none;
+    color: #888;
+    border: 1px solid #333;
+    border-radius: 10px;
+    font-size: 13px;
+    cursor: pointer;
+  ">
+    Maybe later
+  </button>
+</div>
 
+<!-- Fixed Install Button (always visible) -->
+<div id="installFixed" style="
+  display: none;
+  position: fixed;
+  bottom: 100px;
+  left: 24px;
+  background: #0a0a0a;
+  border: 2px solid #FF6B2B;
+  border-radius: 50px;
+  padding: 12px 20px;
+  z-index: 9998;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(255,107,43,0.3);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+" onclick="document.getElementById('installBanner').style.display='block'">
+  <span style="font-size:22px;">📲</span>
+  <div>
+    <div style="color:#FF6B2B; font-weight:700; font-size:13px;">Install App</div>
+    <div style="color:#aaa; font-size:11px;">Tap to add to home screen</div>
+  </div>
+</div>
   <script src="main.js"></script>
 
   <script>
