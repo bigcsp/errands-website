@@ -1,6 +1,7 @@
-﻿/**
+/**
  * ═══════════════════════════════════════════════════════
  *  ERRANDS — Smart Guide Agent FREE VERSION (guide.js)
+ *  Updated with Magodo Phase 2 zones & routes
  *  No API key needed. No cost. Works forever.
  * ═══════════════════════════════════════════════════════
  */
@@ -32,15 +33,15 @@
     },
     {
       patterns: ['what is errands','what does','what is this','explain','tell me about','about this','what do you do','what is this website','this app','this website'],
-      answer: `Welcome to **Errands** 🚴\n\nErrands is a fast bicycle delivery service in Lagos, Nigeria.\n\nHere is what we do in simple words:\n\n- You have a **package** you want to send somewhere in Lagos\n- You tell us the **pickup address** and the **delivery address**\n- One of our **riders on a bicycle** comes to pick it up\n- They deliver it **fast — usually in 30 minutes**\n- You can **watch the rider on a map** the whole time!\n\nWe deliver documents, parcels, food, electronics, and more 📦`
+      answer: `Welcome to **Errands** 🚴\n\nErrands is a fast bicycle delivery service based in **Magodo Phase 2, Lagos**.\n\nHere is what we do in simple words:\n\n- You have a **package** you want to send\n- You tell us the **pickup address** and the **delivery address**\n- One of our **riders on a bicycle** comes to pick it up\n- They deliver it **fast — usually in 30 minutes**\n- You can **watch the rider on a map** the whole time!\n\nWe cover all streets and zones inside **Magodo Phase 2** and nearby areas 📦`
     },
     {
       patterns: ['rider','courier','who delivers','who brings','dispatch','biker'],
-      answer: `Our riders are trained bicycle couriers based in Lagos 🚴\n\nHere is how it works:\n\n1. You place your order\n2. The **nearest available rider** gets assigned automatically\n3. They come to your pickup address\n4. They deliver your package safely\n\nYou can see your rider's name and rating when they are assigned. Our riders are friendly and professional!`
+      answer: `Our riders are trained bicycle couriers based in **Magodo Phase 2** 🚴\n\nHere is how it works:\n\n1. You place your order\n2. The **nearest available rider** gets assigned automatically\n3. They come to your pickup address\n4. They deliver your package safely\n\nYou can see your rider's name and rating when they are assigned. Our riders know every street in Magodo Phase 2 very well!`
     },
     {
       patterns: ['live map','map','watch','see rider','real time','live tracking','live route','view map'],
-      answer: `Yes! You can watch your rider on a **live map** in real time 🗺️\n\nHere is how:\n\n1. Place your order and get your tracking number\n2. Go to the **Track** page\n3. Enter your tracking number\n4. Click **View Live Route**\n\nYou will see a dark map with your rider moving along the route — all the way to your door! The map also shows the **ETA** (how many minutes until delivery).`
+      answer: `Yes! You can watch your rider on a **live map** in real time 🗺️\n\nHere is how:\n\n1. Place your order and get your tracking number\n2. Go to the **Track** page\n3. Enter your tracking number\n4. Click **View Live Route**\n\nYou will see the rider moving through **Magodo Phase 2** streets — from pickup all the way to your door! The map also shows the **ETA** (how many minutes until delivery).`
     },
     {
       patterns: ['cancel','cancell','stop order','change order','modify','wrong address'],
@@ -52,15 +53,40 @@
     },
     {
       patterns: ['safe','secure','insured','damage','lost','broken','fragile','careful'],
-      answer: `Your package is in safe hands! 🛡️\n\n- All deliveries are **handled with care**\n- **Fragile items** get extra careful handling — just select "Fragile item" when placing your order\n- Our riders are trained to handle packages safely\n- If you have concerns about a specific item, add a note in the **"Notes for rider"** box when ordering\n\nFor very valuable items, please mention this when you contact us so we can advise the best approach.`
+      answer: `Your package is in safe hands! 🛡️\n\n- All deliveries are **handled with care**\n- **Fragile items** get extra careful handling — just select "Fragile item" when placing your order\n- Our riders are trained to handle packages safely\n- If you have concerns about a specific item, add a note in the **"Notes for rider"** box when ordering\n\nFor very valuable items, please mention this when you contact us.`
     },
     {
-      patterns: ['area','zone','location','cover','deliver to','where do you','which areas','which places','lagos','lekki','ikeja','vi','victoria island','mainland','island'],
-      answer: `We currently deliver **across Lagos** 🗺️\n\nWe cover areas including:\n- Victoria Island & Lekki\n- Ikeja & Magodo\n- Yaba & Surulere  \n- Lagos Island\n- Ikoyi\n- And many more areas!\n\nIf you are not sure whether we cover your area, just **place your order** and our system will confirm, or call us on **+234 813 922 0395** to check.`
+      // ── UPDATED ZONES ──
+      patterns: ['area','zone','location','cover','deliver to','where do you','which areas','which places','magodo','tokunbo','malculy','secretariat','west zone','bashiru','shittu','emmanuel','keshi','shagisha','phase 2','phase ii','street','gate','road'],
+      answer: `We cover all zones inside **Magodo Phase 2** 🗺️\n\nOur delivery zones include:\n\n- 📍 **Tokunbo Malculy** street & surroundings\n- 📍 **Secretariat Gate** zone\n- 📍 **West Zone** — all streets\n- 📍 **Bashiru Shittu** avenue & nearby roads\n- 📍 **Emmanuel Keshi** street & estate\n- 📍 **Shagisha Gate** zone\n- 📍 **Magodo Phase 2 Gateway** (main entrance)\n- 📍 **All internal streets** within Magodo Phase 2\n\nNot sure if we reach your exact street? Just **call or WhatsApp us** on **+234 813 922 0395** and we will confirm right away! 😊`
+    },
+    {
+      patterns: ['tokunbo','malculy','tokunmbo'],
+      answer: `Yes! We deliver to and from **Tokunbo Malculy** street in Magodo Phase 2 📍\n\nJust enter the full address when placing your order — for example:\n*"5 Tokunbo Malculy Street, Magodo Phase 2, Lagos"*\n\nOur riders know this street very well. Click **Place Order** to book now! 📦`
+    },
+    {
+      patterns: ['secretariat','secretariat gate'],
+      answer: `Yes! We cover the **Secretariat Gate** zone in Magodo Phase 2 📍\n\nJust enter your full address at the Secretariat Gate area when placing your order.\n\nOur riders are familiar with all the streets around that gate. Click **Place Order** to get started! 📦`
+    },
+    {
+      patterns: ['west zone','westzone','west'],
+      answer: `Yes! We deliver across the **West Zone** of Magodo Phase 2 📍\n\nAll streets in the West Zone are covered by our riders.\n\nJust enter your full street address when placing your order and your rider will find you! 🚴`
+    },
+    {
+      patterns: ['bashiru','shittu','bashiru shittu'],
+      answer: `Yes! We deliver to **Bashiru Shittu Avenue** and surrounding roads in Magodo Phase 2 📍\n\nEnter your full address — for example:\n*"12 Bashiru Shittu Avenue, Magodo Phase 2, Lagos"*\n\nClick **Place Order** to book your delivery now! 📦`
+    },
+    {
+      patterns: ['emmanuel','keshi','emmanuel keshi'],
+      answer: `Yes! We cover **Emmanuel Keshi Street** in Magodo Phase 2 📍\n\nThis is one of our regular delivery routes. Just enter your full address when placing an order.\n\nFor example: *"Emmanuel Keshi Street, Magodo Phase 2, Lagos"*\n\nClick **Place Order** to get started! 🚴`
+    },
+    {
+      patterns: ['shagisha','shagisha gate'],
+      answer: `Yes! We deliver to the **Shagisha Gate** zone in Magodo Phase 2 📍\n\nOur riders know the Shagisha Gate area very well.\n\nJust enter your exact address when placing your order and your rider will be there fast! 🚴📦`
     },
     {
       patterns: ['business','bulk','many orders','multiple','shop','store','company','corporate','volume','wholesale'],
-      answer: `Yes! We have special plans for businesses 🏪\n\n- **Volume discounts** for regular deliveries\n- **Priority rider assignment** for business accounts\n- **Monthly invoicing** available\n- Perfect for shops, restaurants, pharmacies, and more\n\nTo set up a business account, contact us:\n📱 **+234 813 922 0395**\n✉️ **hello@errands.com**\n\nWe will create a custom plan that fits your needs!`
+      answer: `Yes! We have special plans for businesses 🏪\n\n- **Volume discounts** for regular deliveries\n- **Priority rider assignment** for business accounts\n- **Monthly invoicing** available\n- Perfect for shops, restaurants, pharmacies in Magodo Phase 2\n\nTo set up a business account, contact us:\n📱 **+234 813 922 0395**\n✉️ **hello@errands.com**\n\nWe will create a custom plan that fits your needs!`
     },
     {
       patterns: ['payment','pay','cash','transfer','pos','card','online payment','how to pay'],
@@ -68,7 +94,7 @@
     },
     {
       patterns: ['hello','hi','hey','good morning','good afternoon','good evening','howdy','sup','hiya'],
-      answer: `Hello! Welcome to Errands 👋😊\n\nI am **Ade**, your Errands helper. I am here to make things easy for you!\n\nI can help you with:\n- 📦 How to **place a delivery order**\n- 🔍 How to **track your package**\n- 💰 **Delivery prices**\n- ⏱️ **How long delivery takes**\n- 📞 **Contact information**\n\nWhat would you like to know?`
+      answer: `Hello! Welcome to Errands 👋😊\n\nI am **Ade**, your Errands helper. I am here to make things easy for you!\n\nI can help you with:\n- 📦 How to **place a delivery order**\n- 🔍 How to **track your package**\n- 💰 **Delivery prices**\n- 🗺️ **Zones we cover in Magodo Phase 2**\n- 📞 **Contact information**\n\nWhat would you like to know?`
     },
     {
       patterns: ['thank','thanks','thank you','appreciate','helpful','great','wonderful','perfect','nice'],
@@ -83,29 +109,21 @@
   /* ── MATCH ENGINE ────────────────────────────────── */
   function getAnswer(input) {
     const text = input.toLowerCase().trim();
-
-    // Try to match patterns
     for (const item of KNOWLEDGE) {
       for (const pattern of item.patterns) {
-        if (text.includes(pattern)) {
-          return item.answer;
-        }
+        if (text.includes(pattern)) return item.answer;
       }
     }
-
-    // Fuzzy: check individual words
     const words = text.split(/\s+/);
     for (const item of KNOWLEDGE) {
       for (const pattern of item.patterns) {
-        const patternWords = pattern.split(/\s+/);
-        if (patternWords.some(pw => pw.length > 3 && words.some(w => w.includes(pw) || pw.includes(w)))) {
+        const pw = pattern.split(/\s+/);
+        if (pw.some(p => p.length > 3 && words.some(w => w.includes(p) || p.includes(w)))) {
           return item.answer;
         }
       }
     }
-
-    // Default fallback
-    return `I am not sure about that, but I can help you with these 😊\n\n- 📦 **Place an order** — click the orange button at the top\n- 🔍 **Track your package** — click "Track" in the menu\n- 💰 **Prices** — ask me "how much does delivery cost"\n- 📞 **Speak to someone** — call **+234 813 922 0395**\n\nOr click the green **WhatsApp button** on the right to chat with our team directly!`;
+    return `I am not sure about that, but I can help you with these 😊\n\n- 📦 **Place an order** — click the orange button at the top\n- 🔍 **Track your package** — click "Track" in the menu\n- 🗺️ **Delivery zones** — ask me "which areas do you cover"\n- 📞 **Speak to someone** — call **+234 813 922 0395**\n\nOr click the green **WhatsApp button** on the right to chat with our team directly!`;
   }
 
   /* ── CSS ─────────────────────────────────────────── */
@@ -131,7 +149,6 @@
       font-size:9px; display:none; align-items:center; justify-content:center;
       font-weight:800;
     }
-
     #eg-panel {
       position:fixed; bottom:0; right:0; left:auto;
       width:360px; max-width:100vw; height:100dvh;
@@ -141,19 +158,15 @@
       font-family:'DM Sans',sans-serif;
     }
     #eg-panel.eg-open { transform:translateX(0); }
-
     #eg-backdrop {
       position:fixed; inset:0; z-index:89998;
-      background:rgba(0,0,0,.5); backdrop-filter:blur(4px);
-      display:none;
+      background:rgba(0,0,0,.5); backdrop-filter:blur(4px); display:none;
     }
     #eg-backdrop.eg-show { display:block; }
-
     #eg-header {
       padding:18px 18px 14px;
       background:linear-gradient(135deg,#1a0f00,#0e0e0e);
-      border-bottom:1px solid rgba(255,255,255,.06);
-      flex-shrink:0;
+      border-bottom:1px solid rgba(255,255,255,.06); flex-shrink:0;
     }
     #eg-header-top { display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; }
     #eg-agent-row { display:flex; align-items:center; gap:12px; }
@@ -165,15 +178,14 @@
     #eg-agent-name { font-family:'Syne',sans-serif; font-weight:800; font-size:15px; color:#f0f0f0; }
     .eg-online { display:flex; align-items:center; gap:5px; font-size:11px; color:#22c55e; margin-top:2px; }
     .eg-online-dot { width:6px; height:6px; border-radius:50%; background:#22c55e; animation:egPulse 1.4s infinite; }
-    @keyframes egPulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+    @keyframes egPulse{0%,100%{opacity:1}50%{opacity:.4}}
     #eg-close-btn {
       background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.08);
       color:#888; width:32px; height:32px; border-radius:8px;
-      cursor:pointer; font-size:16px; display:flex; align-items:center; justify-content:center;
-      transition:all .2s;
+      cursor:pointer; font-size:16px; display:flex; align-items:center;
+      justify-content:center; transition:all .2s;
     }
     #eg-close-btn:hover { background:rgba(255,255,255,.12); color:#f0f0f0; }
-
     #eg-font-controls {
       display:flex; align-items:center; gap:6px;
       background:rgba(255,255,255,.04); border-radius:8px;
@@ -183,73 +195,49 @@
     .eg-font-btn {
       background:rgba(255,255,255,.07); border:none; color:#aaa;
       width:26px; height:26px; border-radius:6px; cursor:pointer;
-      font-size:13px; font-weight:700; display:flex; align-items:center; justify-content:center;
-      transition:all .15s;
+      font-size:13px; font-weight:700; display:flex; align-items:center;
+      justify-content:center; transition:all .15s;
     }
     .eg-font-btn:hover { background:rgba(255,255,255,.14); color:#fff; }
-
     #eg-messages {
       flex:1; overflow-y:auto; padding:16px;
-      display:flex; flex-direction:column; gap:12px;
-      scroll-behavior:smooth;
+      display:flex; flex-direction:column; gap:12px; scroll-behavior:smooth;
     }
-    #eg-messages::-webkit-scrollbar { width:4px; }
-    #eg-messages::-webkit-scrollbar-thumb { background:rgba(255,255,255,.1); border-radius:2px; }
-
+    #eg-messages::-webkit-scrollbar{width:4px}
+    #eg-messages::-webkit-scrollbar-thumb{background:rgba(255,255,255,.1);border-radius:2px}
     .eg-msg { display:flex; flex-direction:column; max-width:90%; gap:4px; }
     .eg-msg.eg-user { align-self:flex-end; align-items:flex-end; }
     .eg-msg.eg-bot  { align-self:flex-start; align-items:flex-start; }
-
-    .eg-bubble {
-      padding:11px 14px; border-radius:18px;
-      line-height:1.6; word-break:break-word;
-    }
+    .eg-bubble { padding:11px 14px; border-radius:18px; line-height:1.6; word-break:break-word; }
     .eg-user .eg-bubble { background:#FF6B2B; color:#fff; border-bottom-right-radius:4px; }
-    .eg-bot  .eg-bubble {
-      background:#1a1a1a; color:#e8e8e8;
-      border:1px solid rgba(255,255,255,.07); border-bottom-left-radius:4px;
-    }
+    .eg-bot  .eg-bubble { background:#1a1a1a; color:#e8e8e8; border:1px solid rgba(255,255,255,.07); border-bottom-left-radius:4px; }
     .eg-bubble strong { color:#fff; }
-    .eg-bubble br { display:block; margin:2px 0; }
-
     .eg-msg-time { font-size:10px; color:#555; padding:0 4px; }
-
     .eg-typing .eg-bubble { padding:14px 18px; }
     .eg-typing-dots { display:flex; gap:5px; }
-    .eg-typing-dots span {
-      width:7px; height:7px; border-radius:50%; background:#555;
-      animation:egDot .8s infinite;
-    }
+    .eg-typing-dots span { width:7px; height:7px; border-radius:50%; background:#555; animation:egDot .8s infinite; }
     .eg-typing-dots span:nth-child(2){animation-delay:.15s}
     .eg-typing-dots span:nth-child(3){animation-delay:.3s}
     @keyframes egDot{0%,80%,100%{transform:scale(1);opacity:.5}40%{transform:scale(1.3);opacity:1}}
-
-    #eg-chips {
-      padding:0 16px 12px; display:flex; flex-wrap:wrap; gap:7px; flex-shrink:0;
-    }
+    #eg-chips { padding:0 16px 12px; display:flex; flex-wrap:wrap; gap:7px; flex-shrink:0; }
     .eg-chip {
       background:rgba(255,107,43,.09); border:1px solid rgba(255,107,43,.2);
       color:#e0e0e0; padding:6px 12px; border-radius:20px;
-      font-size:12px; cursor:pointer; white-space:nowrap;
-      transition:all .2s;
+      font-size:12px; cursor:pointer; white-space:nowrap; transition:all .2s;
     }
     .eg-chip:hover { background:rgba(255,107,43,.22); color:#fff; }
-
     #eg-input-bar {
       padding:12px 14px; border-top:1px solid rgba(255,255,255,.06);
       display:flex; gap:8px; align-items:flex-end; flex-shrink:0;
     }
     #eg-input {
-      flex:1; background:rgba(255,255,255,.05);
-      border:1px solid rgba(255,255,255,.1); border-radius:12px;
-      color:#f0f0f0; font-family:'DM Sans',sans-serif;
-      padding:10px 14px; resize:none; outline:none;
-      max-height:100px; line-height:1.45; transition:border-color .2s;
-      font-size:14px;
+      flex:1; background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.1);
+      border-radius:12px; color:#f0f0f0; font-family:'DM Sans',sans-serif;
+      padding:10px 14px; resize:none; outline:none; max-height:100px;
+      line-height:1.45; transition:border-color .2s; font-size:14px;
     }
     #eg-input:focus { border-color:rgba(255,107,43,.5); }
     #eg-input::placeholder { color:#444; }
-
     #eg-send-btn, #eg-voice-btn {
       width:40px; height:40px; border-radius:10px; border:none;
       cursor:pointer; font-size:17px; display:flex; align-items:center;
@@ -260,37 +248,39 @@
     #eg-voice-btn { background:rgba(255,255,255,.06); color:#888; }
     #eg-voice-btn:hover { background:rgba(255,255,255,.12); color:#fff; }
     #eg-voice-btn.eg-speaking { background:rgba(34,197,94,.15); color:#22c55e; }
-
     #eg-welcome {
       position:absolute; inset:0; z-index:10; background:#0e0e0e;
       display:flex; flex-direction:column; align-items:center;
       justify-content:center; padding:32px 28px; text-align:center;
-      transition:opacity .3s;
     }
-    #eg-welcome.eg-hide { opacity:0; pointer-events:none; }
     #eg-welcome-icon { font-size:56px; margin-bottom:20px; }
     #eg-welcome h2 { font-family:'Syne',sans-serif; font-weight:800; font-size:22px; color:#f0f0f0; margin-bottom:10px; }
     #eg-welcome p { color:#888; font-size:14px; line-height:1.7; margin-bottom:28px; }
     #eg-welcome-start {
-      background:#FF6B2B; color:#fff; border:none;
-      padding:14px 36px; border-radius:30px;
-      font-family:'Syne',sans-serif; font-weight:700; font-size:16px;
-      cursor:pointer; transition:all .2s; margin-bottom:12px; width:100%;
+      background:#FF6B2B; color:#fff; border:none; padding:14px 36px;
+      border-radius:30px; font-family:'Syne',sans-serif; font-weight:700;
+      font-size:16px; cursor:pointer; transition:all .2s; margin-bottom:12px; width:100%;
     }
     #eg-welcome-start:hover { background:#e05a20; transform:translateY(-1px); }
     #eg-welcome-skip { background:transparent; border:none; color:#555; font-size:13px; cursor:pointer; text-decoration:underline; }
-
     #eg-wa-cta {
-      margin:0 16px 12px;
-      background:rgba(37,211,102,.1); border:1px solid rgba(37,211,102,.25);
-      border-radius:12px; padding:12px 16px;
-      display:flex; align-items:center; gap:10px;
+      margin:0 16px 12px; background:rgba(37,211,102,.1);
+      border:1px solid rgba(37,211,102,.25); border-radius:12px;
+      padding:12px 16px; display:flex; align-items:center; gap:10px;
       text-decoration:none; transition:background .2s; flex-shrink:0;
     }
     #eg-wa-cta:hover { background:rgba(37,211,102,.18); }
     #eg-wa-cta span { font-size:20px; }
-    #eg-wa-cta div { font-size:12px; color:#22c55e; font-family:'Syne',sans-serif; font-weight:700; }
-    #eg-wa-cta p { font-size:11px; color:#666; margin:0; }
+    #eg-wa-cta-title { font-size:12px; color:#22c55e; font-family:'Syne',sans-serif; font-weight:700; }
+    #eg-wa-cta-sub { font-size:11px; color:#666; margin:0; }
+
+    /* Zones quick-list pill */
+    .eg-zone-pill {
+      display:inline-block; background:rgba(255,107,43,.1);
+      border:1px solid rgba(255,107,43,.2); color:#FF6B2B;
+      padding:3px 10px; border-radius:20px; font-size:11px;
+      font-family:'Syne',sans-serif; font-weight:700; margin:2px;
+    }
   `;
 
   const styleEl = document.createElement('style');
@@ -300,24 +290,20 @@
   /* ── HTML ────────────────────────────────────────── */
   const html = `
     <div id="eg-backdrop"></div>
-
     <button id="eg-fab" onclick="ErrandsGuide.open()">
       <span class="eg-fab-icon">🙋</span>
       Need Help?
       <span id="eg-notif"></span>
     </button>
-
     <div id="eg-panel">
-
       <div id="eg-welcome">
         <div id="eg-welcome-icon">👋</div>
         <h2>Hi! I'm Ade.</h2>
-        <p>I'm your personal helper for <strong style="color:#FF6B2B">Errands</strong> — Lagos' fast bicycle delivery service.<br><br>
-        I can help you place an order, track your package, or explain anything on this page — in simple words!</p>
+        <p>I'm your personal helper for <strong style="color:#FF6B2B">Errands</strong> — Magodo Phase 2's fast bicycle delivery service.<br><br>
+        I know every zone and street in Magodo Phase 2. Ask me anything!</p>
         <button id="eg-welcome-start" onclick="ErrandsGuide.startChat()">Let's get started 🚀</button>
         <button id="eg-welcome-skip"  onclick="ErrandsGuide.skipWelcome()">Skip intro</button>
       </div>
-
       <div id="eg-header">
         <div id="eg-header-top">
           <div id="eg-agent-row">
@@ -335,27 +321,22 @@
           <button class="eg-font-btn" onclick="ErrandsGuide.fontSize(2)">A+</button>
         </div>
       </div>
-
       <div id="eg-messages"></div>
-
       <a id="eg-wa-cta" href="https://wa.me/2348139220395?text=Hello!%20I%20need%20help%20with%20my%20order" target="_blank">
         <span>💬</span>
         <div>
-          <div>Chat with a real person</div>
-          <p>Open WhatsApp — we reply fast!</p>
+          <div id="eg-wa-cta-title">Chat with a real person</div>
+          <p id="eg-wa-cta-sub">Open WhatsApp — we reply fast!</p>
         </div>
       </a>
-
       <div id="eg-chips"></div>
-
       <div id="eg-input-bar">
-        <textarea id="eg-input" rows="1" placeholder="Type your question here… 😊"
+        <textarea id="eg-input" rows="1" placeholder="Ask me about zones, prices, orders… 😊"
           onkeydown="ErrandsGuide.handleKey(event)"
           oninput="ErrandsGuide.autoResize(this)"></textarea>
         <button id="eg-voice-btn" onclick="ErrandsGuide.toggleSpeak()" title="Read last reply aloud">🔊</button>
         <button id="eg-send-btn" onclick="ErrandsGuide.send()">➤</button>
       </div>
-
     </div>
   `;
 
@@ -365,12 +346,14 @@
 
   /* ── QUICK CHIPS ─────────────────────────────────── */
   const CHIPS = [
-    { label:'📦 How do I place an order?',    msg:'How do I place an order?' },
-    { label:'🔍 How do I track my package?',  msg:'How do I track my package?' },
-    { label:'💰 How much does delivery cost?', msg:'How much does delivery cost?' },
-    { label:'⏱ How long does delivery take?', msg:'How long does delivery take?' },
-    { label:'📞 Contact information',          msg:'How do I contact you?' },
-    { label:'🗺 Which areas do you cover?',    msg:'Which areas do you deliver to?' },
+    { label:'📦 How do I place an order?',       msg:'How do I place an order?' },
+    { label:'🔍 How do I track my package?',     msg:'How do I track my package?' },
+    { label:'🗺️ Which zones do you cover?',      msg:'Which areas do you deliver to?' },
+    { label:'📍 Do you cover Shagisha Gate?',    msg:'Do you deliver to Shagisha Gate?' },
+    { label:'📍 Emmanuel Keshi delivery?',       msg:'Do you deliver to Emmanuel Keshi?' },
+    { label:'💰 How much does delivery cost?',   msg:'How much does delivery cost?' },
+    { label:'⏱ How long does delivery take?',    msg:'How long does delivery take?' },
+    { label:'📞 Contact information',            msg:'How do I contact you?' },
   ];
 
   function renderChips() {
@@ -387,7 +370,6 @@
 
   /* ── PUBLIC ──────────────────────────────────────── */
   window.ErrandsGuide = {
-
     open() {
       document.getElementById('eg-panel').classList.add('eg-open');
       document.getElementById('eg-backdrop').classList.add('eg-show');
@@ -397,61 +379,49 @@
         document.getElementById('eg-welcome').style.display = 'none';
       }
     },
-
     close() {
       document.getElementById('eg-panel').classList.remove('eg-open');
       document.getElementById('eg-backdrop').classList.remove('eg-show');
     },
-
     startChat() {
       localStorage.setItem('eg_visited','1');
       document.getElementById('eg-welcome').style.display = 'none';
-      this._bot(`Hello! 😊 I am **Ade**, your Errands helper.\n\nI can help you:\n\n- 📦 **Place a delivery order**\n- 🔍 **Track your package**\n- 💰 **Check prices**\n- 📞 **Contact the team**\n\nWhat would you like to know today?`);
+      this._bot(`Hello! 😊 I am **Ade**, your Errands helper.\n\nI know every zone in **Magodo Phase 2**! I can help with:\n\n- 📦 **Place a delivery order**\n- 🔍 **Track your package**\n- 🗺️ **Zones covered** — Tokunbo Malculy, Secretariat Gate, West Zone, Bashiru Shittu, Emmanuel Keshi, Shagisha Gate\n- 💰 **Check prices**\n- 📞 **Contact the team**\n\nWhat would you like to know today?`);
     },
-
     skipWelcome() {
       localStorage.setItem('eg_visited','1');
       document.getElementById('eg-welcome').style.display = 'none';
     },
-
     handleKey(e) {
       if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); this.send(); }
     },
-
     autoResize(el) {
       el.style.height = 'auto';
       el.style.height = Math.min(el.scrollHeight, 100) + 'px';
     },
-
     fontSize(d) {
       fontSize = Math.max(12, Math.min(22, fontSize + d));
       document.getElementById('eg-messages').style.fontSize = fontSize + 'px';
     },
-
     sendQuick(msg) {
       document.getElementById('eg-input').value = msg;
       this.send();
     },
-
     send() {
       const input = document.getElementById('eg-input');
       const text  = input.value.trim();
       if (!text) return;
       input.value = '';
       input.style.height = 'auto';
-
       this._user(text);
-
-      // Show typing for realism
       const tid = this._typing();
       setTimeout(() => {
         this._removeTyping(tid);
         const answer = getAnswer(text);
         lastBot = answer;
         this._bot(answer);
-      }, 600 + Math.random() * 400);
+      }, 500 + Math.random() * 400);
     },
-
     toggleSpeak() {
       if (!('speechSynthesis' in window)) return;
       if (speaking) {
@@ -471,10 +441,8 @@
       document.getElementById('eg-voice-btn').classList.add('eg-speaking');
       speechSynthesis.speak(u);
     },
-
-    _user(text) { this._msg('eg-user', this._esc(text)); },
-    _bot(text)  { this._msg('eg-bot',  this._md(text));  },
-
+    _user(t)  { this._msg('eg-user', this._esc(t)); },
+    _bot(t)   { this._msg('eg-bot',  this._md(t));  },
     _msg(cls, html) {
       const el   = document.getElementById('eg-messages');
       const time = new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
@@ -484,7 +452,6 @@
       el.appendChild(div);
       el.scrollTop = el.scrollHeight;
     },
-
     _typing() {
       const el  = document.getElementById('eg-messages');
       const id  = 'egt' + Date.now();
@@ -494,13 +461,8 @@
       el.appendChild(div); el.scrollTop = el.scrollHeight;
       return id;
     },
-
     _removeTyping(id) { document.getElementById(id)?.remove(); },
-
-    _esc(t) {
-      return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-    },
-
+    _esc(t) { return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); },
     _md(t) {
       return t
         .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
@@ -509,10 +471,8 @@
     },
   };
 
-  // Backdrop close
   document.getElementById('eg-backdrop').addEventListener('click', () => ErrandsGuide.close());
 
-  // Show notif dot after 4s on first visit
   setTimeout(() => {
     if (!localStorage.getItem('eg_visited')) {
       const n = document.getElementById('eg-notif');
