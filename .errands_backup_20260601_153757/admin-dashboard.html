@@ -1,7 +1,6 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta name="robots" content="noindex, nofollow, noarchive" />
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Admin Login — MAG-CITY ERANDS</title>
@@ -514,7 +513,6 @@
   </style>
 </head>
 <body>
-<script>window.location.replace("admin-portal.html");</script>
 
 <div class="page">
 
@@ -651,7 +649,10 @@
   const msgEl    = document.getElementById('msg');
 
   // ✅ Change these credentials to your real ones
-  const ADMIN_CREDENTIALS = []; // Credentials removed
+  const ADMIN_CREDENTIALS = [
+    { id: 'admin@magcity.com', password: 'admin123' },
+    { id: 'magcity-admin',     password: 'errand2025' }
+  ];
 
   function showMsg(type, text) {
     msgEl.className = `message ${type}`;
@@ -758,5 +759,5 @@
     if (e.key === 'Enter') loginBtn.click();
   });
 </script>
-<script src="notify.js?v=2"></script><script src="guide.js?v=2"></script></body>
+</body>
 </html>

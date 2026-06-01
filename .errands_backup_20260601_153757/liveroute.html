@@ -1,0 +1,441 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Live Route Tracker - MAG-CITY Errands</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<style>
+  :root { --black:#0a0a0a; --orange:#FF6B2B; --cream:#FFF8F2; --gray:#888; --green:#22c55e; --blue:#3b82f6; --yellow:#f59e0b; --red:#ef4444; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:#111; font-family:'DM Sans',sans-serif; color:#fff; min-height:100vh; }
+
+  .topbar { background:#1a1a1a; border-bottom:1px solid #333; padding:14px 32px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; position:sticky; top:0; z-index:1000; }
+  .logo { font-family:'Bebas Neue',sans-serif; font-size:24px; color:var(--orange); letter-spacing:2px; text-decoration:none; }
+  .nav-links { display:flex; gap:8px; flex-wrap:wrap; }
+  .nav-link { color:#aaa; text-decoration:none; font-size:13px; padding:8px 16px; border-radius:8px; border:1px solid #333; transition:all .2s; }
+  .nav-link:hover { border-color:var(--orange); color:var(--orange); }
+  .nav-link.active { background:var(--orange); color:#fff; border-color:var(--orange); }
+
+  .layout { display:grid; grid-template-columns:380px 1fr; height:calc(100vh - 57px); }
+
+  .sidebar { background:#1a1a1a; border-right:1px solid #333; overflow-y:auto; padding:20px; display:flex; flex-direction:column; gap:14px; }
+  .sidebar-title { font-family:'Bebas Neue',sans-serif; font-size:22px; letter-spacing:2px; color:var(--orange); }
+  .sidebar-sub { font-size:13px; color:#555; margin-top:-10px; }
+
+  .input-group { display:flex; flex-direction:column; gap:6px; }
+  .input-label { font-size:12px; font-weight:700; color:#888; text-transform:uppercase; letter-spacing:.5px; display:flex; align-items:center; gap:6px; }
+  .input-label i { color:var(--orange); }
+  .input-field { background:#0a0a0a; border:2px solid #333; color:#fff; padding:11px 14px; border-radius:10px; font-family:'DM Sans',sans-serif; font-size:14px; outline:none; transition:border-color .2s; width:100%; }
+  .input-field:focus { border-color:var(--orange); }
+  .input-field::placeholder { color:#555; }
+
+  .btn-row { display:flex; gap:8px; }
+  .calc-btn { flex:1; padding:13px; background:var(--orange); color:#fff; border:none; border-radius:10px; font-family:'Bebas Neue',sans-serif; font-size:16px; letter-spacing:1px; cursor:pointer; transition:all .2s; display:flex; align-items:center; justify-content:center; gap:6px; }
+  .calc-btn:hover { background:#e05520; }
+  .calc-btn:disabled { background:#333; cursor:not-allowed; }
+  .live-btn { padding:13px 16px; background:transparent; color:var(--green); border:2px solid var(--green); border-radius:10px; font-family:'Bebas Neue',sans-serif; font-size:14px; letter-spacing:1px; cursor:pointer; transition:all .2s; white-space:nowrap; }
+  .live-btn:hover { background:var(--green); color:#fff; }
+  .live-btn.active { background:var(--green); color:#fff; }
+
+  .divider { height:1px; background:#333; }
+
+  .result-card { background:#0a0a0a; border:1px solid #333; border-radius:12px; padding:14px; display:none; }
+  .result-card.show { display:block; }
+  .result-title { font-family:'Bebas Neue',sans-serif; font-size:15px; letter-spacing:1px; color:var(--orange); margin-bottom:10px; }
+  .result-row { display:flex; justify-content:space-between; align-items:center; padding:7px 0; border-bottom:1px solid #1a1a1a; }
+  .result-row:last-child { border-bottom:none; }
+  .result-key { font-size:12px; color:#666; text-transform:uppercase; letter-spacing:.5px; }
+  .result-val { font-size:14px; font-weight:600; }
+  .result-val.orange { color:var(--orange); }
+  .result-val.green { color:var(--green); }
+  .result-val.blue { color:var(--blue); }
+
+  .live-status { background:#0a0a0a; border:1px solid rgba(34,197,94,0.3); border-radius:12px; padding:14px; display:none; }
+  .live-status.show { display:block; }
+  .live-dot { width:8px; height:8px; border-radius:50%; background:var(--green); display:inline-block; margin-right:6px; animation:blink 1s infinite; }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+  .live-header { display:flex; align-items:center; font-size:13px; font-weight:700; color:var(--green); margin-bottom:10px; }
+  .live-update { font-size:11px; color:#555; margin-top:8px; }
+
+  .steps-wrap { background:#0a0a0a; border:1px solid #333; border-radius:12px; padding:14px; display:none; max-height:220px; overflow-y:auto; }
+  .steps-wrap.show { display:block; }
+  .steps-title { font-family:'Bebas Neue',sans-serif; font-size:15px; letter-spacing:1px; color:var(--orange); margin-bottom:10px; }
+  .step-item { display:flex; gap:8px; padding:7px 0; border-bottom:1px solid #1a1a1a; font-size:12px; color:#aaa; line-height:1.4; }
+  .step-item:last-child { border-bottom:none; }
+  .step-num { color:var(--orange); font-weight:700; min-width:18px; font-size:13px; }
+
+  .order-wrap { background:rgba(255,107,43,0.08); border:1px solid rgba(255,107,43,0.2); border-radius:12px; padding:14px; text-align:center; }
+  .order-wrap p { font-size:13px; color:#aaa; margin-bottom:10px; }
+  .order-wrap a { display:block; padding:11px; background:var(--orange); color:#fff; border-radius:8px; text-decoration:none; font-family:'Bebas Neue',sans-serif; font-size:15px; letter-spacing:1px; transition:background .2s; }
+  .order-wrap a:hover { background:#e05520; }
+
+  .error-msg { background:rgba(239,68,68,0.1); border:1px solid rgba(239,68,68,0.3); border-radius:10px; padding:12px; font-size:13px; color:var(--red); display:none; }
+  .error-msg.show { display:block; }
+
+  .spinner { display:none; width:16px; height:16px; border:2px solid rgba(255,255,255,0.3); border-top-color:#fff; border-radius:50%; animation:spin .7s linear infinite; }
+  @keyframes spin { to{transform:rotate(360deg)} }
+
+  .map-wrap { position:relative; }
+  #map { width:100%; height:100%; background:#1a1a1a; }
+
+  .map-info-box { position:absolute; top:12px; right:12px; background:rgba(17,17,17,0.95); border:1px solid #333; border-radius:12px; padding:14px; z-index:999; min-width:180px; display:none; }
+  .map-info-box.show { display:block; }
+  .map-info-title { font-family:'Bebas Neue',sans-serif; font-size:14px; letter-spacing:1px; color:var(--orange); margin-bottom:8px; }
+  .map-info-row { display:flex; justify-content:space-between; gap:12px; margin-bottom:5px; font-size:12px; }
+  .map-info-key { color:#888; }
+  .map-info-val { font-weight:600; color:#fff; }
+
+  @media(max-width:768px) {
+    .layout { grid-template-columns:1fr; grid-template-rows:auto 350px; height:auto; }
+    .topbar { padding:12px 16px; }
+    .sidebar { padding:14px; max-height:60vh; overflow-y:auto; }
+    .map-info-box { display:none !important; }
+    .nav-links { display:none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a href="index.html" class="logo">MAG-CITY Errands</a>
+  <div class="nav-links">
+    <a href="index.html" class="nav-link">Home</a>
+    <a href="order.html" class="nav-link">Place Order</a>
+    <a href="track.html" class="nav-link">Track Order</a>
+    <a href="zones.html" class="nav-link">Zones</a>
+    <a href="liveroute.html" class="nav-link active">Live Route</a>
+  </div>
+</div>
+
+<div class="layout">
+
+  <div class="sidebar">
+    <div class="sidebar-title">Live Route Tracker</div>
+    <div class="sidebar-sub">100% Free - No card required</div>
+
+    <div class="input-group">
+      <div class="input-label"><i class="fa fa-circle-dot"></i> Pickup Location</div>
+      <input type="text" class="input-field" id="originInput" placeholder="e.g. Ikeja, Lagos"/>
+    </div>
+
+    <div class="input-group">
+      <div class="input-label"><i class="fa fa-location-dot"></i> Delivery Location</div>
+      <input type="text" class="input-field" id="destInput" placeholder="e.g. Magodo Kosofe, Lagos" value="Magodo Kosofe, Lagos"/>
+    </div>
+
+    <div class="input-group">
+      <div class="input-label"><i class="fa fa-motorcycle"></i> Service Type</div>
+      <select class="input-field" id="serviceSelect">
+        <option value="express">Express (1-2 hrs)</option>
+        <option value="standard">Standard (Same day)</option>
+        <option value="scheduled">Scheduled</option>
+      </select>
+    </div>
+
+    <div class="btn-row">
+      <button class="calc-btn" id="calcBtn" onclick="calculateRoute()">
+        <span id="calcText"><i class="fa fa-route"></i> Calculate</span>
+        <div class="spinner" id="calcSpinner"></div>
+      </button>
+      <button class="live-btn" id="liveBtn" onclick="toggleLive()">
+        <i class="fa fa-satellite-dish"></i> Live
+      </button>
+    </div>
+
+    <div class="error-msg" id="errorMsg"></div>
+    <div class="divider"></div>
+
+    <div class="result-card" id="resultCard">
+      <div class="result-title">Route Details</div>
+      <div class="result-row">
+        <div class="result-key">Distance</div>
+        <div class="result-val blue" id="resDistance">-</div>
+      </div>
+      <div class="result-row">
+        <div class="result-key">Est. Duration</div>
+        <div class="result-val green" id="resDuration">-</div>
+      </div>
+      <div class="result-row">
+        <div class="result-key">Delivery Price</div>
+        <div class="result-val orange" id="resPrice">-</div>
+      </div>
+      <div class="result-row">
+        <div class="result-key">Service</div>
+        <div class="result-val" id="resService">-</div>
+      </div>
+      <div class="result-row">
+        <div class="result-key">Zone</div>
+        <div class="result-val" id="resZone">-</div>
+      </div>
+    </div>
+
+    <div class="live-status" id="liveStatus">
+      <div class="live-header"><span class="live-dot"></span>Live Tracking Active</div>
+      <div class="result-row">
+        <div class="result-key">Distance to Dest</div>
+        <div class="result-val blue" id="liveDistance">Calculating...</div>
+      </div>
+      <div class="result-row">
+        <div class="result-key">Est. Time</div>
+        <div class="result-val green" id="liveETA">Calculating...</div>
+      </div>
+      <div class="result-row">
+        <div class="result-key">Your Location</div>
+        <div class="result-val" id="liveAddr" style="font-size:11px;">Getting location...</div>
+      </div>
+      <div class="live-update" id="liveUpdate">Waiting for GPS...</div>
+    </div>
+
+    <div class="steps-wrap" id="stepsWrap">
+      <div class="steps-title">Directions</div>
+      <div id="stepsList"></div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="order-wrap">
+      <p>Ready to send a package along this route?</p>
+      <a href="order.html">Place an Order Now</a>
+    </div>
+  </div>
+
+  <div class="map-wrap">
+    <div id="map"></div>
+    <div class="map-info-box" id="mapInfoBox">
+      <div class="map-info-title">Route Summary</div>
+      <div class="map-info-row"><span class="map-info-key">Distance</span><span class="map-info-val" id="infoDistance">-</span></div>
+      <div class="map-info-row"><span class="map-info-key">Duration</span><span class="map-info-val" id="infoDuration">-</span></div>
+      <div class="map-info-row"><span class="map-info-key">Price</span><span class="map-info-val" id="infoPrice">-</span></div>
+    </div>
+  </div>
+
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+  let map, routeLayer, originMarker, destMarker, liveMarker;
+  let isLive = false;
+  let watchId = null;
+
+  map = L.map('map', { zoomControl:true }).setView([6.601838, 3.351485], 12);
+
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+    attribution: 'OpenStreetMap | CartoDB',
+    maxZoom: 19
+  }).addTo(map);
+
+  function makeIcon(color, label) {
+    return L.divIcon({
+      html: '<div style="background:' + color + ';width:14px;height:14px;border-radius:50%;border:3px solid #fff;box-shadow:0 0 8px ' + color + ';"></div>',
+      className: '',
+      iconSize: [14,14],
+      iconAnchor: [7,7]
+    });
+  }
+
+  function calcPrice(km, service) {
+    let base = 500, per = 80;
+    if (service === 'express') { base = 800; per = 120; }
+    if (service === 'scheduled') { base = 400; per = 60; }
+    return 'N' + Math.round(base + km * per).toLocaleString();
+  }
+
+  function getZone(km) {
+    if (km <= 5) return 'Zone 1 - Core (N500+)';
+    if (km <= 10) return 'Zone 2 - Mainland (N800+)';
+    if (km <= 20) return 'Zone 3 - Island (N1200+)';
+    if (km <= 35) return 'Zone 4 - Extended (N1500+)';
+    return 'Zone 5 - West (N1000+)';
+  }
+
+  function showError(msg) {
+    const el = document.getElementById('errorMsg');
+    el.textContent = msg;
+    el.className = 'error-msg show';
+    setTimeout(() => el.className = 'error-msg', 5000);
+  }
+
+  function haversine(lat1, lon1, lat2, lon2) {
+    const R = 6371;
+    const dLat = (lat2-lat1) * Math.PI/180;
+    const dLon = (lon2-lon1) * Math.PI/180;
+    const a = Math.sin(dLat/2)**2 + Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLon/2)**2;
+    return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+  }
+
+  async function geocode(place) {
+    const url = 'https://nominatim.openstreetmap.org/search?format=json&q=' + encodeURIComponent(place + ' Lagos Nigeria') + '&limit=1';
+    const res = await fetch(url, { headers: { 'Accept-Language':'en' } });
+    const data = await res.json();
+    if (!data.length) throw new Error('Location not found: ' + place);
+    return { lat: parseFloat(data[0].lat), lng: parseFloat(data[0].lon), name: data[0].display_name };
+  }
+
+  async function getRoute(olat, olng, dlat, dlng) {
+    const url = 'https://router.project-osrm.org/route/v1/driving/' + olng + ',' + olat + ';' + dlng + ',' + dlat + '?overview=full&geometries=geojson&steps=true';
+    const res = await fetch(url);
+    const data = await res.json();
+    if (data.code !== 'Ok') throw new Error('Route not found');
+    return data.routes[0];
+  }
+
+  async function reverseGeocode(lat, lng) {
+    const url = 'https://nominatim.openstreetmap.org/reverse?format=json&lat=' + lat + '&lon=' + lng;
+    const res = await fetch(url);
+    const data = await res.json();
+    return data.display_name || 'Location found';
+  }
+
+  window.calculateRoute = async function() {
+    const origin = document.getElementById('originInput').value.trim();
+    const dest = document.getElementById('destInput').value.trim();
+    const service = document.getElementById('serviceSelect').value;
+
+    if (!origin || !dest) { showError('Please enter both pickup and delivery locations'); return; }
+
+    const btn = document.getElementById('calcBtn');
+    const text = document.getElementById('calcText');
+    const spinner = document.getElementById('calcSpinner');
+    btn.disabled = true;
+    text.style.display = 'none';
+    spinner.style.display = 'block';
+    document.getElementById('errorMsg').className = 'error-msg';
+
+    try {
+      const [orig, destination] = await Promise.all([geocode(origin), geocode(dest)]);
+      const route = await getRoute(orig.lat, orig.lng, destination.lat, destination.lng);
+
+      const distKm = route.distance / 1000;
+      const durationMin = Math.round(route.duration / 60);
+      const price = calcPrice(distKm, service);
+      const zone = getZone(distKm);
+
+      if (routeLayer) map.removeLayer(routeLayer);
+      if (originMarker) map.removeLayer(originMarker);
+      if (destMarker) map.removeLayer(destMarker);
+
+      routeLayer = L.geoJSON(route.geometry, {
+        style: { color:'#FF6B2B', weight:5, opacity:0.9 }
+      }).addTo(map);
+
+      originMarker = L.marker([orig.lat, orig.lng], { icon: makeIcon('#22c55e', 'P') })
+        .addTo(map)
+        .bindPopup('<strong style="color:#22c55e">Pickup:</strong><br>' + origin);
+
+      destMarker = L.marker([destination.lat, destination.lng], { icon: makeIcon('#FF6B2B', 'D') })
+        .addTo(map)
+        .bindPopup('<strong style="color:#FF6B2B">Delivery:</strong><br>' + dest);
+
+      map.fitBounds(routeLayer.getBounds(), { padding:[40,40] });
+
+      const distText = distKm.toFixed(1) + ' km';
+      const durText = durationMin >= 60 ? Math.floor(durationMin/60) + 'h ' + (durationMin%60) + 'min' : durationMin + ' mins';
+
+      document.getElementById('resDistance').textContent = distText;
+      document.getElementById('resDuration').textContent = durText;
+      document.getElementById('resPrice').textContent = price;
+      document.getElementById('resService').textContent = service.charAt(0).toUpperCase() + service.slice(1);
+      document.getElementById('resZone').textContent = zone;
+      document.getElementById('resultCard').className = 'result-card show';
+
+      document.getElementById('infoDistance').textContent = distText;
+      document.getElementById('infoDuration').textContent = durText;
+      document.getElementById('infoPrice').textContent = price;
+      document.getElementById('mapInfoBox').className = 'map-info-box show';
+
+      const steps = route.legs[0].steps;
+      let html = '';
+      steps.forEach((s, i) => {
+        const name = s.name || 'Continue';
+        const d = (s.distance/1000).toFixed(1) + ' km';
+        html += '<div class="step-item"><div class="step-num">' + (i+1) + '</div><div>' + name + ' (' + d + ')</div></div>';
+      });
+      document.getElementById('stepsList').innerHTML = html || '<div class="step-item"><div>Route calculated successfully</div></div>';
+      document.getElementById('stepsWrap').className = 'steps-wrap show';
+
+    } catch(e) {
+      showError('Error: ' + e.message + '. Try adding Lagos to your location name.');
+    } finally {
+      btn.disabled = false;
+      text.style.display = 'flex';
+      spinner.style.display = 'none';
+    }
+  };
+
+  window.toggleLive = function() {
+    if (isLive) stopLive(); else startLive();
+  };
+
+  function startLive() {
+    if (!navigator.geolocation) { showError('Geolocation not supported by your browser'); return; }
+    isLive = true;
+    const btn = document.getElementById('liveBtn');
+    btn.className = 'live-btn active';
+    btn.innerHTML = '<i class="fa fa-stop"></i> Stop';
+    document.getElementById('liveStatus').className = 'live-status show';
+
+    watchId = navigator.geolocation.watchPosition(async function(pos) {
+      const lat = pos.coords.latitude;
+      const lng = pos.coords.longitude;
+      const dest = document.getElementById('destInput').value.trim();
+
+      if (liveMarker) map.removeLayer(liveMarker);
+      liveMarker = L.marker([lat, lng], {
+        icon: L.divIcon({
+          html: '<div style="background:#3b82f6;width:16px;height:16px;border-radius:50%;border:3px solid #fff;box-shadow:0 0 12px #3b82f6;animation:blink 1s infinite;"></div>',
+          className: '', iconSize:[16,16], iconAnchor:[8,8]
+        })
+      }).addTo(map).bindPopup('Your live location');
+
+      try {
+        const destination = await geocode(dest);
+        const route = await getRoute(lat, lng, destination.lat, destination.lng);
+        const distKm = (route.distance/1000).toFixed(1);
+        const durMin = Math.round(route.duration/60);
+        const durText = durMin >= 60 ? Math.floor(durMin/60) + 'h ' + (durMin%60) + 'min' : durMin + ' mins';
+
+        if (routeLayer) map.removeLayer(routeLayer);
+        routeLayer = L.geoJSON(route.geometry, { style:{ color:'#3b82f6', weight:5, opacity:0.9 } }).addTo(map);
+
+        document.getElementById('liveDistance').textContent = distKm + ' km remaining';
+        document.getElementById('liveETA').textContent = durText;
+        document.getElementById('liveUpdate').textContent = 'Updated: ' + new Date().toLocaleTimeString();
+
+        const addr = await reverseGeocode(lat, lng);
+        document.getElementById('liveAddr').textContent = addr.split(',').slice(0,3).join(',');
+
+      } catch(e) {
+        document.getElementById('liveUpdate').textContent = 'Update error: ' + e.message;
+      }
+
+    }, function(err) {
+      showError('Location error: ' + err.message);
+      stopLive();
+    }, { enableHighAccuracy:true, maximumAge:10000, timeout:10000 });
+  }
+
+  function stopLive() {
+    isLive = false;
+    if (watchId) navigator.geolocation.clearWatch(watchId);
+    if (liveMarker) { map.removeLayer(liveMarker); liveMarker = null; }
+    const btn = document.getElementById('liveBtn');
+    btn.className = 'live-btn';
+    btn.innerHTML = '<i class="fa fa-satellite-dish"></i> Live';
+    document.getElementById('liveStatus').className = 'live-status';
+  }
+
+  document.getElementById('originInput').addEventListener('keydown', e => { if(e.key==='Enter') calculateRoute(); });
+  document.getElementById('destInput').addEventListener('keydown', e => { if(e.key==='Enter') calculateRoute(); });
+</script>
+
+<!-- WhatsApp -->
+<a href="https://wa.me/2348139220395?text=Hello!%20I%20want%20to%20place%20a%20delivery%20order" target="_blank" style="position:fixed;bottom:30px;right:30px;background:#25D366;color:#fff;width:62px;height:62px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:34px;text-decoration:none;box-shadow:0 4px 20px rgba(37,211,102,0.5);z-index:9999;" title="Chat with us on WhatsApp">
+  <i class="fa-brands fa-whatsapp"></i>
+</a>
+
+</body>
+</html>

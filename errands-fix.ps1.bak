@@ -1,0 +1,148 @@
+﻿PowerShell Extension v2025.4.0
+Copyright (c) Microsoft Corporation.
+
+https://aka.ms/vscode-powershell
+Type 'help' to get help.
+
+PS C:\Users\dell\Desktop\MAG-CITY ERANDS\errands-website> powershell -ExecutionPolicy Bypass -File errands-fix.ps1
+At C:\Users\dell\Desktop\MAG-CITY 
+ERANDS\errands-website\errands-fix.ps1:59 char:1
++ }
++ ~
+Unexpected token '}' in expression or statement.
+At C:\Users\dell\Desktop\MAG-CITY 
+ERANDS\errands-website\errands-fix.ps1:182 char:43
++ "/* Package lookup removed â€” tracking handled 
+by track. ...
++ ~
+Missing ')' in method call.
+At C:\Users\dell\Desktop\MAG-CITY 
+ERANDS\errands-website\errands-fix.ps1:182 char:44
++ "/* Package lookup removed â€” tracking handled 
+by track. ...
++ ~~~~~~~~
+Unexpected token 'tracking' in expression or statement.
+At C:\Users\dell\Desktop\MAG-CITY 
+ERANDS\errands-website\errands-fix.ps1:196 char:73
++ ...     "(?s)/\*[^*]*5\. PRESS ENTER TO 
+TRACK.*?trackPackage\(\)\s*\}\)",
++                                                               
+~
+Unexpected token '}' in expression or statement.
+At C:\Users\dell\Desktop\MAG-CITY 
+ERANDS\errands-website\errands-fix.ps1:196 char:75
++ ...     "(?s)/\*[^*]*5\. PRESS ENTER TO 
+TRACK.*?trackPackage\(\)\s*\}\)",
++                                                               
+~
+Unexpected token ')' in expression or statement.
+At C:\Users\dell\Desktop\MAG-CITY 
+ERANDS\errands-website\errands-fix.ps1:199 char:13
++ OK "Removed dead ERR- trackPackage/packages system 
+from main. ...
++             ~~~~~~~
+Unexpected token 'Removed' in expression or statement.
+At C:\Users\dell\Desktop\MAG-CITY 
+ERANDS\errands-website\errands-fix.ps1:204 char:66
++ ...     $js = $js -replace 
+"hamburger\.addEventListener\('click', functio ...
+    +                                                               
+    ~
+    Missing expression after ','.
+    At C:\Users\dell\Desktop\MAG-CITY 
+    ERANDS\errands-website\errands-fix.ps1:204 char:67
+    + ...  $js -replace "hamburger\.addEventListener\('click', 
+function \(\) \{ ...
++                                                          
+~~~~~~~~
+Unexpected token 'function' in expression or statement.
+At C:\Users\dell\Desktop\MAG-CITY 
+ERANDS\errands-website\errands-fix.ps1:204 char:66
++ ...     $js = $js -replace 
+"hamburger\.addEventListener\('click', functio ...
+        +                                                               
+        ~
+        Missing closing ')' in expression.
+        At C:\Users\dell\Desktop\MAG-CITY 
+        ERANDS\errands-website\errands-fix.ps1:205 char:30
+        + "if (hamburger `&`& mobileMenu) 
+hamburger ...
++                              ~~
+Unexpected token 'if' in expression or statement.
+Not all parse errors were reported.  Correct the reported 
+errors and try again.
+    + CategoryInfo          : ParserError: (:) [], ParentContai 
+   nsErrorRecordException
+    + FullyQualifiedErrorId : UnexpectedToken
+ 
+PS C:\Users\dell\Desktop\MAG-CITY ERANDS\errands-website> powershell -ExecutionPolicy Bypass -File errands-fix.ps1
+At C:\Users\dell\Desktop\MAG-CITY 
+ERANDS\errands-website\errands-fix.ps1:59 char:1
++ }
++ ~
+Unexpected token '}' in expression or statement.
+At C:\Users\dell\Desktop\MAG-CITY 
+ERANDS\errands-website\errands-fix.ps1:182 char:43
++             "/ * Package lookup removed â€” tracking handled 
+by track. ...
++                                           ~
+Missing ')' in method call.
+At C:\Users\dell\Desktop\MAG-CITY 
+ERANDS\errands-website\errands-fix.ps1:182 char:44
++             "/* Package lookup removed â€” tracking handled 
+by track. ...
++                                            ~~~~~~~~
+Unexpected token 'tracking' in expression or statement.
+At C:\Users\dell\Desktop\MAG-CITY 
+ERANDS\errands-website\errands-fix.ps1:196 char:73
++ ...     "(?s)/\*[^*]*5\. PRESS ENTER TO 
+        TRACK.*?trackPackage\(\)\s*\ }\)",
++                                                               
+      ~
+Unexpected token '}' in expression or statement.
+At C:\Users\dell\Desktop\MAG-CITY 
+ERANDS\errands-website\errands-fix.ps1:196 char:75
++ ...     "(?s) / \*[^*]*5\. PRESS ENTER TO 
+TRACK.*?trackPackage\(\)\s*\ }\)",
++                                                               
+        ~
+Unexpected token ')' in expression or statement.
+At C:\Users\dell\Desktop\MAG-CITY 
+ERANDS\errands-website\errands-fix.ps1:199 char:13
++         OK "Removed dead ERR- trackPackage/packages system 
+from main. ...
++ ~~~~~~~
+Unexpected token 'Removed' in expression or statement.
+At C:\Users\dell\Desktop\MAG-CITY 
+ERANDS\errands-website\errands-fix.ps1:204 char:66
++ ...     $js = $js -replace 
+"hamburger\.addEventListener\('click', functio ...
++                                                               
+   ~
+Missing expression after ','.
+At C:\Users\dell\Desktop\MAG-CITY 
+ERANDS\errands-website\errands-fix.ps1:204 char:67
++ ...  $js -replace "hamburger\.addEventListener\('click', 
+    function \(\) \ { ...
+        +                                                          
+        ~~~~~~~~
+        Unexpected token 'function' in expression or statement.
+        At C:\Users\dell\Desktop\MAG-CITY 
+        ERANDS\errands-website\errands-fix.ps1:204 char:66
+        + ...     $js = $js -replace 
+        "hamburger\.addEventListener\('click', functio ...
++                                                               
+   ~
+Missing closing ')' in expression.
+At C:\Users\dell\Desktop\MAG-CITY 
+ERANDS\errands-website\errands-fix.ps1:205 char:30
++                             "if (hamburger `&`& mobileMenu) 
+        hamburger ...
+        + ~~
+        Unexpected token 'if' in expression or statement.
+        Not all parse errors were reported.  Correct the reported 
+        errors and try again.
+        + CategoryInfo          : ParserError: (:) [], ParentContai 
+        nsErrorRecordException
+        + FullyQualifiedErrorId : UnexpectedToken
+ 

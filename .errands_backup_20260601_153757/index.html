@@ -16,7 +16,7 @@
   <meta name="apple-mobile-web-app-title" content="Errands" />
   <link rel="apple-touch-icon" href="icon-192.png" />
 
-<style>#eg-fab { bottom: 100px !important; left: auto !important; right: 24px !important; } </style></head>
+<style>#eg-fab { bottom: 100px !important; left: auto !important; right: 24px !important; } </style><style>#eg-fab{bottom:100px!important;right:24px!important;left:auto!important}</style></head>
 <body>
 
   <nav class="navbar">
@@ -140,7 +140,7 @@
         <div class="step-num">01</div>
         <h3>Book a pickup</h3>
         <p>Enter your pickup and drop-off location online. Takes less than 2 minutes.</p>
-        <a href="order.html" style="display:inline-block;margin-top:12px;background:#FF6B2B;color:#fff;padding:10px 24px;border-radius:30px;text-decoration:none;font-weight:600;font-size:14px;">Book Now</a>
+        <a href="order.html" style="display:inline-block;margin-top:12px;background:#FF6B2B;color:#fff;padding:10px 24px;border-radius:30px;text-decoration:none;font-weight:600;font-size:14px;">Book Now ?</a>
       </div>
       <div class="step">
         <div class="step-num">02</div>
@@ -151,7 +151,7 @@
         <div class="step-num">03</div>
         <h3>Track live</h3>
         <p>Watch every move on the map until delivery is complete.</p>
-        <a href="track.html" style="display:inline-block;margin-top:12px;background:#0a0a0a;color:#fff;padding:10px 24px;border-radius:30px;text-decoration:none;font-weight:600;font-size:14px;">Track Order</a>
+        <a href="track.html" style="display:inline-block;margin-top:12px;background:#0a0a0a;color:#fff;padding:10px 24px;border-radius:30px;text-decoration:none;font-weight:600;font-size:14px;">Track Order ?</a>
       </div>
       <div class="step">
         <div class="step-num">04</div>
@@ -219,7 +219,7 @@
       <a href="#">Careers</a>
       <a href="order.html">Place Order</a>
       <a href="track.html">Track Order</a>
-      
+      <a href="admin.html">Admin</a>
     </div>
     <p class="footer-copy">© 2026 Errands. All rights reserved.</p>
   </footer>
@@ -282,12 +282,12 @@
     <i class="fa-brands fa-whatsapp"></i>
   </a>
 
-  <script src="main.js?v=3"></script>
+  <script src="main.js?v=2"></script>
 
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('sw.js')
+        navigator.serviceWorker.register('/errands-website/sw.js')
           .then(() => console.log('SW registered'))
           .catch(err => console.log('SW error:', err));
       });

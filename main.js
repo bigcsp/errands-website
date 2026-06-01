@@ -1,4 +1,4 @@
-/* ============================================================
+﻿/* ============================================================
    main.js — Errands delivery website
    Sections (in order of page flow):
      1. Mobile menu toggle
@@ -20,181 +20,14 @@
 const hamburger  = document.getElementById('hamburger')
 const mobileMenu = document.getElementById('mobileMenu')
 
-hamburger.addEventListener('click', function () {
+if (hamburger && mobileMenu) hamburger.addEventListener('click', function () {
   mobileMenu.classList.toggle('open')
 })
 
 
-/* ============================================================
-   2. PACKAGE DATA
-      Acts as a mini database of tracked deliveries.
-      In a real app this would come from a backend API.
-
-      Each package has:
-        id     — tracking number
-        status — 'On the way' | 'Delivered' | 'Pickup pending'
-        rider  — rider's name
-        from   — pickup address
-        to     — drop-off address
-        eta    — estimated arrival or delivery time
-        item   — type of item being delivered
-   ============================================================ */
-
-const packages = {
-
-  'ERR-00423': {
-    id:     'ERR-00423',
-    status: 'On the way',
-    rider:  'Kwame A.',
-    from:   'Magodo Phase 2 Entrance, Lagos',
-    to:     'CMD Road, Magodo Phase 2',
-    eta:    '4 minutes',
-    item:   'Small package',
-  },
-
-  'ERR-00891': {
-    id:     'ERR-00891',
-    status: 'Delivered',
-    rider:  'Chidi O.',
-    from:   'Magodo Phase 2 Entrance, Lagos',
-    to:     'CMD Road, Magodo Phase 2',
-    eta:    'Delivered at 2:45pm',
-    item:   'Documents',
-  },
-
-  'ERR-00312': {
-    id:     'ERR-00312',
-    status: 'Pickup pending',
-    rider:  'Not assigned yet',
-    from:   'Magodo Phase 2 Entrance, Lagos',
-    to:     'CMD Road, Magodo Phase 2',
-    eta:    'Estimating...',
-    item:   'Fragile item',
-  },
-
-}
+/* Package lookup removed - tracking handled by track.html?tracking=MAG-XXXX */
 
 
-/* ============================================================
-   3. FILL TRACKING INPUT
-      Called when the user clicks a sample tracking number
-      in the hero section (e.g. "Try: ERR-00423")
-      Pastes the code into the input and focuses it.
-   ============================================================ */
-
-function fillTracking(code) {
-  const input = document.getElementById('trackInput')
-  input.value = code
-  input.focus()
-}
-
-
-/* ============================================================
-   4. TRACK A PACKAGE
-      Called by the "Track now" button (or pressing Enter).
-      Steps:
-        a) Read + sanitise the input value
-        b) Show a warning if the field is empty
-        c) Look up the code in the packages object
-        d) Render a result card if found, or an error if not
-        e) Scroll smoothly to the result
-   ============================================================ */
-
-function trackPackage() {
-
-  // a) Read input, remove spaces, force uppercase
-  const input     = document.getElementById('trackInput').value.trim().toUpperCase()
-  const resultBox = document.getElementById('trackingResult')
-
-  // b) Empty input — show warning and stop
-  if (!input) {
-    resultBox.innerHTML = `
-      <div class="result-error">
-        ⚠️ Please enter a tracking number first.
-      </div>
-    `
-    resultBox.scrollIntoView({ behavior: 'smooth', block: 'center' })
-    return
-  }
-
-  // c) Look up the code
-  const pkg = packages[input]
-
-  if (pkg) {
-
-    // d-i) Package found — pick colour + icon based on status
-    let statusColor = '#E85D26'   // orange  = on the way (default)
-    let statusIcon  = '🚴'
-    if (pkg.status === 'Delivered')      { statusColor = '#16a34a'; statusIcon = '✅' }
-    if (pkg.status === 'Pickup pending') { statusColor = '#d97706'; statusIcon = '🕐' }
-
-    // d-ii) Build and inject the result card HTML
-    resultBox.innerHTML = `
-      <div class="result-card">
-
-        <!-- Header row: package ID + status badge -->
-        <div class="result-header">
-          <h3>📦 ${pkg.id}</h3>
-          <span class="result-status-badge"
-                style="background:${statusColor}20;
-                       color:${statusColor};
-                       border:1px solid ${statusColor}40;">
-            ${statusIcon} ${pkg.status}
-          </span>
-        </div>
-
-        <!-- Detail rows -->
-        <div class="result-row">
-          <span>Rider</span>
-          <strong>${pkg.rider}</strong>
-        </div>
-        <div class="result-row">
-          <span>From</span>
-          <strong>${pkg.from}</strong>
-        </div>
-        <div class="result-row">
-          <span>To</span>
-          <strong>${pkg.to}</strong>
-        </div>
-        <div class="result-row">
-          <span>Item</span>
-          <strong>${pkg.item}</strong>
-        </div>
-        <div class="result-row">
-          <span>ETA</span>
-          <strong style="color:${statusColor}">${pkg.eta}</strong>
-        </div>
-
-      </div>
-    `
-
-  } else {
-
-    // d-iii) Package not found — show error with examples
-    resultBox.innerHTML = `
-      <div class="result-error">
-        ❌ No package found for <strong>${input}</strong>.
-        Please check the number and try again.
-        <div class="result-hint">
-          Try: ERR-00423, ERR-00891, or ERR-00312
-        </div>
-      </div>
-    `
-  }
-
-  // e) Scroll to result
-  resultBox.scrollIntoView({ behavior: 'smooth', block: 'center' })
-}
-
-
-/* ============================================================
-   5. PRESS ENTER TO TRACK
-      Allows the user to hit Enter instead of clicking the button
-   ============================================================ */
-
-document.getElementById('trackInput').addEventListener('keydown', function (e) {
-  if (e.key === 'Enter') trackPackage()
-})
 
 
 /* ============================================================
