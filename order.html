@@ -10,11 +10,9 @@
     :root {
       --orange: #FF6B2B; --dark: #0a0a0a; --mid: #141414;
       --border: rgba(255,255,255,0.08); --text: #f0f0f0;
-      --muted: #888; --green: #22c55e; --radius: 14px;
+      --muted: #888; --green: #22c55e; --whatsapp: #25D366; --radius: 14px;
     }
     body { font-family: 'DM Sans', sans-serif; background: var(--dark); color: var(--text); min-height: 100vh; }
-
-    /* NAV */
     .nav {
       display: flex; align-items: center; justify-content: space-between;
       padding: 0 32px; height: 64px;
@@ -25,28 +23,21 @@
     .logo-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--orange); }
     .nav-back { background: var(--mid); border: 1px solid var(--border); color: var(--text); padding: 8px 18px; border-radius: 30px; font-family: 'Syne', sans-serif; font-weight: 600; font-size: 14px; text-decoration: none; transition: background 0.2s; }
     .nav-back:hover { background: #222; }
-
-    /* LAYOUT */
     .page { max-width: 680px; margin: 0 auto; padding: 48px 24px 80px; }
     .page-header { margin-bottom: 36px; }
     .page-tag { display: inline-block; background: rgba(255,107,43,0.12); border: 1px solid rgba(255,107,43,0.25); color: var(--orange); font-family: 'Syne', sans-serif; font-weight: 600; font-size: 12px; letter-spacing: 1px; text-transform: uppercase; padding: 5px 12px; border-radius: 30px; margin-bottom: 14px; }
     .page-header h1 { font-family: 'Syne', sans-serif; font-weight: 800; font-size: clamp(28px, 5vw, 40px); line-height: 1.15; }
     .page-header p { color: var(--muted); margin-top: 8px; font-size: 15px; }
-
-    /* FORM CARD */
     .form-card { background: var(--mid); border: 1px solid var(--border); border-radius: 20px; padding: 32px; }
     .form-section { margin-bottom: 28px; }
     .form-section-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 13px; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
     .form-section-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
-
     .form-row { display: grid; gap: 14px; margin-bottom: 14px; }
     .form-row.cols-2 { grid-template-columns: 1fr 1fr; }
     @media (max-width: 520px) { .form-row.cols-2 { grid-template-columns: 1fr; } }
-
     .field { display: flex; flex-direction: column; gap: 6px; }
     .field label { font-size: 13px; font-weight: 500; font-family: 'Syne', sans-serif; color: var(--muted); }
     .field label span { color: var(--orange); }
-
     .field input, .field select, .field textarea {
       background: rgba(255,255,255,0.04); border: 1px solid var(--border);
       border-radius: 10px; padding: 12px 14px; color: var(--text);
@@ -60,8 +51,6 @@
     .field select option { background: #1a1a1a; }
     .field textarea { resize: vertical; min-height: 80px; }
     .field input::placeholder, .field textarea::placeholder { color: rgba(136,136,136,0.5); }
-
-    /* PRICE PREVIEW */
     .price-preview {
       background: rgba(255,107,43,0.07); border: 1px solid rgba(255,107,43,0.2);
       border-radius: 12px; padding: 16px 20px;
@@ -71,19 +60,20 @@
     .price-label { font-size: 13px; color: var(--muted); font-family: 'Syne', sans-serif; }
     .price-value { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 22px; color: var(--orange); }
     .price-note { font-size: 11px; color: var(--muted); margin-top: 2px; }
-
-    /* SUBMIT */
+    .submit-row { display: flex; gap: 10px; }
+    @media (max-width: 480px) { .submit-row { flex-direction: column; } }
     .submit-btn {
-      width: 100%; padding: 16px; background: var(--orange); color: #fff;
+      flex: 1; padding: 16px; background: var(--orange); color: #fff;
       border: none; border-radius: 12px; font-family: 'Syne', sans-serif;
-      font-weight: 700; font-size: 16px; cursor: pointer;
+      font-weight: 700; font-size: 15px; cursor: pointer;
       transition: all 0.2s; letter-spacing: 0.5px;
     }
     .submit-btn:hover { background: #e05a20; transform: translateY(-1px); box-shadow: 0 6px 24px rgba(255,107,43,0.35); }
     .submit-btn:active { transform: translateY(0); }
     .submit-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
-
-    /* SUCCESS MODAL */
+    .submit-btn.whatsapp-btn { background: var(--whatsapp); }
+    .submit-btn.whatsapp-btn:hover { background: #1ebe5a; box-shadow: 0 6px 24px rgba(37,211,102,0.35); }
+    .payment-note { text-align: center; font-size: 12px; color: var(--muted); margin-top: 12px; }
     .modal-overlay {
       position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(8px);
       z-index: 1000; display: flex; align-items: center; justify-content: center;
@@ -238,9 +228,15 @@
         </div>
       </div>
 
-      <button class="submit-btn" id="submitBtn" onclick="placeOrder()">
-        📦 Place Order
-      </button>
+      <div class="submit-row">
+        <button class="submit-btn" id="cardBtn" onclick="placeOrderCard()">
+          💳 Pay with Card
+        </button>
+        <button class="submit-btn whatsapp-btn" id="whatsappBtn" onclick="placeOrderWhatsApp()">
+          💬 Pay via WhatsApp
+        </button>
+      </div>
+      <div class="payment-note">Choose card for instant checkout, or WhatsApp to arrange payment directly with us.</div>
 
     </div>
   </div>
@@ -249,8 +245,8 @@
   <div class="modal-overlay" id="modalOverlay">
     <div class="modal">
       <div class="modal-icon">🎉</div>
-      <h2>Order placed!</h2>
-      <p>Your order has been received. A rider will be assigned shortly.</p>
+      <h2 id="modalTitle">Order placed!</h2>
+      <p id="modalMessage">Your order has been received. A rider will be assigned shortly.</p>
       <div class="tracking-box">
         <div class="t-label">Your tracking number</div>
         <div class="t-number" id="modalTrackNum">MAG-00000000</div>
@@ -269,7 +265,13 @@
     // ── PAYSTACK CONFIG ──────────────────────────────────────────────
     // Replace with your own Paystack TEST public key (Settings → API Keys & Webhooks)
     // Get yours at: https://dashboard.paystack.com/#/settings/developer
-    const PAYSTACK_PUBLIC_KEY = 'pk_test_REPLACE_WITH_YOUR_KEY';
+    const PAYSTACK_PUBLIC_KEY = 'pk_test_12d2dad4149636bdc8216796f35204ccbc9cec27';
+    // ─────────────────────────────────────────────────────────────────
+
+    // ── WHATSAPP CONFIG ──────────────────────────────────────────────
+    // Replace with your business WhatsApp number, country code first, no + or spaces
+    // Example: Nigeria number 0801 234 5678 becomes 2348012345678
+    const WHATSAPP_NUMBER = '234XXXXXXXXXX';
     // ─────────────────────────────────────────────────────────────────
 
     const PRICES = {
@@ -295,7 +297,7 @@
       return id;
     }
 
-    function placeOrder() {
+    function buildOrder() {
       // Validation
       const required = ['senderName','senderPhone','senderEmail','pickupAddress','pickupDate','pickupTime','dropoffAddress','recipientName','recipientPhone','packageType'];
       for (const id of required) {
@@ -304,7 +306,7 @@
           el.style.borderColor = '#ef4444';
           el.focus();
           setTimeout(() => el.style.borderColor = '', 2000);
-          return;
+          return null;
         }
       }
 
@@ -315,7 +317,7 @@
       const extra  = weight > 2 ? (weight - 2) * 200 : 0;
       const price  = base + extra;
 
-      const order = {
+      return {
         id:             trackingNum,
         status:         'Pending',
         createdAt:      new Date().toISOString(),
@@ -335,15 +337,24 @@
         rider:          '',
         paymentStatus:  'pending',
         paystackRef:    '',
+        paymentMethod:  '',
       };
+    }
 
+    // ── CARD (PAYSTACK) FLOW ─────────────────────────────────────────
+    function placeOrderCard() {
+      const order = buildOrder();
+      if (!order) return;
+      order.paymentMethod = 'card';
       payWithPaystack(order);
     }
 
     function payWithPaystack(order) {
-      const submitBtn = document.getElementById('submitBtn');
-      submitBtn.disabled = true;
-      submitBtn.textContent = '⏳ Processing payment…';
+      const cardBtn = document.getElementById('cardBtn');
+      const whatsappBtn = document.getElementById('whatsappBtn');
+      cardBtn.disabled = true;
+      whatsappBtn.disabled = true;
+      cardBtn.textContent = '⏳ Processing payment…';
 
       const handler = PaystackPop.setup({
         key: PAYSTACK_PUBLIC_KEY,
@@ -355,12 +366,16 @@
           // Runs after a successful payment
           order.paymentStatus = 'paid';
           order.paystackRef = response.reference;
-          completeOrder(order);
+          completeOrder(order, {
+            title: 'Order placed!',
+            message: 'Your order has been received. A rider will be assigned shortly.'
+          });
         },
         onClose: function() {
           // Runs if the customer closes the popup without paying
-          submitBtn.disabled = false;
-          submitBtn.textContent = '📦 Place Order';
+          cardBtn.disabled = false;
+          whatsappBtn.disabled = false;
+          cardBtn.textContent = '💳 Pay with Card';
           alert('Payment was not completed. Your order has not been placed.');
         }
       });
@@ -368,21 +383,57 @@
       handler.openIframe();
     }
 
-    function completeOrder(order) {
-      // Save to localStorage — only happens after payment succeeds
+    // ── WHATSAPP FLOW ────────────────────────────────────────────────
+    function placeOrderWhatsApp() {
+      const order = buildOrder();
+      if (!order) return;
+      order.paymentMethod = 'whatsapp';
+      order.paymentStatus = 'pending-whatsapp';
+
+      completeOrder(order, {
+        title: 'Order saved!',
+        message: 'Continue on WhatsApp to confirm your order and arrange payment.'
+      });
+
+      const message = buildWhatsAppMessage(order);
+      const waLink = 'https://wa.me/' + WHATSAPP_NUMBER + '?text=' + encodeURIComponent(message);
+      window.open(waLink, '_blank');
+    }
+
+    function buildWhatsAppMessage(order) {
+      return "Hi! I'd like to place a delivery order.\n\n" +
+        "*Tracking #:* " + order.id + "\n" +
+        "*Sender:* " + order.senderName + " (" + order.senderPhone + ")\n" +
+        "*Pickup:* " + order.pickupAddress + "\n" +
+        "*Pickup date/time:* " + order.pickupDate + " at " + order.pickupTime + "\n\n" +
+        "*Drop-off:* " + order.dropoffAddress + "\n" +
+        "*Recipient:* " + order.recipientName + " (" + order.recipientPhone + ")\n\n" +
+        "*Package:* " + order.packageType + ", ~" + order.packageWeight + "kg\n" +
+        "*Notes:* " + (order.notes || 'None') + "\n\n" +
+        "*Amount to pay:* ₦" + order.price.toLocaleString() + "\n\n" +
+        "I'll send payment confirmation here. Thank you!";
+    }
+
+    // ── SHARED COMPLETION ────────────────────────────────────────────
+    function completeOrder(order, modalText) {
+      // Save to localStorage
       const existing = JSON.parse(localStorage.getItem('errands_orders') || '[]');
       existing.unshift(order); // newest first
       localStorage.setItem('errands_orders', JSON.stringify(existing));
       ErrandsNotify.send(order);
 
       // Show success modal
+      document.getElementById('modalTitle').textContent = modalText.title;
+      document.getElementById('modalMessage').textContent = modalText.message;
       document.getElementById('modalTrackNum').textContent = order.id;
       document.getElementById('trackLink').href = 'track.html?tracking=' + order.id;
       document.getElementById('modalOverlay').classList.add('show');
 
-      const submitBtn = document.getElementById('submitBtn');
-      submitBtn.disabled = false;
-      submitBtn.textContent = '📦 Place Order';
+      const cardBtn = document.getElementById('cardBtn');
+      const whatsappBtn = document.getElementById('whatsappBtn');
+      cardBtn.disabled = false;
+      whatsappBtn.disabled = false;
+      cardBtn.textContent = '💳 Pay with Card';
     }
 
     function resetForm() {
