@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -149,8 +149,8 @@
         </div>
         <div class="form-row">
           <div class="field">
-            <label>Email (optional)</label>
-            <input type="email" id="senderEmail" placeholder="e.g. adaeze@email.com" />
+            <label>Email <span>*</span></label>
+            <input type="email" id="senderEmail" placeholder="e.g. adaeze@email.com" required />
           </div>
         </div>
       </div>
@@ -266,6 +266,12 @@
     // Set default date to today
     document.getElementById('pickupDate').value = new Date().toISOString().split('T')[0];
 
+    // ── PAYSTACK CONFIG ──────────────────────────────────────────────
+    // Replace with your own Paystack TEST public key (Settings → API Keys & Webhooks)
+    // Get yours at: https://dashboard.paystack.com/#/settings/developer
+    const PAYSTACK_PUBLIC_KEY = 'pk_test_12d2dad4149636bdc8216796f35204ccbc9cec27';
+    // ─────────────────────────────────────────────────────────────────
+
     const PRICES = {
       'Documents': 800, 'Small parcel': 1200, 'Medium parcel': 1800,
       'Large parcel': 2500, 'Food / Perishables': 1500,
@@ -291,7 +297,7 @@
 
     function placeOrder() {
       // Validation
-      const required = ['senderName','senderPhone','pickupAddress','pickupDate','pickupTime','dropoffAddress','recipientName','recipientPhone','packageType'];
+      const required = ['senderName','senderPhone','senderEmail','pickupAddress','pickupDate','pickupTime','dropoffAddress','recipientName','recipientPhone','packageType'];
       for (const id of required) {
         const el = document.getElementById(id);
         if (!el.value.trim()) {
@@ -327,18 +333,56 @@
         price:          price,
         notes:          document.getElementById('notes').value.trim(),
         rider:          '',
+        paymentStatus:  'pending',
+        paystackRef:    '',
       };
 
-      // Save to localStorage
+      payWithPaystack(order);
+    }
+
+    function payWithPaystack(order) {
+      const submitBtn = document.getElementById('submitBtn');
+      submitBtn.disabled = true;
+      submitBtn.textContent = '⏳ Processing payment…';
+
+      const handler = PaystackPop.setup({
+        key: PAYSTACK_PUBLIC_KEY,
+        email: order.senderEmail,
+        amount: Math.round(order.price * 100), // Paystack expects amount in kobo
+        currency: 'NGN',
+        ref: order.id, // reuse the MAG- tracking number as the payment reference
+        callback: function(response) {
+          // Runs after a successful payment
+          order.paymentStatus = 'paid';
+          order.paystackRef = response.reference;
+          completeOrder(order);
+        },
+        onClose: function() {
+          // Runs if the customer closes the popup without paying
+          submitBtn.disabled = false;
+          submitBtn.textContent = '📦 Place Order';
+          alert('Payment was not completed. Your order has not been placed.');
+        }
+      });
+
+      handler.openIframe();
+    }
+
+    function completeOrder(order) {
+      // Save to localStorage — only happens after payment succeeds
       const existing = JSON.parse(localStorage.getItem('errands_orders') || '[]');
       existing.unshift(order); // newest first
       localStorage.setItem('errands_orders', JSON.stringify(existing));
       ErrandsNotify.send(order);
 
       // Show success modal
-      document.getElementById('modalTrackNum').textContent = trackingNum;
-      document.getElementById('trackLink').href = 'track.html?tracking=' + trackingNum;
+      document.getElementById('modalTrackNum').textContent = order.id;
+      document.getElementById('trackLink').href = 'track.html?tracking=' + order.id;
       document.getElementById('modalOverlay').classList.add('show');
+
+      const submitBtn = document.getElementById('submitBtn');
+      submitBtn.disabled = false;
+      submitBtn.textContent = '📦 Place Order';
     }
 
     function resetForm() {
@@ -350,5 +394,6 @@
       document.getElementById('priceDisplay').textContent = '₦ —';
     }
   </script>
-<script src="notify.js?v=2"></script><script src="guide.js?v=2"></script></body>
+  <script src="https://js.paystack.co/v1/inline.js"></script>
+  <script src="notify.js?v=2"></script><script src="guide.js?v=2"></script></body>
 </html>
