@@ -465,7 +465,7 @@
       existing.unshift(order);
       localStorage.setItem('errands_orders', JSON.stringify(existing));
       ErrandsNotify.send(order);
-
+sendOrderConfirmationEmail(order);
       document.getElementById('modalTitle').textContent = modalText.title;
       document.getElementById('modalMessage').textContent = modalText.message;
       document.getElementById('modalTrackNum').textContent = order.id;
@@ -493,6 +493,33 @@
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA0mhui3FRpg4le8BVh6rfsF9pUzDT0zYw&libraries=places&callback=initAutocomplete&v=2" async defer></script>
   <script src="https://js.paystack.co/v1/inline.js"></script>
   <script src="notify.js?v=2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script>
+  (function() {
+    emailjs.init({ publicKey: 'W2WT7AXD61e1PGM7z' });
+  })();
+
+  function sendOrderConfirmationEmail(order) {
+    const params = {
+      to_email:       order.senderEmail,
+      to_name:        order.senderName,
+      tracking_number: order.id,
+      pickup_address: order.pickupAddress,
+      pickup_date:    order.pickupDate,
+      pickup_time:    order.pickupTime,
+      dropoff_address: order.dropoffAddress,
+      recipient_name: order.recipientName,
+      recipient_phone: order.recipientPhone,
+      package_type:   order.packageType,
+      price:          '₦' + order.price.toLocaleString(),
+      payment_status: order.paymentMethod === 'whatsapp' ? 'Pending (WhatsApp)' : 'Paid',
+    };
+
+    emailjs.send('service_7hfaifj', 'h3t98tn', params)
+      .then(() => console.log('Order confirmation email sent'))
+      .catch((err) => console.error('Email failed:', err));
+  }
+</script>
   <script src="guide.js?v=2"></script>
 </body>
 </html>
