@@ -51,6 +51,19 @@
     .field select option { background: #1a1a1a; }
     .field textarea { resize: vertical; min-height: 80px; }
     .field input::placeholder, .field textarea::placeholder { color: rgba(136,136,136,0.5); }
+    /* Google Places autocomplete dropdown styling */
+    .pac-container {
+      background: #1e1e1e; border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 10px; margin-top: 4px; font-family: 'DM Sans', sans-serif;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.5); z-index: 9999;
+    }
+    .pac-item { padding: 10px 14px; color: #ccc; cursor: pointer; border-top: 1px solid rgba(255,255,255,0.06); font-size: 13px; }
+    .pac-item:first-child { border-top: none; }
+    .pac-item:hover, .pac-item-selected { background: rgba(255,107,43,0.12); color: #fff; }
+    .pac-item-query { color: #fff; font-size: 14px; }
+    .pac-matched { color: var(--orange); font-weight: 600; }
+    .pac-icon { display: none; }
+    .hdpi .pac-icon { display: none; }
     .price-preview {
       background: rgba(255,107,43,0.07); border: 1px solid rgba(255,107,43,0.2);
       border-radius: 12px; padding: 16px 20px;
@@ -151,7 +164,7 @@
         <div class="form-row">
           <div class="field">
             <label>Pickup address <span>*</span></label>
-            <input type="text" id="pickupAddress" placeholder="e.g. 12 Adeola Odeku St, Victoria Island, Lagos" required />
+            <input type="text" id="pickupAddress" placeholder="Start typing an address in Lagos…" autocomplete="off" required />
           </div>
         </div>
         <div class="form-row cols-2">
@@ -172,7 +185,7 @@
         <div class="form-row">
           <div class="field">
             <label>Drop-off address <span>*</span></label>
-            <input type="text" id="dropoffAddress" placeholder="e.g. 5 Broad St, Lagos Island, Lagos" required />
+            <input type="text" id="dropoffAddress" placeholder="Start typing an address in Lagos…" autocomplete="off" required />
           </div>
         </div>
         <div class="form-row cols-2">
@@ -263,14 +276,12 @@
     document.getElementById('pickupDate').value = new Date().toISOString().split('T')[0];
 
     // ── PAYSTACK CONFIG ──────────────────────────────────────────────
-    // Replace with your own Paystack TEST public key (Settings → API Keys & Webhooks)
-    // Get yours at: https://dashboard.paystack.com/#/settings/developer
-    const PAYSTACK_PUBLIC_KEY = 'const PAYSTACK_PUBLIC_KEY = 'pk_live_bf88b9562eaf980a9945529312a7dcea37dbb64a';';
+    const PAYSTACK_PUBLIC_KEY = 'pk_live_bf88b9562eaf980a9945529312a7dcea37dbb64a';
     // ─────────────────────────────────────────────────────────────────
 
     // ── WHATSAPP CONFIG ──────────────────────────────────────────────
-    // Replace with your business WhatsApp number, country code first, no + or spaces
-    // Example: Nigeria number 0801 234 5678 becomes 2348012345678
+    // Replace with your business WhatsApp number (country code, no + or spaces)
+    // e.g. Nigeria 0801 234 5678 becomes 2348012345678
     const WHATSAPP_NUMBER = '234XXXXXXXXXX';
     // ─────────────────────────────────────────────────────────────────
 
@@ -279,6 +290,46 @@
       'Large parcel': 2500, 'Food / Perishables': 1500,
       'Fragile item': 2000, 'Electronics': 2200,
     };
+
+    // ── GOOGLE PLACES AUTOCOMPLETE ───────────────────────────────────
+    function initAutocomplete() {
+      const options = {
+        componentRestrictions: { country: 'ng' },
+        fields: ['formatted_address', 'geometry', 'name'],
+        types: ['geocode', 'establishment'],
+      };
+
+      const pickupAC = new google.maps.places.Autocomplete(
+        document.getElementById('pickupAddress'), options
+      );
+      const dropoffAC = new google.maps.places.Autocomplete(
+        document.getElementById('dropoffAddress'), options
+      );
+
+      // When a place is selected, fill the input with the full formatted address
+      pickupAC.addListener('place_changed', function() {
+        const place = pickupAC.getPlace();
+        if (place.formatted_address) {
+          document.getElementById('pickupAddress').value = place.formatted_address;
+        }
+      });
+
+      dropoffAC.addListener('place_changed', function() {
+        const place = dropoffAC.getPlace();
+        if (place.formatted_address) {
+          document.getElementById('dropoffAddress').value = place.formatted_address;
+        }
+      });
+
+      // Prevent form submission on Enter key inside address fields
+      document.getElementById('pickupAddress').addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') e.preventDefault();
+      });
+      document.getElementById('dropoffAddress').addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') e.preventDefault();
+      });
+    }
+    // ─────────────────────────────────────────────────────────────────
 
     function updatePrice() {
       const type   = document.getElementById('packageType').value;
@@ -298,7 +349,6 @@
     }
 
     function buildOrder() {
-      // Validation
       const required = ['senderName','senderPhone','senderEmail','pickupAddress','pickupDate','pickupTime','dropoffAddress','recipientName','recipientPhone','packageType'];
       for (const id of required) {
         const el = document.getElementById(id);
@@ -341,7 +391,6 @@
       };
     }
 
-    // ── CARD (PAYSTACK) FLOW ─────────────────────────────────────────
     function placeOrderCard() {
       const order = buildOrder();
       if (!order) return;
@@ -359,11 +408,10 @@
       const handler = PaystackPop.setup({
         key: PAYSTACK_PUBLIC_KEY,
         email: order.senderEmail,
-        amount: Math.round(order.price * 100), // Paystack expects amount in kobo
+        amount: Math.round(order.price * 100),
         currency: 'NGN',
-        ref: order.id, // reuse the MAG- tracking number as the payment reference
+        ref: order.id,
         callback: function(response) {
-          // Runs after a successful payment
           order.paymentStatus = 'paid';
           order.paystackRef = response.reference;
           completeOrder(order, {
@@ -372,7 +420,6 @@
           });
         },
         onClose: function() {
-          // Runs if the customer closes the popup without paying
           cardBtn.disabled = false;
           whatsappBtn.disabled = false;
           cardBtn.textContent = '💳 Pay with Card';
@@ -383,7 +430,6 @@
       handler.openIframe();
     }
 
-    // ── WHATSAPP FLOW ────────────────────────────────────────────────
     function placeOrderWhatsApp() {
       const order = buildOrder();
       if (!order) return;
@@ -410,19 +456,16 @@
         "*Recipient:* " + order.recipientName + " (" + order.recipientPhone + ")\n\n" +
         "*Package:* " + order.packageType + ", ~" + order.packageWeight + "kg\n" +
         "*Notes:* " + (order.notes || 'None') + "\n\n" +
-        "*Amount to pay:* ₦" + order.price.toLocaleString() + "\n\n" +
+        "*Amount to pay:* \u20a6" + order.price.toLocaleString() + "\n\n" +
         "I'll send payment confirmation here. Thank you!";
     }
 
-    // ── SHARED COMPLETION ────────────────────────────────────────────
     function completeOrder(order, modalText) {
-      // Save to localStorage
       const existing = JSON.parse(localStorage.getItem('errands_orders') || '[]');
-      existing.unshift(order); // newest first
+      existing.unshift(order);
       localStorage.setItem('errands_orders', JSON.stringify(existing));
       ErrandsNotify.send(order);
 
-      // Show success modal
       document.getElementById('modalTitle').textContent = modalText.title;
       document.getElementById('modalMessage').textContent = modalText.message;
       document.getElementById('modalTrackNum').textContent = order.id;
@@ -445,6 +488,11 @@
       document.getElementById('priceDisplay').textContent = '₦ —';
     }
   </script>
+
+  <!-- Google Maps Places API — autocomplete callback fires initAutocomplete() -->
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAOmhu13FRpg48BVh6rfsF9pUzDTOzYw&libraries=places&callback=initAutocomplete" async defer></script>
   <script src="https://js.paystack.co/v1/inline.js"></script>
-  <script src="notify.js?v=2"></script><script src="guide.js?v=2"></script></body>
+  <script src="notify.js?v=2"></script>
+  <script src="guide.js?v=2"></script>
+</body>
 </html>
