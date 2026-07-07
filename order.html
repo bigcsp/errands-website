@@ -281,7 +281,7 @@
         recipient_name:  order.recipientName,
         recipient_phone: order.recipientPhone,
         package_type:    order.packageType,
-        price:           '\u20a6' + order.price.toLocaleString(),
+        price:           '₦' + order.price.toLocaleString(),
         payment_status:  order.paymentMethod === 'whatsapp' ? 'Pending (WhatsApp)' : 'Paid',
       };
       emailjs.send('service_4mx2xgp', 'template_7hubh48', params)
@@ -293,11 +293,7 @@
   <script>
     document.getElementById('pickupDate').value = new Date().toISOString().split('T')[0];
 
-    // ── PAYSTACK CONFIG ──────────────────────────────────────────────
     const PAYSTACK_PUBLIC_KEY = 'pk_live_bf88b9562eaf980a9945529312a7dcea37dbb64a';
-
-    // ── WHATSAPP CONFIG ──────────────────────────────────────────────
-    // Replace with your business WhatsApp number (country code, no + or spaces)
     const WHATSAPP_NUMBER = '234XXXXXXXXXX';
 
     const PRICES = {
@@ -306,7 +302,6 @@
       'Fragile item': 2000, 'Electronics': 2200,
     };
 
-    // ── GOOGLE PLACES AUTOCOMPLETE ───────────────────────────────────
     function initAutocomplete() {
       const options = {
         componentRestrictions: { country: 'ng' },
@@ -321,32 +316,23 @@
       );
       pickupAC.addListener('place_changed', function() {
         const place = pickupAC.getPlace();
-        if (place.formatted_address) {
-          document.getElementById('pickupAddress').value = place.formatted_address;
-        }
+        if (place.formatted_address) document.getElementById('pickupAddress').value = place.formatted_address;
       });
       dropoffAC.addListener('place_changed', function() {
         const place = dropoffAC.getPlace();
-        if (place.formatted_address) {
-          document.getElementById('dropoffAddress').value = place.formatted_address;
-        }
+        if (place.formatted_address) document.getElementById('dropoffAddress').value = place.formatted_address;
       });
-      document.getElementById('pickupAddress').addEventListener('keydown', function(e) {
-        if (e.key === 'Enter') e.preventDefault();
-      });
-      document.getElementById('dropoffAddress').addEventListener('keydown', function(e) {
-        if (e.key === 'Enter') e.preventDefault();
-      });
+      document.getElementById('pickupAddress').addEventListener('keydown', function(e) { if (e.key === 'Enter') e.preventDefault(); });
+      document.getElementById('dropoffAddress').addEventListener('keydown', function(e) { if (e.key === 'Enter') e.preventDefault(); });
     }
 
     function updatePrice() {
-      const type   = document.getElementById('packageType').value;
+      const type = document.getElementById('packageType').value;
       const weight = parseFloat(document.getElementById('packageWeight').value) || 1;
-      if (!type) { document.getElementById('priceDisplay').textContent = '\u20a6 \u2014'; return; }
-      const base  = PRICES[type] || 1000;
+      if (!type) { document.getElementById('priceDisplay').textContent = '₦ —'; return; }
+      const base = PRICES[type] || 1000;
       const extra = weight > 2 ? (weight - 2) * 200 : 0;
-      const total = base + extra;
-      document.getElementById('priceDisplay').textContent = '\u20a6 ' + total.toLocaleString();
+      document.getElementById('priceDisplay').textContent = '₦ ' + (base + extra).toLocaleString();
     }
 
     function generateTrackingNumber() {
@@ -361,73 +347,51 @@
       for (const id of required) {
         const el = document.getElementById(id);
         if (!el.value.trim()) {
-          el.style.borderColor = '#ef4444';
-          el.focus();
-          setTimeout(() => el.style.borderColor = '', 2000);
-          return null;
+          el.style.borderColor = '#ef4444'; el.focus();
+          setTimeout(() => el.style.borderColor = '', 2000); return null;
         }
       }
-      const trackingNum = generateTrackingNumber();
-      const type   = document.getElementById('packageType').value;
+      const type = document.getElementById('packageType').value;
       const weight = parseFloat(document.getElementById('packageWeight').value) || 1;
-      const base   = PRICES[type] || 1000;
-      const extra  = weight > 2 ? (weight - 2) * 200 : 0;
-      const price  = base + extra;
+      const base = PRICES[type] || 1000;
+      const extra = weight > 2 ? (weight - 2) * 200 : 0;
       return {
-        id:             trackingNum,
-        status:         'Pending',
-        createdAt:      new Date().toISOString(),
-        senderName:     document.getElementById('senderName').value.trim(),
-        senderPhone:    document.getElementById('senderPhone').value.trim(),
-        senderEmail:    document.getElementById('senderEmail').value.trim(),
-        pickupAddress:  document.getElementById('pickupAddress').value.trim(),
-        pickupDate:     document.getElementById('pickupDate').value,
-        pickupTime:     document.getElementById('pickupTime').value,
+        id: generateTrackingNumber(), status: 'Pending', createdAt: new Date().toISOString(),
+        senderName: document.getElementById('senderName').value.trim(),
+        senderPhone: document.getElementById('senderPhone').value.trim(),
+        senderEmail: document.getElementById('senderEmail').value.trim(),
+        pickupAddress: document.getElementById('pickupAddress').value.trim(),
+        pickupDate: document.getElementById('pickupDate').value,
+        pickupTime: document.getElementById('pickupTime').value,
         dropoffAddress: document.getElementById('dropoffAddress').value.trim(),
-        recipientName:  document.getElementById('recipientName').value.trim(),
+        recipientName: document.getElementById('recipientName').value.trim(),
         recipientPhone: document.getElementById('recipientPhone').value.trim(),
-        packageType:    type,
-        packageWeight:  weight,
-        price:          price,
-        notes:          document.getElementById('notes').value.trim(),
-        rider:          '',
-        paymentStatus:  'pending',
-        paystackRef:    '',
-        paymentMethod:  '',
+        packageType: type, packageWeight: weight, price: base + extra,
+        notes: document.getElementById('notes').value.trim(),
+        rider: '', paymentStatus: 'pending', paystackRef: '', paymentMethod: '',
       };
     }
 
     function placeOrderCard() {
-      const order = buildOrder();
-      if (!order) return;
-      order.paymentMethod = 'card';
-      payWithPaystack(order);
+      const order = buildOrder(); if (!order) return;
+      order.paymentMethod = 'card'; payWithPaystack(order);
     }
 
     function payWithPaystack(order) {
       const cardBtn = document.getElementById('cardBtn');
       const whatsappBtn = document.getElementById('whatsappBtn');
-      cardBtn.disabled = true;
-      whatsappBtn.disabled = true;
-      cardBtn.textContent = '\u23f3 Processing payment\u2026';
+      cardBtn.disabled = true; whatsappBtn.disabled = true;
+      cardBtn.textContent = '⏳ Processing payment…';
       const handler = PaystackPop.setup({
-        key: PAYSTACK_PUBLIC_KEY,
-        email: order.senderEmail,
-        amount: Math.round(order.price * 100),
-        currency: 'NGN',
-        ref: order.id,
+        key: PAYSTACK_PUBLIC_KEY, email: order.senderEmail,
+        amount: Math.round(order.price * 100), currency: 'NGN', ref: order.id,
         callback: function(response) {
-          order.paymentStatus = 'paid';
-          order.paystackRef = response.reference;
-          completeOrder(order, {
-            title: 'Order placed!',
-            message: 'Your order has been received. A rider will be assigned shortly.'
-          });
+          order.paymentStatus = 'paid'; order.paystackRef = response.reference;
+          completeOrder(order, { title: 'Order placed!', message: 'Your order has been received. A rider will be assigned shortly.' });
         },
         onClose: function() {
-          cardBtn.disabled = false;
-          whatsappBtn.disabled = false;
-          cardBtn.textContent = '\ud83d\udcb3 Pay with Card';
+          cardBtn.disabled = false; whatsappBtn.disabled = false;
+          cardBtn.textContent = '💳 Pay with Card';
           alert('Payment was not completed. Your order has not been placed.');
         }
       });
@@ -435,31 +399,16 @@
     }
 
     function placeOrderWhatsApp() {
-      const order = buildOrder();
-      if (!order) return;
-      order.paymentMethod = 'whatsapp';
-      order.paymentStatus = 'pending-whatsapp';
-      completeOrder(order, {
-        title: 'Order saved!',
-        message: 'Continue on WhatsApp to confirm your order and arrange payment.'
-      });
-      const message = buildWhatsAppMessage(order);
-      const waLink = 'https://wa.me/' + WHATSAPP_NUMBER + '?text=' + encodeURIComponent(message);
-      window.open(waLink, '_blank');
-    }
-
-    function buildWhatsAppMessage(order) {
-      return "Hi! I'd like to place a delivery order.\n\n" +
-        "*Tracking #:* " + order.id + "\n" +
-        "*Sender:* " + order.senderName + " (" + order.senderPhone + ")\n" +
-        "*Pickup:* " + order.pickupAddress + "\n" +
-        "*Pickup date/time:* " + order.pickupDate + " at " + order.pickupTime + "\n\n" +
-        "*Drop-off:* " + order.dropoffAddress + "\n" +
-        "*Recipient:* " + order.recipientName + " (" + order.recipientPhone + ")\n\n" +
-        "*Package:* " + order.packageType + ", ~" + order.packageWeight + "kg\n" +
-        "*Notes:* " + (order.notes || 'None') + "\n\n" +
-        "*Amount to pay:* \u20a6" + order.price.toLocaleString() + "\n\n" +
-        "I'll send payment confirmation here. Thank you!";
+      const order = buildOrder(); if (!order) return;
+      order.paymentMethod = 'whatsapp'; order.paymentStatus = 'pending-whatsapp';
+      completeOrder(order, { title: 'Order saved!', message: 'Continue on WhatsApp to confirm your order and arrange payment.' });
+      const message = "Hi! I'd like to place a delivery order.\n\n" +
+        "*Tracking #:* " + order.id + "\n*Sender:* " + order.senderName + " (" + order.senderPhone + ")\n" +
+        "*Pickup:* " + order.pickupAddress + "\n*Pickup date/time:* " + order.pickupDate + " at " + order.pickupTime + "\n\n" +
+        "*Drop-off:* " + order.dropoffAddress + "\n*Recipient:* " + order.recipientName + " (" + order.recipientPhone + ")\n\n" +
+        "*Package:* " + order.packageType + ", ~" + order.packageWeight + "kg\n*Notes:* " + (order.notes || 'None') + "\n\n" +
+        "*Amount to pay:* \u20a6" + order.price.toLocaleString() + "\n\nI'll send payment confirmation here. Thank you!";
+      window.open('https://wa.me/' + WHATSAPP_NUMBER + '?text=' + encodeURIComponent(message), '_blank');
     }
 
     function completeOrder(order, modalText) {
@@ -473,20 +422,16 @@
       document.getElementById('modalTrackNum').textContent = order.id;
       document.getElementById('trackLink').href = 'track.html?tracking=' + order.id;
       document.getElementById('modalOverlay').classList.add('show');
-      const cardBtn = document.getElementById('cardBtn');
-      const whatsappBtn = document.getElementById('whatsappBtn');
-      cardBtn.disabled = false;
-      whatsappBtn.disabled = false;
-      cardBtn.textContent = '\ud83d\udcb3 Pay with Card';
+      document.getElementById('cardBtn').disabled = false;
+      document.getElementById('whatsappBtn').disabled = false;
+      document.getElementById('cardBtn').textContent = '💳 Pay with Card';
     }
 
     function resetForm() {
       document.getElementById('modalOverlay').classList.remove('show');
-      document.querySelectorAll('input, select, textarea').forEach(el => {
-        if (el.type !== 'date') el.value = '';
-      });
+      document.querySelectorAll('input, select, textarea').forEach(el => { if (el.type !== 'date') el.value = ''; });
       document.getElementById('pickupDate').value = new Date().toISOString().split('T')[0];
-      document.getElementById('priceDisplay').textContent = '\u20a6 \u2014';
+      document.getElementById('priceDisplay').textContent = '₦ —';
     }
   </script>
 
