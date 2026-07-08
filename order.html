@@ -416,6 +416,7 @@
       existing.unshift(order);
       localStorage.setItem('errands_orders', JSON.stringify(existing));
       ErrandsNotify.send(order);
+      if (window.saveOrderToFirestore) saveOrderToFirestore(order);
       sendOrderConfirmationEmail(order);
       document.getElementById('modalTitle').textContent = modalText.title;
       document.getElementById('modalMessage').textContent = modalText.message;
@@ -440,4 +441,18 @@
   <script src="notify.js?v=2"></script>
   <script src="guide.js?v=2"></script>
 </body>
+<script type="module">
+  import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js';
+  import { getFirestore, doc, setDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js';
+  const app = initializeApp({ apiKey:"AIzaSyDyWMcMx6tqYHxumN3sPImoDUaTeAkNHCU", authDomain:"mag-city-errands.firebaseapp.com", projectId:"mag-city-errands", storageBucket:"mag-city-errands.firebasestorage.app", messagingSenderId:"315623986569", appId:"1:315623986569:web:ba7200af8ca50abc5f3d58" });
+  const db = getFirestore(app);
+  window.saveOrderToFirestore = async function(order) {
+    try {
+      await setDoc(doc(db, 'orders', order.id), {
+        ...order, assignedRider: '', riderStatus: 'unassigned', createdAt: serverTimestamp()
+      });
+      console.log('Order saved to Firestore:', order.id);
+    } catch(e) { console.error('Firestore save failed:', e); }
+  };
+</script>
 </html>
