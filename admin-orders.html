@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Order Management — Mag-City Admin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --orange: #FF6B2B; --dark: #0a0a0a; --mid: #141414; --mid2: #1a1a1a;
+      --border: rgba(255,255,255,0.08); --text: #f0f0f0; --muted: #888;
+      --green: #22c55e; --blue: #3b82f6; --red: #ef4444; --yellow: #eab308;
+    }
+    body { font-family: 'DM Sans', sans-serif; background: var(--dark); color: var(--text); min-height: 100vh; }
+
+    /* NAV */
+    .nav { display: flex; align-items: center; justify-content: space-between; padding: 0 28px; height: 60px; border-bottom: 1px solid var(--border); background: rgba(10,10,10,0.95); backdrop-filter: blur(16px); position: sticky; top: 0; z-index: 100; }
+    .nav-logo { display: flex; align-items: center; gap: 8px; font-family: 'Syne', sans-serif; font-weight: 800; font-size: 18px; text-decoration: none; color: inherit; }
+    .logo-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--orange); }
+    .admin-badge { background: rgba(255,107,43,0.15); border: 1px solid rgba(255,107,43,0.3); color: var(--orange); font-family: 'Syne', sans-serif; font-weight: 700; font-size: 11px; padding: 3px 10px; border-radius: 20px; letter-spacing: 1px; }
+    .nav-right { display: flex; align-items: center; gap: 10px; }
+    .nav-link { color: var(--muted); text-decoration: none; font-size: 13px; padding: 6px 12px; border-radius: 8px; transition: all 0.2s; }
+    .nav-link:hover { background: rgba(255,255,255,0.06); color: var(--text); }
+    .nav-link.active { color: var(--orange); }
+    .btn-logout { background: none; border: 1px solid var(--border); color: var(--muted); padding: 6px 14px; border-radius: 30px; font-size: 13px; cursor: pointer; transition: all 0.2s; }
+    .btn-logout:hover { border-color: var(--red); color: var(--red); }
+
+    /* LAYOUT */
+    .page { max-width: 1200px; margin: 0 auto; padding: 32px 24px 80px; }
+
+    /* STATS */
+    .stats-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-bottom: 28px; }
+    @media (max-width: 900px) { .stats-grid { grid-template-columns: repeat(3, 1fr); } }
+    @media (max-width: 520px) { .stats-grid { grid-template-columns: 1fr 1fr; } }
+    .stat-card { background: var(--mid); border: 1px solid var(--border); border-radius: 14px; padding: 16px 18px; }
+    .stat-card .s-label { font-size: 11px; color: var(--muted); font-family: 'Syne', sans-serif; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+    .stat-card .s-value { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 26px; color: var(--orange); }
+    .stat-card.green .s-value { color: var(--green); }
+    .stat-card.blue .s-value { color: var(--blue); }
+    .stat-card.yellow .s-value { color: var(--yellow); }
+    .stat-card.red .s-value { color: var(--red); }
+
+    /* TOOLBAR */
+    .toolbar { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; }
+    .search-box { flex: 1; min-width: 200px; background: var(--mid); border: 1px solid var(--border); border-radius: 10px; padding: 10px 14px; color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 14px; outline: none; transition: border-color 0.2s; }
+    .search-box:focus { border-color: var(--orange); }
+    .search-box::placeholder { color: rgba(136,136,136,0.5); }
+    .filter-tabs { display: flex; gap: 6px; flex-wrap: wrap; }
+    .filter-tab { background: var(--mid); border: 1px solid var(--border); color: var(--muted); padding: 8px 14px; border-radius: 30px; font-family: 'Syne', sans-serif; font-weight: 600; font-size: 12px; cursor: pointer; transition: all 0.2s; white-space: nowrap; }
+    .filter-tab.active { background: var(--orange); border-color: var(--orange); color: #fff; }
+    .btn-refresh { background: var(--mid); border: 1px solid var(--border); color: var(--muted); padding: 10px 16px; border-radius: 10px; font-size: 13px; cursor: pointer; transition: all 0.2s; white-space: nowrap; }
+    .btn-refresh:hover { border-color: var(--orange); color: var(--orange); }
+
+    /* ORDERS TABLE */
+    .orders-table { width: 100%; border-collapse: collapse; }
+    .orders-table th { text-align: left; padding: 10px 14px; font-family: 'Syne', sans-serif; font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px solid var(--border); white-space: nowrap; }
+    .orders-table td { padding: 14px; border-bottom: 1px solid rgba(255,255,255,0.04); vertical-align: middle; font-size: 13px; }
+    .orders-table tr:hover td { background: rgba(255,255,255,0.02); }
+    .tracking-id { font-family: 'Syne', sans-serif; font-weight: 800; color: var(--orange); font-size: 13px; letter-spacing: 0.5px; }
+    .address-cell { max-width: 160px; }
+    .address-cell .addr-main { font-size: 13px; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 150px; }
+    .address-cell .addr-sub { font-size: 11px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 150px; }
+    .price-cell { font-family: 'Syne', sans-serif; font-weight: 700; color: var(--orange); white-space: nowrap; }
+    .date-cell { font-size: 12px; color: var(--muted); white-space: nowrap; }
+    .customer-cell .c-name { font-size: 13px; color: var(--text); font-weight: 500; }
+    .customer-cell .c-phone { font-size: 11px; color: var(--muted); }
+
+    /* STATUS BADGES */
+    .badge { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-family: 'Syne', sans-serif; font-weight: 700; padding: 3px 10px; border-radius: 20px; text-transform: uppercase; letter-spacing: 0.5px; white-space: nowrap; }
+    .badge-pending { background: rgba(234,179,8,0.12); color: var(--yellow); border: 1px solid rgba(234,179,8,0.2); }
+    .badge-assigned { background: rgba(255,107,43,0.12); color: var(--orange); border: 1px solid rgba(255,107,43,0.2); }
+    .badge-transit { background: rgba(59,130,246,0.12); color: var(--blue); border: 1px solid rgba(59,130,246,0.2); }
+    .badge-delivered { background: rgba(34,197,94,0.12); color: var(--green); border: 1px solid rgba(34,197,94,0.2); }
+    .badge-whatsapp { background: rgba(37,211,102,0.12); color: #25D366; border: 1px solid rgba(37,211,102,0.2); }
+
+    /* RIDER ASSIGN */
+    .assign-cell { min-width: 200px; }
+    .assign-row { display: flex; gap: 6px; align-items: center; }
+    .rider-select { flex: 1; background: var(--mid2); border: 1px solid var(--border); border-radius: 8px; padding: 7px 10px; color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 12px; outline: none; cursor: pointer; appearance: none; transition: border-color 0.2s; }
+    .rider-select:focus { border-color: var(--orange); }
+    .rider-select option { background: #1a1a1a; }
+    .btn-assign { background: var(--orange); color: #fff; border: none; border-radius: 8px; padding: 7px 14px; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 12px; cursor: pointer; transition: all 0.2s; white-space: nowrap; }
+    .btn-assign:hover { background: #e05a20; }
+    .btn-assign:disabled { opacity: 0.5; cursor: not-allowed; }
+    .assigned-rider { display: flex; align-items: center; gap: 6px; }
+    .rider-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green); flex-shrink: 0; }
+    .rider-name { font-size: 12px; color: var(--green); font-weight: 500; }
+    .btn-reassign { background: none; border: 1px solid var(--border); color: var(--muted); padding: 4px 10px; border-radius: 6px; font-size: 11px; cursor: pointer; transition: all 0.2s; }
+    .btn-reassign:hover { border-color: var(--orange); color: var(--orange); }
+
+    /* ORDER DETAIL MODAL */
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(8px); z-index: 1000; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.3s; padding: 20px; }
+    .modal-overlay.show { opacity: 1; pointer-events: all; }
+    .modal { background: var(--mid); border: 1px solid var(--border); border-radius: 20px; padding: 32px; max-width: 520px; width: 100%; transform: translateY(20px); transition: transform 0.3s; max-height: 90vh; overflow-y: auto; }
+    .modal-overlay.show .modal { transform: translateY(0); }
+    .modal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
+    .modal-title { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 20px; }
+    .btn-close { background: none; border: none; color: var(--muted); font-size: 20px; cursor: pointer; padding: 4px; }
+    .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 20px; }
+    .detail-item .d-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 3px; font-family: 'Syne', sans-serif; }
+    .detail-item .d-value { font-size: 14px; color: var(--text); font-weight: 500; }
+    .detail-item.full { grid-column: 1 / -1; }
+    .modal-section { font-family: 'Syne', sans-serif; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin: 20px 0 12px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+    .status-update-row { display: flex; gap: 8px; margin-top: 20px; flex-wrap: wrap; }
+    .btn-status { flex: 1; min-width: 100px; padding: 10px; border: none; border-radius: 10px; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 12px; cursor: pointer; transition: all 0.2s; }
+    .btn-pending { background: rgba(234,179,8,0.15); color: var(--yellow); }
+    .btn-transit { background: rgba(59,130,246,0.15); color: var(--blue); }
+    .btn-delivered { background: rgba(34,197,94,0.15); color: var(--green); }
+    .btn-cancel { background: rgba(239,68,68,0.15); color: var(--red); }
+
+    /* EMPTY / LOADING */
+    .empty-state { text-align: center; padding: 60px 20px; color: var(--muted); }
+    .empty-state .e-icon { font-size: 48px; margin-bottom: 16px; }
+    .empty-state h3 { font-family: 'Syne', sans-serif; font-size: 18px; color: var(--text); margin-bottom: 8px; }
+    .loading { text-align: center; padding: 40px; color: var(--muted); font-size: 14px; }
+    .toast { position: fixed; bottom: 24px; right: 24px; background: #1a1a1a; border: 1px solid var(--border); border-radius: 12px; padding: 12px 20px; font-size: 13px; z-index: 9999; transform: translateY(80px); transition: transform 0.3s; }
+    .toast.show { transform: translateY(0); }
+    .toast.success { border-color: rgba(34,197,94,0.4); color: var(--green); }
+    .toast.error { border-color: rgba(239,68,68,0.4); color: var(--red); }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      .orders-table { display: block; overflow-x: auto; }
+      .page { padding: 20px 16px 60px; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="nav">
+    <a href="index.html" class="nav-logo"><span class="logo-dot"></span>Errands</a>
+    <div class="nav-right">
+      <a href="admin-portal.html" class="nav-link">Dashboard</a>
+      <a href="admin-orders.html" class="nav-link active">Orders</a>
+      <span class="admin-badge">ADMIN</span>
+      <button class="btn-logout" onclick="handleLogout()">Sign out</button>
+    </div>
+  </nav>
+
+  <div class="page">
+
+    <!-- STATS -->
+    <div class="stats-grid">
+      <div class="stat-card"><div class="s-label">Total Orders</div><div class="s-value" id="statTotal">—</div></div>
+      <div class="stat-card yellow"><div class="s-label">Pending</div><div class="s-value" id="statPending">—</div></div>
+      <div class="stat-card"><div class="s-label">Assigned</div><div class="s-value" id="statAssigned">—</div></div>
+      <div class="stat-card blue"><div class="s-label">In Transit</div><div class="s-value" id="statTransit">—</div></div>
+      <div class="stat-card green"><div class="s-label">Delivered</div><div class="s-value" id="statDelivered">—</div></div>
+    </div>
+
+    <!-- TOOLBAR -->
+    <div class="toolbar">
+      <input class="search-box" id="searchBox" placeholder="🔍  Search by tracking ID, name or address…" oninput="applyFilters()" />
+      <div class="filter-tabs">
+        <button class="filter-tab active" onclick="setFilter('all', this)">All</button>
+        <button class="filter-tab" onclick="setFilter('pending', this)">Pending</button>
+        <button class="filter-tab" onclick="setFilter('assigned', this)">Assigned</button>
+        <button class="filter-tab" onclick="setFilter('transit', this)">In Transit</button>
+        <button class="filter-tab" onclick="setFilter('delivered', this)">Delivered</button>
+      </div>
+      <button class="btn-refresh" onclick="loadOrders()">↻ Refresh</button>
+    </div>
+
+    <!-- TABLE -->
+    <div id="tableContainer">
+      <div class="loading">Loading orders…</div>
+    </div>
+
+  </div>
+
+  <!-- ORDER DETAIL MODAL -->
+  <div class="modal-overlay" id="detailModal">
+    <div class="modal">
+      <div class="modal-header">
+        <div class="modal-title" id="modalTrackId">Order Details</div>
+        <button class="btn-close" onclick="closeModal()">✕</button>
+      </div>
+      <div id="modalContent"></div>
+    </div>
+  </div>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast"></div>
+
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js';
+    import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js';
+    import { getFirestore, collection, getDocs, doc, getDoc, updateDoc, query, orderBy, serverTimestamp, where } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js';
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDyWMcMx6tqYHxumN3sPImoDUaTeAkNHCU",
+      authDomain: "mag-city-errands.firebaseapp.com",
+      projectId: "mag-city-errands",
+      storageBucket: "mag-city-errands.firebasestorage.app",
+      messagingSenderId: "315623986569",
+      appId: "1:315623986569:web:ba7200af8ca50abc5f3d58"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    let allOrders = [];
+    let riders = [];
+    let currentFilter = 'all';
+    let currentModal = null;
+
+    // ── AUTH GUARD ───────────────────────────────────────────────────
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) { window.location.href = 'login.html'; return; }
+      const snap = await getDoc(doc(db, 'users', user.uid));
+      if (!snap.exists() || snap.data().role !== 'admin') {
+        window.location.href = snap.exists() && snap.data().role === 'rider' ? 'rider-dashboard.html' : 'user-dashboard.html';
+        return;
+      }
+      await loadRiders();
+      await loadOrders();
+    });
+
+    // ── LOAD RIDERS ──────────────────────────────────────────────────
+    async function loadRiders() {
+      try {
+        const q = query(collection(db, 'users'), where('role', '==', 'rider'));
+        const snap = await getDocs(q);
+        riders = [];
+        snap.forEach(d => riders.push({ uid: d.id, ...d.data() }));
+      } catch(e) { console.error('Load riders failed:', e); }
+    }
+
+    // ── LOAD ORDERS ──────────────────────────────────────────────────
+    window.loadOrders = async function() {
+      document.getElementById('tableContainer').innerHTML = '<div class="loading">Loading orders…</div>';
+      try {
+        // Load from Firestore
+        const fsSnap = await getDocs(collection(db, 'orders'));
+        const fsOrders = [];
+        fsSnap.forEach(d => fsOrders.push({ ...d.data(), docId: d.id }));
+
+        // Also load from localStorage orders not yet in Firestore
+        const local = JSON.parse(localStorage.getItem('errands_orders') || '[]');
+        const fsIds = new Set(fsOrders.map(o => o.id || o.docId));
+        local.forEach(o => { if (!fsIds.has(o.id)) fsOrders.push({ ...o, docId: o.id, _localOnly: true }); });
+
+        allOrders = fsOrders.sort((a, b) => {
+          const ta = a.createdAt?.seconds ? a.createdAt.seconds * 1000 : new Date(a.createdAt || 0).getTime();
+          const tb = b.createdAt?.seconds ? b.createdAt.seconds * 1000 : new Date(b.createdAt || 0).getTime();
+          return tb - ta;
+        });
+
+        updateStats();
+        applyFilters();
+      } catch(e) {
+        document.getElementById('tableContainer').innerHTML = `<div class="empty-state"><div class="e-icon">⚠️</div><h3>Failed to load orders</h3><p>${e.message}</p></div>`;
+      }
+    };
+
+    function updateStats() {
+      document.getElementById('statTotal').textContent = allOrders.length;
+      document.getElementById('statPending').textContent = allOrders.filter(o => !o.assignedRider || o.assignedRider === '').length;
+      document.getElementById('statAssigned').textContent = allOrders.filter(o => o.riderStatus === 'assigned').length;
+      document.getElementById('statTransit').textContent = allOrders.filter(o => o.riderStatus === 'pickedup' || o.status === 'In Transit').length;
+      document.getElementById('statDelivered').textContent = allOrders.filter(o => o.riderStatus === 'delivered' || o.status === 'Delivered').length;
+    }
+
+    window.setFilter = function(filter, btn) {
+      currentFilter = filter;
+      document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+      btn.classList.add('active');
+      applyFilters();
+    };
+
+    window.applyFilters = function() {
+      const search = document.getElementById('searchBox').value.toLowerCase();
+      let filtered = allOrders.filter(o => {
+        if (search) {
+          const searchable = ((o.id || '') + (o.senderName || '') + (o.pickupAddress || '') + (o.dropoffAddress || '')).toLowerCase();
+          if (!searchable.includes(search)) return false;
+        }
+        if (currentFilter === 'pending') return !o.assignedRider || o.assignedRider === '';
+        if (currentFilter === 'assigned') return o.riderStatus === 'assigned';
+        if (currentFilter === 'transit') return o.riderStatus === 'pickedup' || o.status === 'In Transit';
+        if (currentFilter === 'delivered') return o.riderStatus === 'delivered' || o.status === 'Delivered';
+        return true;
+      });
+      renderTable(filtered);
+    };
+
+    function getRiderName(uid) {
+      const r = riders.find(r => r.uid === uid);
+      return r ? r.name : uid;
+    }
+
+    function getStatusBadge(order) {
+      if (order.riderStatus === 'delivered' || order.status === 'Delivered') return '<span class="badge badge-delivered">✅ Delivered</span>';
+      if (order.riderStatus === 'pickedup' || order.status === 'In Transit') return '<span class="badge badge-transit">🛵 In Transit</span>';
+      if (order.assignedRider) return '<span class="badge badge-assigned">📋 Assigned</span>';
+      if (order.paymentStatus === 'pending-whatsapp') return '<span class="badge badge-whatsapp">💬 WhatsApp</span>';
+      if (order.paymentStatus === 'paid') return '<span class="badge badge-assigned" style="color:#22c55e;background:rgba(34,197,94,0.12);border-color:rgba(34,197,94,0.2)">💳 Paid</span>';
+      return '<span class="badge badge-pending">⏳ Pending</span>';
+    }
+
+    function renderTable(orders) {
+      if (orders.length === 0) {
+        document.getElementById('tableContainer').innerHTML = '<div class="empty-state"><div class="e-icon">📦</div><h3>No orders found</h3><p>Try a different filter or search term.</p></div>';
+        return;
+      }
+
+      const riderOptions = riders.map(r => `<option value="${r.uid}">${r.name}</option>`).join('');
+
+      const rows = orders.map((o, i) => {
+        const date = o.createdAt?.seconds
+          ? new Date(o.createdAt.seconds * 1000).toLocaleDateString('en-NG', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })
+          : o.createdAt ? new Date(o.createdAt).toLocaleDateString('en-NG', { day: 'numeric', month: 'short' }) : '—';
+
+        const assignCell = (o.assignedRider && o.assignedRider !== '')
+          ? `<div class="assigned-rider">
+              <span class="rider-dot"></span>
+              <span class="rider-name">${getRiderName(o.assignedRider)}</span>
+              <button class="btn-reassign" onclick="startReassign('${o.docId || o.id}', ${i})">Change</button>
+             </div>`
+          : `<div class="assign-row">
+              <select class="rider-select" id="sel-${i}">
+                <option value="">Select rider…</option>
+                ${riderOptions}
+              </select>
+              <button class="btn-assign" onclick="assignRider('${o.docId || o.id}', ${i})">Assign</button>
+             </div>`;
+
+        return `<tr>
+          <td><span class="tracking-id" style="cursor:pointer" onclick="openDetail(${i})">${o.id || o.docId}</span></td>
+          <td class="customer-cell"><div class="c-name">${o.senderName || '—'}</div><div class="c-phone">${o.senderPhone || ''}</div></td>
+          <td class="address-cell"><div class="addr-main">${o.pickupAddress || '—'}</div><div class="addr-sub">→ ${o.dropoffAddress || '—'}</div></td>
+          <td><span class="badge" style="background:rgba(255,255,255,0.05);color:var(--muted);border:1px solid var(--border)">${o.packageType || '—'}</span></td>
+          <td class="price-cell">₦${(o.price || 0).toLocaleString()}</td>
+          <td>${getStatusBadge(o)}</td>
+          <td class="date-cell">${date}</td>
+          <td class="assign-cell">${assignCell}</td>
+        </tr>`;
+      }).join('');
+
+      document.getElementById('tableContainer').innerHTML = `
+        <table class="orders-table">
+          <thead>
+            <tr>
+              <th>Tracking ID</th>
+              <th>Customer</th>
+              <th>Route</th>
+              <th>Package</th>
+              <th>Fee</th>
+              <th>Status</th>
+              <th>Date</th>
+              <th>Assign Rider</th>
+            </tr>
+          </thead>
+          <tbody>${rows}</tbody>
+        </table>`;
+    }
+
+    // ── ASSIGN RIDER ─────────────────────────────────────────────────
+    window.assignRider = async function(docId, idx) {
+      const sel = document.getElementById('sel-' + idx);
+      const riderUid = sel.value;
+      if (!riderUid) { showToast('Please select a rider first', 'error'); return; }
+
+      const btn = sel.parentElement.querySelector('.btn-assign');
+      btn.disabled = true; btn.textContent = 'Assigning…';
+
+      try {
+        await updateDoc(doc(db, 'orders', docId), {
+          assignedRider: riderUid,
+          riderStatus: 'assigned',
+          status: 'Assigned',
+          assignedAt: serverTimestamp()
+        });
+
+        const order = allOrders.find(o => (o.docId || o.id) === docId);
+        if (order) { order.assignedRider = riderUid; order.riderStatus = 'assigned'; order.status = 'Assigned'; }
+
+        showToast('Rider assigned successfully ✅', 'success');
+        updateStats();
+        applyFilters();
+      } catch(e) {
+        showToast('Failed: ' + e.message, 'error');
+        btn.disabled = false; btn.textContent = 'Assign';
+      }
+    };
+
+    window.startReassign = function(docId, idx) {
+      const order = allOrders[idx];
+      if (order) { order.assignedRider = ''; order.riderStatus = 'unassigned'; }
+      applyFilters();
+    };
+
+    // ── ORDER DETAIL MODAL ───────────────────────────────────────────
+    window.openDetail = function(idx) {
+      const o = allOrders[idx];
+      currentModal = o;
+      document.getElementById('modalTrackId').textContent = o.id || o.docId;
+
+      const date = o.createdAt?.seconds
+        ? new Date(o.createdAt.seconds * 1000).toLocaleString('en-NG')
+        : o.createdAt ? new Date(o.createdAt).toLocaleString('en-NG') : '—';
+
+      document.getElementById('modalContent').innerHTML = `
+        <div style="margin-bottom:16px">${getStatusBadge(o)}</div>
+        <div class="modal-section">Sender</div>
+        <div class="detail-grid">
+          <div class="detail-item"><div class="d-label">Name</div><div class="d-value">${o.senderName || '—'}</div></div>
+          <div class="detail-item"><div class="d-label">Phone</div><div class="d-value"><a href="tel:${o.senderPhone}" style="color:var(--orange);text-decoration:none">${o.senderPhone || '—'}</a></div></div>
+          <div class="detail-item full"><div class="d-label">Email</div><div class="d-value">${o.senderEmail || '—'}</div></div>
+        </div>
+        <div class="modal-section">Route</div>
+        <div class="detail-grid">
+          <div class="detail-item full"><div class="d-label">📍 Pickup</div><div class="d-value">${o.pickupAddress || '—'}</div></div>
+          <div class="detail-item"><div class="d-label">Date</div><div class="d-value">${o.pickupDate || '—'}</div></div>
+          <div class="detail-item"><div class="d-label">Time</div><div class="d-value">${o.pickupTime || '—'}</div></div>
+          <div class="detail-item full"><div class="d-label">🏁 Drop-off</div><div class="d-value">${o.dropoffAddress || '—'}</div></div>
+          <div class="detail-item"><div class="d-label">Recipient</div><div class="d-value">${o.recipientName || '—'}</div></div>
+          <div class="detail-item"><div class="d-label">Recipient phone</div><div class="d-value"><a href="tel:${o.recipientPhone}" style="color:var(--orange);text-decoration:none">${o.recipientPhone || '—'}</a></div></div>
+        </div>
+        <div class="modal-section">Package & Payment</div>
+        <div class="detail-grid">
+          <div class="detail-item"><div class="d-label">Type</div><div class="d-value">${o.packageType || '—'}</div></div>
+          <div class="detail-item"><div class="d-label">Weight</div><div class="d-value">${o.packageWeight || '—'} kg</div></div>
+          <div class="detail-item"><div class="d-label">Delivery fee</div><div class="d-value" style="color:var(--orange);font-weight:700">₦${(o.price || 0).toLocaleString()}</div></div>
+          <div class="detail-item"><div class="d-label">Payment</div><div class="d-value">${o.paymentStatus || '—'}</div></div>
+          ${o.notes ? `<div class="detail-item full"><div class="d-label">Notes</div><div class="d-value">${o.notes}</div></div>` : ''}
+        </div>
+        <div class="modal-section">Assigned Rider</div>
+        <div style="margin-bottom:16px;font-size:14px;color:${o.assignedRider ? 'var(--green)' : 'var(--muted)'}">
+          ${o.assignedRider ? '🛵 ' + getRiderName(o.assignedRider) : 'Not yet assigned'}
+        </div>
+        <div class="modal-section">Update Status</div>
+        <div class="status-update-row">
+          <button class="btn-status btn-pending" onclick="updateStatus('${o.docId || o.id}', 'Pending')">⏳ Pending</button>
+          <button class="btn-status btn-transit" onclick="updateStatus('${o.docId || o.id}', 'In Transit')">🛵 In Transit</button>
+          <button class="btn-status btn-delivered" onclick="updateStatus('${o.docId || o.id}', 'Delivered')">✅ Delivered</button>
+          <button class="btn-status btn-cancel" onclick="updateStatus('${o.docId || o.id}', 'Cancelled')">❌ Cancel</button>
+        </div>
+        <div style="margin-top:16px;font-size:11px;color:var(--muted)">Ordered: ${date}</div>`;
+
+      document.getElementById('detailModal').classList.add('show');
+    };
+
+    window.closeModal = function() {
+      document.getElementById('detailModal').classList.remove('show');
+    };
+
+    window.updateStatus = async function(docId, status) {
+      try {
+        await updateDoc(doc(db, 'orders', docId), { status, updatedAt: serverTimestamp() });
+        const order = allOrders.find(o => (o.docId || o.id) === docId);
+        if (order) order.status = status;
+        showToast('Status updated to ' + status, 'success');
+        closeModal();
+        updateStats();
+        applyFilters();
+      } catch(e) { showToast('Failed: ' + e.message, 'error'); }
+    };
+
+    // ── TOAST ────────────────────────────────────────────────────────
+    function showToast(msg, type) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.className = 'toast show ' + (type || '');
+      setTimeout(() => t.classList.remove('show'), 3000);
+    }
+
+    window.handleLogout = async function() {
+      await signOut(auth);
+      window.location.href = 'login.html';
+    };
+
+    // Close modal on overlay click
+    document.getElementById('detailModal').addEventListener('click', function(e) {
+      if (e.target === this) closeModal();
+    });
+  </script>
+</body>
+</html>
