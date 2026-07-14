@@ -1,233 +1,273 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Track Order â€” MAG-CITY Errands</title>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
-<style>
-  :root { --black:#0a0a0a; --orange:#FF6B2B; --cream:#FFF8F2; --gray:#888; --border:#e8e0d8; --green:#22c55e; --blue:#3b82f6; --yellow:#f59e0b; }
-  * { margin:0; padding:0; box-sizing:border-box; }
-  body { background:var(--cream); font-family:'DM Sans',sans-serif; color:var(--black); min-height:100vh; }
-
-  header { background:var(--black); padding:18px 40px; display:flex; align-items:center; justify-content:space-between; }
-  .logo { font-family:'Bebas Neue',sans-serif; font-size:28px; color:var(--orange); letter-spacing:2px; }
-  .nav-link { color:#ccc; text-decoration:none; font-size:14px; transition:color .2s; }
-  .nav-link:hover { color:var(--orange); }
-
-  .hero { background:var(--black); padding:60px 40px 80px; text-align:center; }
-  .hero h1 { font-family:'Bebas Neue',sans-serif; font-size:clamp(48px,8vw,80px); color:#fff; letter-spacing:3px; }
-  .hero h1 span { color:var(--orange); }
-  .hero p { color:#aaa; margin-top:12px; }
-
-  .search-wrap {
-    max-width:600px; margin:-40px auto 40px;
-    background:#fff; border-radius:16px;
-    box-shadow:0 20px 60px rgba(0,0,0,0.1);
-    padding:36px; position:relative; z-index:2;
-  }
-  .search-wrap h2 { font-family:'Bebas Neue',sans-serif; font-size:24px; letter-spacing:2px; margin-bottom:20px; }
-  .search-row { display:flex; gap:12px; }
-  .search-row input {
-    flex:1; padding:14px 16px; border:2px solid var(--border);
-    border-radius:10px; font-family:'DM Sans',sans-serif; font-size:15px;
-    outline:none; background:var(--cream); text-transform:uppercase;
-    letter-spacing:2px; transition:border-color .2s;
-  }
-  .search-row input:focus { border-color:var(--orange); background:#fff; }
-  .search-btn {
-    padding:14px 24px; background:var(--orange); color:#fff; border:none;
-    border-radius:10px; font-family:'Bebas Neue',sans-serif; font-size:18px;
-    letter-spacing:1px; cursor:pointer; transition:background .2s; white-space:nowrap;
-  }
-  .search-btn:hover { background:#e05520; }
-
-  .result-wrap { max-width:700px; margin:0 auto 60px; display:none; }
-  .result-wrap.show { display:block; }
-
-  .order-card { background:#fff; border-radius:16px; box-shadow:0 10px 40px rgba(0,0,0,0.08); overflow:hidden; margin-bottom:20px; }
-  .order-header {
-    background:var(--black); padding:24px 32px;
-    display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;
-  }
-  .tracking-num { font-family:'Bebas Neue',sans-serif; font-size:28px; color:var(--orange); letter-spacing:3px; }
-  .status-badge { padding:8px 18px; border-radius:30px; font-size:13px; font-weight:700; letter-spacing:1px; text-transform:uppercase; }
-  .status-Pending { background:rgba(245,158,11,0.2); color:var(--yellow); }
-  .status-PickedUp { background:rgba(59,130,246,0.2); color:var(--blue); }
-  .status-OnTheWay { background:rgba(59,130,246,0.2); color:var(--blue); }
-  .status-Delivered { background:rgba(34,197,94,0.2); color:var(--green); }
-
-  .order-body { padding:32px; }
-
-  .progress-steps { display:flex; align-items:center; margin-bottom:36px; }
-  .step { display:flex; flex-direction:column; align-items:center; flex:1; position:relative; }
-  .step-circle {
-    width:40px; height:40px; border-radius:50%; border:3px solid var(--border);
-    background:#fff; display:flex; align-items:center; justify-content:center;
-    font-size:16px; position:relative; z-index:1; transition:all .3s;
-  }
-  .step.done .step-circle { background:var(--green); border-color:var(--green); }
-  .step.active .step-circle { background:var(--orange); border-color:var(--orange); animation:pulse 1.5s infinite; }
-  @keyframes pulse { 0%,100%{box-shadow:0 0 0 0 rgba(255,107,43,0.4)} 50%{box-shadow:0 0 0 8px rgba(255,107,43,0)} }
-  .step-label { font-size:11px; font-weight:600; margin-top:8px; color:var(--gray); text-align:center; text-transform:uppercase; letter-spacing:.5px; }
-  .step.done .step-label, .step.active .step-label { color:var(--black); }
-  .step-line { flex:1; height:3px; background:var(--border); margin:0 4px; margin-bottom:20px; transition:background .3s; }
-  .step-line.done { background:var(--green); }
-
-  .info-grid { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
-  .info-item label { font-size:12px; font-weight:700; color:var(--gray); text-transform:uppercase; letter-spacing:.5px; display:block; margin-bottom:4px; }
-  .info-item p { font-size:15px; font-weight:500; }
-  .divider { height:1px; background:var(--border); margin:24px 0; }
-
-  .timeline-title { font-family:'Bebas Neue',sans-serif; font-size:20px; letter-spacing:2px; margin-bottom:20px; color:var(--orange); }
-  .timeline { list-style:none; }
-  .timeline li { display:flex; gap:16px; padding-bottom:20px; position:relative; }
-  .timeline li:not(:last-child)::before { content:''; position:absolute; left:11px; top:24px; bottom:0; width:2px; background:var(--border); }
-  .tl-dot { width:24px; height:24px; border-radius:50%; background:var(--orange); flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:12px; margin-top:2px; }
-  .tl-content { flex:1; }
-  .tl-status { font-weight:700; font-size:15px; }
-  .tl-note { font-size:13px; color:var(--gray); margin-top:2px; }
-  .tl-time { font-size:12px; color:#bbb; margin-top:4px; }
-
-  .error-msg { text-align:center; padding:48px; background:#fff; border-radius:16px; box-shadow:0 10px 40px rgba(0,0,0,0.08); }
-  .error-msg .icon { font-size:48px; margin-bottom:16px; }
-  .error-msg h3 { font-family:'Bebas Neue',sans-serif; font-size:28px; letter-spacing:2px; }
-  .error-msg p { color:var(--gray); margin-top:8px; }
-
-  @media(max-width:600px) {
-    .search-wrap { margin:-20px 16px 30px; padding:24px 20px; }
-    .search-row { flex-direction:column; }
-    .result-wrap { margin:0 16px 40px; }
-    .order-header { flex-direction:column; }
-    .info-grid { grid-template-columns:1fr; }
-    .order-body { padding:20px; }
-    header { padding:16px 20px; }
-  }
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Track Order — Mag-City Errands</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root { --orange: #FF6B2B; --dark: #0a0a0a; --mid: #141414; --border: rgba(255,255,255,0.08); --text: #f0f0f0; --muted: #888; --green: #22c55e; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--dark); color: var(--text); min-height: 100vh; }
+    .nav { display: flex; align-items: center; justify-content: space-between; padding: 0 32px; height: 64px; border-bottom: 1px solid var(--border); background: rgba(10,10,10,0.9); backdrop-filter: blur(16px); position: sticky; top: 0; z-index: 1000; }
+    .nav-logo { display: flex; align-items: center; gap: 8px; font-family: 'Syne', sans-serif; font-weight: 800; font-size: 20px; text-decoration: none; color: inherit; }
+    .logo-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--orange); }
+    .nav-back { background: var(--mid); border: 1px solid var(--border); color: var(--text); padding: 8px 18px; border-radius: 30px; font-family: 'Syne', sans-serif; font-weight: 600; font-size: 14px; text-decoration: none; }
+    .page { max-width: 900px; margin: 0 auto; padding: 32px 24px 80px; }
+    .search-row { display: flex; gap: 10px; margin-bottom: 28px; }
+    .search-input { flex: 1; background: var(--mid); border: 1px solid var(--border); border-radius: 12px; padding: 14px 18px; color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 15px; outline: none; transition: border-color 0.2s; }
+    .search-input:focus { border-color: var(--orange); }
+    .search-input::placeholder { color: rgba(136,136,136,0.5); }
+    .btn-search { background: var(--orange); color: #fff; border: none; border-radius: 12px; padding: 14px 28px; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 15px; cursor: pointer; white-space: nowrap; }
+    .btn-search:hover { background: #e05a20; }
+    .live-bar { background: rgba(34,197,94,0.08); border: 1px solid rgba(34,197,94,0.25); border-radius: 14px; padding: 14px 20px; margin-bottom: 20px; display: none; align-items: center; gap: 12px; flex-wrap: wrap; }
+    .live-bar.show { display: flex; }
+    .live-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--green); animation: pulse 1.5s infinite; flex-shrink: 0; }
+    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(1.3)} }
+    .live-text { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 14px; color: var(--green); }
+    .live-sub { font-size: 12px; color: var(--muted); margin-left: auto; }
+    .map-wrapper { position: relative; border-radius: 20px; overflow: hidden; border: 1px solid var(--border); margin-bottom: 24px; display: none; }
+    .map-wrapper.show { display: block; }
+    #map { height: 420px; width: 100%; }
+    .map-overlay { position: absolute; top: 12px; left: 12px; z-index: 500; background: rgba(10,10,10,0.88); backdrop-filter: blur(10px); border: 1px solid var(--border); border-radius: 12px; padding: 10px 16px; }
+    .map-overlay .m-id { font-family: 'Syne', sans-serif; font-weight: 800; color: var(--orange); font-size: 14px; letter-spacing: 1px; }
+    .map-overlay .m-status { font-size: 11px; color: var(--muted); margin-top: 2px; }
+    .no-rider { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); background: rgba(10,10,10,0.88); border: 1px solid var(--border); border-radius: 14px; padding: 20px 28px; text-align: center; z-index: 500; display: none; }
+    .no-rider.show { display: block; }
+    .no-rider .nr-icon { font-size: 32px; margin-bottom: 8px; }
+    .no-rider h4 { font-family: 'Syne', sans-serif; font-size: 14px; margin-bottom: 4px; }
+    .no-rider p { font-size: 12px; color: var(--muted); }
+    .rider-card { background: rgba(255,107,43,0.06); border: 1px solid rgba(255,107,43,0.15); border-radius: 16px; padding: 18px 20px; display: none; align-items: center; gap: 16px; margin-bottom: 20px; flex-wrap: wrap; }
+    .rider-card.show { display: flex; }
+    .rider-avatar { width: 44px; height: 44px; border-radius: 50%; background: var(--orange); display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+    .rider-info .r-name { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 16px; }
+    .rider-info .r-sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
+    .rider-gps { margin-left: auto; text-align: right; }
+    .rider-gps .gps-val { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 13px; color: var(--green); }
+    .rider-gps .gps-label { font-size: 11px; color: var(--muted); }
+    .order-card { background: var(--mid); border: 1px solid var(--border); border-radius: 20px; padding: 28px; margin-bottom: 20px; display: none; }
+    .order-card.show { display: block; }
+    .section-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin-bottom: 18px; display: flex; align-items: center; gap: 8px; }
+    .section-title::after { content:''; flex:1; height:1px; background:var(--border); }
+    .timeline { display: flex; margin-bottom: 24px; }
+    .t-step { flex: 1; display: flex; flex-direction: column; align-items: center; position: relative; }
+    .t-step::before { content:''; position:absolute; top:14px; left:50%; right:-50%; height:2px; background:var(--border); z-index:0; }
+    .t-step:last-child::before { display:none; }
+    .t-step.done::before { background:var(--orange); }
+    .t-dot { width:28px; height:28px; border-radius:50%; background:var(--mid); border:2px solid var(--border); display:flex; align-items:center; justify-content:center; font-size:12px; z-index:1; position:relative; margin-bottom:8px; }
+    .t-step.done .t-dot { background:var(--orange); border-color:var(--orange); }
+    .t-step.current .t-dot { background:var(--orange); border-color:var(--orange); box-shadow:0 0 0 5px rgba(255,107,43,0.2); animation:stepPulse 2s infinite; }
+    @keyframes stepPulse { 0%,100%{box-shadow:0 0 0 5px rgba(255,107,43,0.15)} 50%{box-shadow:0 0 0 10px rgba(255,107,43,0.05)} }
+    .t-label { font-size:11px; font-family:'Syne',sans-serif; font-weight:600; color:var(--muted); text-align:center; }
+    .t-step.done .t-label, .t-step.current .t-label { color:var(--text); }
+    .badge { display:inline-flex; align-items:center; gap:6px; font-size:12px; font-family:'Syne',sans-serif; font-weight:700; padding:5px 14px; border-radius:20px; text-transform:uppercase; }
+    .badge-pending { background:rgba(234,179,8,0.12); color:#eab308; border:1px solid rgba(234,179,8,0.2); }
+    .badge-assigned { background:rgba(255,107,43,0.12); color:var(--orange); border:1px solid rgba(255,107,43,0.2); }
+    .badge-transit { background:rgba(59,130,246,0.12); color:#60a5fa; border:1px solid rgba(59,130,246,0.2); }
+    .badge-delivered { background:rgba(34,197,94,0.12); color:var(--green); border:1px solid rgba(34,197,94,0.2); }
+    .detail-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:20px; }
+    @media(max-width:520px){.detail-grid{grid-template-columns:1fr;}}
+    .d-item .d-label { font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:1px; margin-bottom:3px; font-family:'Syne',sans-serif; }
+    .d-item .d-value { font-size:14px; color:var(--text); font-weight:500; }
+    .d-item.full { grid-column:1/-1; }
+    .price-val { font-family:'Syne',sans-serif; font-weight:800; font-size:20px; color:var(--orange); }
+    .not-found { display:none; text-align:center; padding:60px 20px; }
+    .not-found.show { display:block; }
+    .not-found .e-icon { font-size:52px; margin-bottom:16px; }
+    .not-found h2 { font-family:'Syne',sans-serif; font-weight:800; font-size:24px; margin-bottom:8px; }
+    .not-found p { color:var(--muted); }
+    .default-state { text-align:center; padding:60px 20px; }
+    .default-state .e-icon { font-size:52px; margin-bottom:16px; }
+    .default-state h2 { font-family:'Syne',sans-serif; font-weight:800; font-size:24px; margin-bottom:8px; }
+    .default-state p { color:var(--muted); font-size:14px; }
+  </style>
 </head>
 <body>
-
-<header>
-<a href="index.html" style="text-decoration:none;"><div class="logo">MAG-CITY Errands</div></a>
-  <a href="order.html" class="nav-link">Place Order â†’</a>
-</header>
-
-<div class="hero">
-  <h1>TRACK YOUR <span>ORDER</span></h1>
-  <p>Enter your tracking number to see live updates</p>
-</div>
-
-<div class="search-wrap">
-  <h2>Enter Tracking Number</h2>
-  <div class="search-row">
-    <input type="text" id="trackInput" placeholder="MAG-XXXXXXXX" oninput="this.value=this.value.toUpperCase()" onkeydown="if(event.key==='Enter')trackOrder()"/>
-    <button class="search-btn" onclick="trackOrder()">TRACK</button>
+  <nav class="nav">
+    <a href="index.html" class="nav-logo"><span class="logo-dot"></span>Errands</a>
+    <a href="index.html" class="nav-back">← Back home</a>
+  </nav>
+  <div class="page">
+    <div class="search-row">
+      <input class="search-input" id="trackInput" placeholder="Enter your MAG- tracking number…" />
+      <button class="btn-search" onclick="searchOrder()">🔍 Track</button>
+    </div>
+    <div class="not-found" id="notFound">
+      <div class="e-icon">🔍</div>
+      <h2>Order not found</h2>
+      <p>Check your tracking number and try again.</p>
+    </div>
+    <div class="live-bar" id="liveBar">
+      <span class="live-dot"></span>
+      <span class="live-text">🛵 Rider is on the way — live location active</span>
+      <span class="live-sub" id="liveSub"></span>
+    </div>
+    <div class="rider-card" id="riderCard">
+      <div class="rider-avatar">🛵</div>
+      <div class="rider-info">
+        <div class="r-name">Your Rider</div>
+        <div class="r-sub" id="riderSub">En route to your location</div>
+      </div>
+      <div class="rider-gps">
+        <div class="gps-val" id="gpsCoords">Live</div>
+        <div class="gps-label">GPS Active</div>
+      </div>
+    </div>
+    <div class="map-wrapper" id="mapWrapper">
+      <div id="map"></div>
+      <div class="map-overlay">
+        <div class="m-id" id="mapId">—</div>
+        <div class="m-status" id="mapStatus">Waiting for rider…</div>
+      </div>
+      <div class="no-rider" id="noRider">
+        <div class="nr-icon">📍</div>
+        <h4>Rider location not yet active</h4>
+        <p>Live tracking starts when your rider begins delivery</p>
+      </div>
+    </div>
+    <div class="order-card" id="orderCard">
+      <div class="section-title">Delivery Status</div>
+      <div class="timeline">
+        <div class="t-step" id="s-placed"><div class="t-dot">✓</div><div class="t-label">Placed</div></div>
+        <div class="t-step" id="s-assigned"><div class="t-dot">🛵</div><div class="t-label">Assigned</div></div>
+        <div class="t-step" id="s-pickedup"><div class="t-dot">📦</div><div class="t-label">Picked Up</div></div>
+        <div class="t-step" id="s-delivered"><div class="t-dot">✅</div><div class="t-label">Delivered</div></div>
+      </div>
+      <span id="statusBadge" class="badge badge-pending">⏳ Pending</span>
+      <div class="detail-grid">
+        <div class="d-item full"><div class="d-label">Tracking Number</div><div class="d-value" style="font-family:'Syne',sans-serif;font-weight:800;color:var(--orange);font-size:18px;letter-spacing:2px" id="dTrack">—</div></div>
+        <div class="d-item full"><div class="d-label">📍 Pickup</div><div class="d-value" id="dPickup">—</div></div>
+        <div class="d-item full"><div class="d-label">🏁 Drop-off</div><div class="d-value" id="dDropoff">—</div></div>
+        <div class="d-item"><div class="d-label">Package</div><div class="d-value" id="dPackage">—</div></div>
+        <div class="d-item"><div class="d-label">Date</div><div class="d-value" id="dDate">—</div></div>
+        <div class="d-item"><div class="d-label">Delivery Fee</div><div class="d-value price-val" id="dPrice">—</div></div>
+        <div class="d-item"><div class="d-label">Payment</div><div class="d-value" id="dPayment">—</div></div>
+      </div>
+    </div>
+    <div class="default-state" id="defaultState">
+      <div class="e-icon">📦</div>
+      <h2>Track your order</h2>
+      <p>Enter your MAG- tracking number above to see live delivery status and rider location on the map.</p>
+    </div>
   </div>
-</div>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js';
+    import { getFirestore, collection, query, where, getDocs, onSnapshot, doc } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js';
+    const firebaseConfig = { apiKey:"AIzaSyDyWMcMx6tqYHxumN3sPImoDUaTeAkNHCU", authDomain:"mag-city-errands.firebaseapp.com", projectId:"mag-city-errands", storageBucket:"mag-city-errands.firebasestorage.app", messagingSenderId:"315623986569", appId:"1:315623986569:web:ba7200af8ca50abc5f3d58" };
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    let map = null, riderMarker = null, unsubscribe = null;
 
-<div class="result-wrap" id="resultWrap"></div>
-
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-  import { getFirestore, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-
-  const firebaseConfig = {
-    apiKey: "AIzaSyDyWMcMx6tqYHxumN3sPImoDUaTeAkNHCU",
-    authDomain: "mag-city-errands.firebaseapp.com",
-    projectId: "mag-city-errands",
-    storageBucket: "mag-city-errands.firebasestorage.app",
-    messagingSenderId: "315623986569",
-    appId: "1:315623986569:web:ba7200af8ca50abc5f3d58"
-  };
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
-
-  const steps = ['Pending','Picked Up','On The Way','Delivered'];
-  const stepIcons = ['ðŸ“‹','ðŸ“¦','ðŸš´','âœ…'];
-
-  function statusIndex(status) {
-    if (status === 'Pending') return 0;
-    if (status === 'Picked Up') return 1;
-    if (status === 'On The Way') return 2;
-    if (status === 'Delivered') return 3;
-    return 0;
-  }
-
-  function formatTime(iso) {
-    if (!iso) return '';
-    const d = new Date(iso);
-    return d.toLocaleString('en-NG', { dateStyle:'medium', timeStyle:'short' });
-  }
-
-  function renderResult(order) {
-    const si = statusIndex(order.status);
-    let stepsHTML = '';
-    steps.forEach((s, i) => {
-      if (i > 0) stepsHTML += `<div class="step-line ${i <= si ? 'done' : ''}"></div>`;
-      const cls = i < si ? 'done' : i === si ? 'active' : '';
-      stepsHTML += `<div class="step ${cls}"><div class="step-circle">${i < si ? 'âœ“' : stepIcons[i]}</div><div class="step-label">${s}</div></div>`;
-    });
-
-    const history = order.statusHistory || [];
-    let timelineHTML = history.slice().reverse().map(h => `
-      <li>
-        <div class="tl-dot">ðŸ“</div>
-        <div class="tl-content">
-          <div class="tl-status">${h.status}</div>
-          <div class="tl-note">${h.note || ''}</div>
-          <div class="tl-time">${formatTime(h.time)}</div>
-        </div>
-      </li>`).join('');
-
-    document.getElementById('resultWrap').innerHTML = `
-      <div class="order-card">
-        <div class="order-header">
-          <div class="tracking-num">${order.trackingNumber}</div>
-          <div class="status-badge status-${order.status.replace(/\s/g,'')}">${order.status}</div>
-        </div>
-        <div class="order-body">
-          <div class="progress-steps">${stepsHTML}</div>
-          <div class="info-grid">
-            <div class="info-item"><label>Customer</label><p>${order.customerName}</p></div>
-            <div class="info-item"><label>Phone</label><p>${order.customerPhone}</p></div>
-            <div class="info-item"><label>Service</label><p>${order.serviceType}</p></div>
-            <div class="info-item"><label>Package Size</label><p>${order.packageSize}</p></div>
-            <div class="info-item"><label>Pickup</label><p>${order.pickupAddress}</p></div>
-            <div class="info-item"><label>Delivery</label><p>${order.deliveryAddress}</p></div>
-          </div>
-          ${order.packageDescription ? `<div class="divider"></div><div class="info-item"><label>Package Details</label><p>${order.packageDescription}</p></div>` : ''}
-          <div class="divider"></div>
-          <div class="timeline-title">ðŸ“‹ Status History</div>
-          <ul class="timeline">${timelineHTML || '<li><div class="tl-dot">ðŸ“‹</div><div class="tl-content"><div class="tl-status">Order Placed</div></div></li>'}</ul>
-        </div>
-      </div>`;
-    document.getElementById('resultWrap').classList.add('show');
-  }
-
-  window.trackOrder = async function() {
-    const tracking = document.getElementById('trackInput').value.trim().toUpperCase();
-    if (!tracking) { alert('Please enter a tracking number'); return; }
-
-    const wrap = document.getElementById('resultWrap');
-    wrap.classList.add('show');
-    wrap.innerHTML = `<div class="error-msg"><div class="icon">ðŸ”</div><h3>Searching...</h3><p>Looking up your order</p></div>`;
-
-    try {
-      const q = query(collection(db, 'orders'), where('trackingNumber', '==', tracking));
-      const snap = await getDocs(q);
-      if (snap.empty) {
-        wrap.innerHTML = `<div class="error-msg"><div class="icon">âŒ</div><h3>Not Found</h3><p>No order found with tracking number <strong>${tracking}</strong>.<br>Please check and try again.</p></div>`;
-      } else {
-        renderResult(snap.docs[0].data());
-      }
-    } catch (err) {
-      wrap.innerHTML = `<div class="error-msg"><div class="icon">âš ï¸</div><h3>Error</h3><p>${err.message}</p></div>`;
+    function initMap() {
+      if (map) return;
+      map = L.map('map').setView([6.619, 3.377], 13);
+      L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', { attribution:'© OpenStreetMap © CartoDB', maxZoom:19 }).addTo(map);
     }
-  };
 
-  const params = new URLSearchParams(window.location.search);
-  const t = params.get('tracking');
-  if (t) { document.getElementById('trackInput').value = t; window.trackOrder(); }
-</script>
+    function riderIcon() {
+      return L.divIcon({ html:`<div style="background:#FF6B2B;width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;border:3px solid #fff;box-shadow:0 2px 16px rgba(255,107,43,0.7)">🛵</div>`, iconSize:[38,38], iconAnchor:[19,19], className:'' });
+    }
+
+    window.searchOrder = async function() {
+      const input = document.getElementById('trackInput').value.trim().toUpperCase();
+      if (!input) return;
+      document.getElementById('defaultState').style.display = 'none';
+      document.getElementById('notFound').classList.remove('show');
+      document.getElementById('orderCard').classList.remove('show');
+      document.getElementById('mapWrapper').classList.remove('show');
+      document.getElementById('liveBar').classList.remove('show');
+      document.getElementById('riderCard').classList.remove('show');
+      if (unsubscribe) { unsubscribe(); unsubscribe = null; }
+
+      let orderData = null, firestoreDocId = null;
+      try {
+        const q = query(collection(db, 'orders'), where('id', '==', input));
+        const snap = await getDocs(q);
+        if (!snap.empty) { snap.forEach(d => { orderData = d.data(); firestoreDocId = d.id; }); }
+      } catch(e) { console.error(e); }
+
+      if (!orderData) {
+        const local = JSON.parse(localStorage.getItem('errands_orders') || '[]');
+        const found = local.find(o => o.id === input);
+        if (found) orderData = found;
+      }
+
+      if (!orderData) { document.getElementById('notFound').classList.add('show'); return; }
+
+      renderOrder(orderData);
+      document.getElementById('mapWrapper').classList.add('show');
+      initMap();
+      setTimeout(() => map.invalidateSize(), 200);
+      document.getElementById('noRider').classList.add('show');
+
+      if (firestoreDocId) {
+        unsubscribe = onSnapshot(doc(db, 'orders', firestoreDocId), (snap) => {
+          if (!snap.exists()) return;
+          const data = snap.data();
+          renderOrder(data);
+          updateMap(data);
+        });
+      }
+    };
+
+    function renderOrder(o) {
+      document.getElementById('orderCard').classList.add('show');
+      document.getElementById('dTrack').textContent = o.id || '—';
+      document.getElementById('mapId').textContent = o.id || '—';
+      document.getElementById('dPickup').textContent = o.pickupAddress || '—';
+      document.getElementById('dDropoff').textContent = o.dropoffAddress || '—';
+      document.getElementById('dPackage').textContent = o.packageType || '—';
+      document.getElementById('dDate').textContent = o.pickupDate || '—';
+      document.getElementById('dPrice').textContent = o.price ? '₦'+o.price.toLocaleString() : '—';
+      document.getElementById('dPayment').textContent = o.paymentStatus || '—';
+
+      const status = o.riderStatus || o.status || '';
+      const badge = document.getElementById('statusBadge');
+      if (status==='delivered'||o.status==='Delivered') { badge.className='badge badge-delivered'; badge.textContent='✅ Delivered'; }
+      else if (status==='pickedup'||o.status==='In Transit') { badge.className='badge badge-transit'; badge.textContent='🛵 In Transit'; document.getElementById('riderSub').textContent='En route to drop-off'; }
+      else if (o.assignedRider) { badge.className='badge badge-assigned'; badge.textContent='📋 Rider Assigned'; }
+      else { badge.className='badge badge-pending'; badge.textContent='⏳ Pending'; }
+
+      let activeIdx = 0;
+      if (o.assignedRider) activeIdx = 1;
+      if (status==='pickedup'||o.status==='In Transit') activeIdx = 2;
+      if (status==='delivered'||o.status==='Delivered') activeIdx = 3;
+      ['placed','assigned','pickedup','delivered'].forEach((s,i) => {
+        const el = document.getElementById('s-'+s);
+        if (!el) return;
+        el.classList.remove('done','current');
+        if (i<activeIdx) el.classList.add('done');
+        else if (i===activeIdx) el.classList.add('current');
+      });
+    }
+
+    function updateMap(o) {
+      if (!map) return;
+      if (o.riderOnline && o.riderLat && o.riderLng) {
+        const lat = o.riderLat, lng = o.riderLng;
+        const time = o.riderLastSeen?.seconds ? new Date(o.riderLastSeen.seconds*1000).toLocaleTimeString('en-NG',{hour:'2-digit',minute:'2-digit',second:'2-digit'}) : 'Just now';
+        document.getElementById('liveBar').classList.add('show');
+        document.getElementById('riderCard').classList.add('show');
+        document.getElementById('noRider').classList.remove('show');
+        document.getElementById('liveSub').textContent = 'Updated ' + time;
+        document.getElementById('mapStatus').textContent = '🟢 Live — ' + time;
+        document.getElementById('gpsCoords').textContent = lat.toFixed(4)+', '+lng.toFixed(4);
+        if (riderMarker) { riderMarker.setLatLng([lat,lng]); }
+        else { riderMarker = L.marker([lat,lng],{icon:riderIcon()}).addTo(map); riderMarker.bindPopup('<b>🛵 Your Rider</b><br>Live GPS location').openPopup(); }
+        map.setView([lat,lng], 15);
+      } else {
+        document.getElementById('liveBar').classList.remove('show');
+        document.getElementById('mapStatus').textContent = 'Waiting for rider location…';
+        document.getElementById('noRider').classList.add('show');
+        if (riderMarker) { map.removeLayer(riderMarker); riderMarker = null; }
+      }
+    }
+
+    const param = new URLSearchParams(window.location.search).get('tracking');
+    if (param) { document.getElementById('trackInput').value = param; window.searchOrder(); }
+    document.getElementById('trackInput').addEventListener('keydown', e => { if(e.key==='Enter') window.searchOrder(); });
+  </script>
 </body>
 </html>

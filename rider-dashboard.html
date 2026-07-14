@@ -12,14 +12,20 @@
     .nav { display: flex; align-items: center; justify-content: space-between; padding: 0 32px; height: 64px; border-bottom: 1px solid var(--border); background: rgba(10,10,10,0.9); backdrop-filter: blur(16px); position: sticky; top: 0; z-index: 100; }
     .nav-logo { display: flex; align-items: center; gap: 8px; font-family: 'Syne', sans-serif; font-weight: 800; font-size: 20px; text-decoration: none; color: inherit; }
     .logo-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--orange); }
-    .rider-badge { background: rgba(34,197,94,0.15); border: 1px solid rgba(34,197,94,0.3); color: #22c55e; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 12px; padding: 4px 12px; border-radius: 20px; }
+    .rider-badge { background: rgba(34,197,94,0.15); border: 1px solid rgba(34,197,94,0.3); color: var(--green); font-family: 'Syne', sans-serif; font-weight: 700; font-size: 12px; padding: 4px 12px; border-radius: 20px; }
     .nav-right { display: flex; align-items: center; gap: 12px; }
-    .btn-logout { background: none; border: 1px solid var(--border); color: var(--muted); padding: 6px 14px; border-radius: 30px; font-size: 13px; cursor: pointer; transition: all 0.2s; }
+    .online-toggle { display: flex; align-items: center; gap: 8px; background: var(--mid); border: 1px solid var(--border); border-radius: 30px; padding: 8px 16px; cursor: pointer; transition: all 0.2s; }
+    .online-toggle.online { border-color: rgba(34,197,94,0.4); background: rgba(34,197,94,0.08); }
+    .toggle-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--muted); transition: background 0.2s; }
+    .online-toggle.online .toggle-dot { background: var(--green); animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.6;transform:scale(1.2)} }
+    .toggle-label { font-size: 12px; font-family: 'Syne', sans-serif; font-weight: 600; color: var(--muted); }
+    .online-toggle.online .toggle-label { color: var(--green); }
+    .btn-logout { background: none; border: 1px solid var(--border); color: var(--muted); padding: 6px 14px; border-radius: 30px; font-size: 13px; cursor: pointer; }
     .btn-logout:hover { border-color: #ef4444; color: #ef4444; }
     .page { max-width: 900px; margin: 0 auto; padding: 40px 24px 80px; }
-    .page-header { margin-bottom: 32px; }
-    .page-tag { display: inline-block; background: rgba(34,197,94,0.12); border: 1px solid rgba(34,197,94,0.25); color: #22c55e; font-family: 'Syne', sans-serif; font-weight: 600; font-size: 12px; letter-spacing: 1px; text-transform: uppercase; padding: 5px 12px; border-radius: 30px; margin-bottom: 12px; }
-    .page-header h1 { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 32px; }
+    .page-tag { display: inline-block; background: rgba(34,197,94,0.12); border: 1px solid rgba(34,197,94,0.25); color: var(--green); font-family: 'Syne', sans-serif; font-weight: 600; font-size: 12px; letter-spacing: 1px; text-transform: uppercase; padding: 5px 12px; border-radius: 30px; margin-bottom: 12px; }
+    h1 { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 32px; margin-bottom: 32px; }
     .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 32px; }
     @media (max-width: 640px) { .stats-row { grid-template-columns: 1fr 1fr; } }
     .stat-card { background: var(--mid); border: 1px solid var(--border); border-radius: 16px; padding: 20px; }
@@ -29,115 +35,106 @@
     .tab-btn { background: var(--mid); border: 1px solid var(--border); color: var(--muted); padding: 8px 20px; border-radius: 30px; font-family: 'Syne', sans-serif; font-weight: 600; font-size: 13px; cursor: pointer; transition: all 0.2s; }
     .tab-btn.active { background: var(--orange); border-color: var(--orange); color: #fff; }
     .delivery-card { background: var(--mid); border: 1px solid var(--border); border-radius: 16px; padding: 20px 24px; margin-bottom: 14px; transition: border-color 0.2s; }
-    .delivery-card:hover { border-color: rgba(255,107,43,0.3); }
+    .delivery-card.tracking-active { border-color: rgba(34,197,94,0.4); background: rgba(34,197,94,0.03); }
     .delivery-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; flex-wrap: wrap; gap: 8px; }
     .tracking-id { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 16px; color: var(--orange); letter-spacing: 1px; }
-    .status-badge { font-size: 11px; font-family: 'Syne', sans-serif; font-weight: 700; padding: 4px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px; }
+    .status-badge { font-size: 11px; font-family: 'Syne', sans-serif; font-weight: 700; padding: 4px 12px; border-radius: 20px; text-transform: uppercase; }
     .s-assigned { background: rgba(234,179,8,0.15); color: #eab308; }
     .s-pickedup { background: rgba(255,107,43,0.15); color: var(--orange); }
-    .s-delivered { background: rgba(34,197,94,0.15); color: #22c55e; }
+    .s-delivered { background: rgba(34,197,94,0.15); color: var(--green); }
+    .gps-active-badge { background: rgba(34,197,94,0.15); border: 1px solid rgba(34,197,94,0.3); color: var(--green); font-size: 11px; font-family: 'Syne', sans-serif; font-weight: 700; padding: 4px 12px; border-radius: 20px; display: flex; align-items: center; gap: 6px; }
+    .gps-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green); animation: pulse 1.5s infinite; }
     .route-row { display: flex; align-items: flex-start; gap: 16px; margin-bottom: 16px; }
     .route-line { display: flex; flex-direction: column; align-items: center; padding-top: 4px; }
     .dot-pickup { width: 10px; height: 10px; border-radius: 50%; background: var(--orange); flex-shrink: 0; }
-    .dot-dropoff { width: 10px; height: 10px; border-radius: 50%; background: #22c55e; flex-shrink: 0; }
+    .dot-dropoff { width: 10px; height: 10px; border-radius: 50%; background: var(--green); flex-shrink: 0; }
     .route-connector { width: 2px; height: 24px; background: var(--border); margin: 4px 0; }
     .route-details { flex: 1; }
     .route-item { margin-bottom: 12px; }
     .route-item .r-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 2px; }
     .route-item .r-value { font-size: 14px; color: var(--text); font-weight: 500; }
     .customer-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; padding: 14px; background: rgba(255,255,255,0.03); border-radius: 10px; }
-    @media (max-width: 480px) { .customer-row { grid-template-columns: 1fr; } }
     .c-item .c-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 2px; }
     .c-item .c-value { font-size: 13px; color: var(--text); }
     .action-row { display: flex; gap: 10px; flex-wrap: wrap; }
-    .btn-action { flex: 1; min-width: 120px; padding: 12px; border: none; border-radius: 10px; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 13px; cursor: pointer; transition: all 0.2s; }
+    .btn-action { flex: 1; min-width: 110px; padding: 12px; border: none; border-radius: 10px; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 12px; cursor: pointer; transition: all 0.2s; }
+    .btn-start-gps { background: rgba(34,197,94,0.15); color: var(--green); border: 1px solid rgba(34,197,94,0.3); }
+    .btn-start-gps:hover { background: var(--green); color: #000; }
+    .btn-stop-gps { background: rgba(239,68,68,0.15); color: #ef4444; border: 1px solid rgba(239,68,68,0.4); animation: borderPulse 2s infinite; }
+    @keyframes borderPulse { 0%,100%{border-color:rgba(239,68,68,0.3)} 50%{border-color:rgba(239,68,68,0.8)} }
     .btn-pickup { background: rgba(255,107,43,0.15); color: var(--orange); border: 1px solid rgba(255,107,43,0.3); }
     .btn-pickup:hover { background: var(--orange); color: #fff; }
-    .btn-deliver { background: rgba(34,197,94,0.15); color: #22c55e; border: 1px solid rgba(34,197,94,0.3); }
-    .btn-deliver:hover { background: #22c55e; color: #000; }
+    .btn-deliver { background: rgba(34,197,94,0.15); color: var(--green); border: 1px solid rgba(34,197,94,0.3); }
+    .btn-deliver:hover { background: var(--green); color: #000; }
     .btn-call { background: rgba(255,255,255,0.05); color: var(--text); border: 1px solid var(--border); }
-    .btn-call:hover { background: rgba(255,255,255,0.1); }
     .btn-whatsapp { background: rgba(37,211,102,0.1); color: #25D366; border: 1px solid rgba(37,211,102,0.3); }
-    .btn-whatsapp:hover { background: #25D366; color: #fff; }
+    .gps-info { background: rgba(34,197,94,0.06); border: 1px solid rgba(34,197,94,0.15); border-radius: 10px; padding: 10px 14px; margin-bottom: 12px; font-size: 12px; color: var(--green); display: none; }
+    .gps-info.show { display: block; }
     .empty-state { text-align: center; padding: 60px 20px; color: var(--muted); }
     .empty-state .e-icon { font-size: 48px; margin-bottom: 16px; }
     .empty-state h3 { font-family: 'Syne', sans-serif; font-size: 20px; color: var(--text); margin-bottom: 8px; }
     .loading { text-align: center; padding: 40px; color: var(--muted); }
-    .online-toggle { display: flex; align-items: center; gap: 10px; background: var(--mid); border: 1px solid var(--border); border-radius: 30px; padding: 8px 16px; }
-    .toggle-dot { width: 10px; height: 10px; border-radius: 50%; background: #22c55e; animation: pulse 2s infinite; }
-    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
-    .toggle-label { font-size: 13px; font-family: 'Syne', sans-serif; font-weight: 600; color: #22c55e; }
+    .toast { position: fixed; bottom: 24px; right: 24px; background: #1a1a1a; border: 1px solid var(--border); border-radius: 12px; padding: 12px 20px; font-size: 13px; z-index: 9999; transform: translateY(80px); transition: transform 0.3s; max-width: 300px; }
+    .toast.show { transform: translateY(0); }
+    .toast.success { border-color: rgba(34,197,94,0.4); color: var(--green); }
+    .toast.error { border-color: rgba(239,68,68,0.4); color: #ef4444; }
   </style>
 </head>
 <body>
   <nav class="nav">
     <a href="index.html" class="nav-logo"><span class="logo-dot"></span>Errands</a>
     <div class="nav-right">
-      <div class="online-toggle"><span class="toggle-dot"></span><span class="toggle-label">Online</span></div>
+      <div class="online-toggle" id="onlineToggle" onclick="toggleOnline()">
+        <span class="toggle-dot"></span>
+        <span class="toggle-label" id="onlineLabel">Offline</span>
+      </div>
       <span class="rider-badge">🛵 Rider</span>
       <button class="btn-logout" onclick="handleLogout()">Sign out</button>
     </div>
   </nav>
-
   <div class="page">
-    <div class="page-header">
-      <div class="page-tag">🛵 Rider Portal</div>
-      <h1 id="riderName">My Deliveries</h1>
-    </div>
-
+    <div class="page-tag">🛵 Rider Portal</div>
+    <h1 id="riderName">My Deliveries</h1>
     <div class="stats-row">
       <div class="stat-card"><div class="s-label">Assigned</div><div class="s-value" id="statAssigned">0</div></div>
       <div class="stat-card"><div class="s-label">Picked Up</div><div class="s-value" id="statPickedUp">0</div></div>
       <div class="stat-card"><div class="s-label">Delivered</div><div class="s-value" id="statDelivered">0</div></div>
       <div class="stat-card"><div class="s-label">Total</div><div class="s-value" id="statTotal">0</div></div>
     </div>
-
     <div class="tabs">
-      <button class="tab-btn active" onclick="filterOrders('all')">All</button>
-      <button class="tab-btn" onclick="filterOrders('assigned')">Assigned</button>
-      <button class="tab-btn" onclick="filterOrders('pickedup')">Picked Up</button>
-      <button class="tab-btn" onclick="filterOrders('delivered')">Delivered</button>
+      <button class="tab-btn active" onclick="filterOrders('all',this)">All</button>
+      <button class="tab-btn" onclick="filterOrders('assigned',this)">Assigned</button>
+      <button class="tab-btn" onclick="filterOrders('pickedup',this)">Picked Up</button>
+      <button class="tab-btn" onclick="filterOrders('delivered',this)">Delivered</button>
     </div>
-
     <div id="deliveriesContainer"><div class="loading">Loading deliveries…</div></div>
   </div>
-
+  <div class="toast" id="toast"></div>
   <script type="module">
     import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js';
     import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js';
     import { getFirestore, collection, query, where, getDocs, doc, getDoc, updateDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js';
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyDyWMcMx6tqYHxumN3sPImoDUaTeAkNHCU",
-      authDomain: "mag-city-errands.firebaseapp.com",
-      projectId: "mag-city-errands",
-      storageBucket: "mag-city-errands.firebasestorage.app",
-      messagingSenderId: "315623986569",
-      appId: "1:315623986569:web:ba7200af8ca50abc5f3d58"
-    };
-
+    const firebaseConfig = { apiKey:"AIzaSyDyWMcMx6tqYHxumN3sPImoDUaTeAkNHCU", authDomain:"mag-city-errands.firebaseapp.com", projectId:"mag-city-errands", storageBucket:"mag-city-errands.firebasestorage.app", messagingSenderId:"315623986569", appId:"1:315623986569:web:ba7200af8ca50abc5f3d58" };
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getFirestore(app);
-
-    let allOrders = [];
-    let currentFilter = 'all';
-    let currentUser = null;
+    let allOrders = [], currentFilter = 'all', isOnline = false;
+    const gpsIntervals = {}, activeTracking = new Set();
 
     onAuthStateChanged(auth, async (user) => {
       if (!user) { window.location.href = 'login.html'; return; }
-      currentUser = user;
-
       const snap = await getDoc(doc(db, 'users', user.uid));
-      if (!snap.exists() || snap.data().role !== 'rider') {
-        window.location.href = snap.exists() && snap.data().role === 'admin' ? 'admin-portal.html' : 'user-dashboard.html';
-        return;
-      }
-
-      const name = snap.data().name || 'Rider';
-      document.getElementById('riderName').textContent = name + "'s Deliveries";
+      if (!snap.exists() || snap.data().role !== 'rider') { window.location.href = snap.exists() && snap.data().role === 'admin' ? 'admin-orders.html' : 'user-dashboard.html'; return; }
+      document.getElementById('riderName').textContent = (snap.data().name || 'Rider') + "'s Deliveries";
       loadDeliveries(user.uid);
     });
+
+    window.toggleOnline = function() {
+      isOnline = !isOnline;
+      document.getElementById('onlineToggle').classList.toggle('online', isOnline);
+      document.getElementById('onlineLabel').textContent = isOnline ? 'Online' : 'Offline';
+      showToast(isOnline ? '🟢 You are now Online' : '⭕ You are now Offline', 'success');
+    };
 
     async function loadDeliveries(uid) {
       try {
@@ -146,88 +143,114 @@
         allOrders = [];
         snap.forEach(d => allOrders.push({ ...d.data(), docId: d.id }));
         allOrders.sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
+        updateStats(); renderOrders(allOrders);
+      } catch(e) { document.getElementById('deliveriesContainer').innerHTML = `<div class="empty-state"><div class="e-icon">⚠️</div><h3>Could not load</h3><p>${e.message}</p></div>`; }
+    }
 
-        document.getElementById('statAssigned').textContent = allOrders.filter(o => o.riderStatus === 'assigned').length;
-        document.getElementById('statPickedUp').textContent = allOrders.filter(o => o.riderStatus === 'pickedup').length;
-        document.getElementById('statDelivered').textContent = allOrders.filter(o => o.riderStatus === 'delivered').length;
-        document.getElementById('statTotal').textContent = allOrders.length;
-
-        renderOrders(allOrders);
-      } catch(e) {
-        document.getElementById('deliveriesContainer').innerHTML = '<div class="empty-state"><div class="e-icon">⚠️</div><h3>Could not load deliveries</h3><p>' + e.message + '</p></div>';
-      }
+    function updateStats() {
+      document.getElementById('statAssigned').textContent = allOrders.filter(o=>o.riderStatus==='assigned').length;
+      document.getElementById('statPickedUp').textContent = allOrders.filter(o=>o.riderStatus==='pickedup').length;
+      document.getElementById('statDelivered').textContent = allOrders.filter(o=>o.riderStatus==='delivered').length;
+      document.getElementById('statTotal').textContent = allOrders.length;
     }
 
     function renderOrders(orders) {
       const container = document.getElementById('deliveriesContainer');
-      if (orders.length === 0) {
-        container.innerHTML = '<div class="empty-state"><div class="e-icon">🛵</div><h3>No deliveries here</h3><p>Orders assigned to you will appear here.</p></div>';
-        return;
-      }
+      if (!orders.length) { container.innerHTML = '<div class="empty-state"><div class="e-icon">🛵</div><h3>No deliveries here</h3><p>Assigned orders will appear here.</p></div>'; return; }
       container.innerHTML = orders.map(o => {
-        const statusClass = o.riderStatus === 'delivered' ? 's-delivered' : o.riderStatus === 'pickedup' ? 's-pickedup' : 's-assigned';
-        const statusLabel = o.riderStatus === 'delivered' ? '✅ Delivered' : o.riderStatus === 'pickedup' ? '🛵 Picked Up' : '📋 Assigned';
-        const pickupBtn = o.riderStatus === 'assigned' ? `<button class="btn-action btn-pickup" onclick="updateStatus('${o.docId}', 'pickedup')">📦 Mark Picked Up</button>` : '';
-        const deliverBtn = o.riderStatus === 'pickedup' ? `<button class="btn-action btn-deliver" onclick="updateStatus('${o.docId}', 'delivered')">✅ Mark Delivered</button>` : '';
-        return `<div class="delivery-card" id="card-${o.docId}">
+        const isTracking = activeTracking.has(o.docId);
+        const statusClass = o.riderStatus==='delivered'?'s-delivered':o.riderStatus==='pickedup'?'s-pickedup':'s-assigned';
+        const statusLabel = o.riderStatus==='delivered'?'✅ Delivered':o.riderStatus==='pickedup'?'🛵 Picked Up':'📋 Assigned';
+        const gpsBtn = o.riderStatus!=='delivered' ? (isTracking ? `<button class="btn-action btn-stop-gps" onclick="stopGPS('${o.docId}')">📡 Stop GPS</button>` : `<button class="btn-action btn-start-gps" onclick="startGPS('${o.docId}')">📍 Start GPS</button>`) : '';
+        const pickupBtn = o.riderStatus==='assigned' ? `<button class="btn-action btn-pickup" onclick="updateStatus('${o.docId}','pickedup')">📦 Picked Up</button>` : '';
+        const deliverBtn = o.riderStatus==='pickedup' ? `<button class="btn-action btn-deliver" onclick="updateStatus('${o.docId}','delivered')">✅ Delivered</button>` : '';
+        return `<div class="delivery-card ${isTracking?'tracking-active':''}" id="card-${o.docId}">
           <div class="delivery-top">
-            <span class="tracking-id">${o.id || o.docId}</span>
-            <span class="status-badge ${statusClass}">${statusLabel}</span>
-          </div>
-          <div class="route-row">
-            <div class="route-line">
-              <div class="dot-pickup"></div>
-              <div class="route-connector"></div>
-              <div class="dot-dropoff"></div>
+            <span class="tracking-id">${o.id||o.docId}</span>
+            <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+              ${isTracking?'<div class="gps-active-badge"><span class="gps-dot"></span>GPS Live</div>':''}
+              <span class="status-badge ${statusClass}">${statusLabel}</span>
             </div>
+          </div>
+          <div class="gps-info ${isTracking?'show':''}" id="gps-info-${o.docId}">📡 Broadcasting your location — customers can see you moving on the map in real time</div>
+          <div class="route-row">
+            <div class="route-line"><div class="dot-pickup"></div><div class="route-connector"></div><div class="dot-dropoff"></div></div>
             <div class="route-details">
-              <div class="route-item"><div class="r-label">Pickup</div><div class="r-value">${o.pickupAddress || '—'}</div></div>
-              <div class="route-item"><div class="r-label">Drop-off</div><div class="r-value">${o.dropoffAddress || '—'}</div></div>
+              <div class="route-item"><div class="r-label">📍 Pickup</div><div class="r-value">${o.pickupAddress||'—'}</div></div>
+              <div class="route-item"><div class="r-label">🏁 Drop-off</div><div class="r-value">${o.dropoffAddress||'—'}</div></div>
             </div>
           </div>
           <div class="customer-row">
-            <div class="c-item"><div class="c-label">Sender</div><div class="c-value">${o.senderName || '—'}</div></div>
-            <div class="c-item"><div class="c-label">Sender phone</div><div class="c-value">${o.senderPhone || '—'}</div></div>
-            <div class="c-item"><div class="c-label">Recipient</div><div class="c-value">${o.recipientName || '—'}</div></div>
-            <div class="c-item"><div class="c-label">Recipient phone</div><div class="c-value">${o.recipientPhone || '—'}</div></div>
+            <div class="c-item"><div class="c-label">Sender</div><div class="c-value">${o.senderName||'—'}</div></div>
+            <div class="c-item"><div class="c-label">Phone</div><div class="c-value">${o.senderPhone||'—'}</div></div>
+            <div class="c-item"><div class="c-label">Recipient</div><div class="c-value">${o.recipientName||'—'}</div></div>
+            <div class="c-item"><div class="c-label">Phone</div><div class="c-value">${o.recipientPhone||'—'}</div></div>
           </div>
           <div class="action-row">
-            ${pickupBtn}${deliverBtn}
-            <button class="btn-action btn-call" onclick="window.open('tel:${o.senderPhone}')">📞 Call Sender</button>
+            ${gpsBtn}${pickupBtn}${deliverBtn}
+            <button class="btn-action btn-call" onclick="window.open('tel:${o.senderPhone}')">📞 Sender</button>
             <button class="btn-action btn-whatsapp" onclick="window.open('https://wa.me/234${(o.recipientPhone||'').replace(/^0/,'')}')">💬 WhatsApp</button>
           </div>
         </div>`;
       }).join('');
     }
 
+    window.startGPS = function(docId) {
+      if (!navigator.geolocation) { showToast('GPS not supported on this device', 'error'); return; }
+      if (!isOnline) { showToast('Please set yourself Online first', 'error'); return; }
+      showToast('📍 Starting GPS…', 'success');
+      navigator.geolocation.getCurrentPosition(async (pos) => {
+        await sendLocation(docId, pos.coords.latitude, pos.coords.longitude);
+        activeTracking.add(docId);
+        const id = setInterval(() => {
+          navigator.geolocation.getCurrentPosition(async (p) => { await sendLocation(docId, p.coords.latitude, p.coords.longitude); }, (e) => console.error(e));
+        }, 10000);
+        gpsIntervals[docId] = id;
+        showToast('📡 GPS active — customers can track you live', 'success');
+        filterOrders(currentFilter);
+      }, () => showToast('GPS permission denied. Please allow location access.', 'error'), { enableHighAccuracy: true, timeout: 10000 });
+    };
+
+    window.stopGPS = async function(docId) {
+      if (gpsIntervals[docId]) { clearInterval(gpsIntervals[docId]); delete gpsIntervals[docId]; }
+      activeTracking.delete(docId);
+      try { await updateDoc(doc(db,'orders',docId), { riderOnline:false, riderLat:null, riderLng:null, riderLastSeen:serverTimestamp() }); } catch(e) {}
+      showToast('GPS tracking stopped', 'success');
+      filterOrders(currentFilter);
+    };
+
+    async function sendLocation(docId, lat, lng) {
+      try { await updateDoc(doc(db,'orders',docId), { riderOnline:true, riderLat:lat, riderLng:lng, riderLastSeen:serverTimestamp() }); } catch(e) { console.error(e); }
+    }
+
     window.updateStatus = async function(docId, status) {
       try {
-        await updateDoc(doc(db, 'orders', docId), {
-          riderStatus: status,
-          status: status === 'delivered' ? 'Delivered' : 'In Transit',
-          updatedAt: serverTimestamp()
-        });
-        const order = allOrders.find(o => o.docId === docId);
-        if (order) { order.riderStatus = status; order.status = status === 'delivered' ? 'Delivered' : 'In Transit'; }
-        document.getElementById('statAssigned').textContent = allOrders.filter(o => o.riderStatus === 'assigned').length;
-        document.getElementById('statPickedUp').textContent = allOrders.filter(o => o.riderStatus === 'pickedup').length;
-        document.getElementById('statDelivered').textContent = allOrders.filter(o => o.riderStatus === 'delivered').length;
-        filterOrders(currentFilter);
-      } catch(e) { alert('Failed to update: ' + e.message); }
+        const updates = { riderStatus:status, status:status==='delivered'?'Delivered':'In Transit', updatedAt:serverTimestamp() };
+        if (status==='delivered') { updates.riderOnline=false; if(gpsIntervals[docId]){clearInterval(gpsIntervals[docId]);delete gpsIntervals[docId];} activeTracking.delete(docId); }
+        await updateDoc(doc(db,'orders',docId), updates);
+        const o = allOrders.find(o=>o.docId===docId);
+        if (o) { o.riderStatus=status; o.status=updates.status; }
+        updateStats(); filterOrders(currentFilter);
+        showToast(status==='delivered'?'✅ Delivered!':'📦 Picked up confirmed!', 'success');
+      } catch(e) { showToast('Failed: '+e.message,'error'); }
     };
 
-    window.filterOrders = function(filter) {
+    window.filterOrders = function(filter, btn) {
       currentFilter = filter;
-      document.querySelectorAll('.tab-btn').forEach((b, i) => {
-        b.classList.toggle('active', ['all','assigned','pickedup','delivered'][i] === filter);
-      });
-      const filtered = filter === 'all' ? allOrders : allOrders.filter(o => o.riderStatus === filter);
-      renderOrders(filtered);
+      document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+      if(btn) btn.classList.add('active');
+      renderOrders(filter==='all'?allOrders:allOrders.filter(o=>o.riderStatus===filter));
     };
+
+    function showToast(msg, type) {
+      const t = document.getElementById('toast');
+      t.textContent = msg; t.className = 'toast show '+(type||'');
+      setTimeout(()=>t.classList.remove('show'), 3500);
+    }
 
     window.handleLogout = async function() {
-      await signOut(auth);
-      window.location.href = 'login.html';
+      Object.values(gpsIntervals).forEach(id=>clearInterval(id));
+      await signOut(auth); window.location.href = 'login.html';
     };
   </script>
 </body>
