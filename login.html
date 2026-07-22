@@ -29,13 +29,26 @@
     .btn { width: 100%; padding: 14px; background: var(--orange); color: #fff; border: none; border-radius: 12px; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 15px; cursor: pointer; transition: all 0.2s; margin-top: 8px; }
     .btn:hover { background: #e05a20; transform: translateY(-1px); }
     .btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+    .btn-ghost { width: 100%; padding: 12px; background: none; color: var(--muted); border: 1px solid var(--border); border-radius: 12px; font-family: 'Syne', sans-serif; font-weight: 600; font-size: 14px; cursor: pointer; transition: all 0.2s; margin-top: 8px; }
+    .btn-ghost:hover { border-color: var(--orange); color: var(--orange); }
     .error { background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.3); border-radius: 10px; padding: 12px 14px; font-size: 13px; color: #f87171; margin-bottom: 16px; display: none; }
     .success { background: rgba(34,197,94,0.1); border: 1px solid rgba(34,197,94,0.3); border-radius: 10px; padding: 12px 14px; font-size: 13px; color: #4ade80; margin-bottom: 16px; display: none; }
-    .divider { text-align: center; color: var(--muted); font-size: 12px; margin: 20px 0; position: relative; }
-    .divider::before { content: ''; position: absolute; top: 50%; left: 0; right: 0; height: 1px; background: var(--border); }
-    .divider span { background: var(--mid); padding: 0 12px; position: relative; }
+    .forgot-link { text-align: right; margin-top: -8px; margin-bottom: 16px; }
+    .forgot-link button { background: none; border: none; color: var(--orange); font-size: 13px; cursor: pointer; font-family: 'DM Sans', sans-serif; text-decoration: underline; }
+    .forgot-link button:hover { color: #e05a20; }
     .home-link { text-align: center; margin-top: 20px; font-size: 13px; color: var(--muted); }
     .home-link a { color: var(--orange); text-decoration: none; font-weight: 600; }
+    .divider { text-align: center; color: var(--muted); font-size: 12px; margin: 16px 0; position: relative; }
+    .divider::before { content: ''; position: absolute; top: 50%; left: 0; right: 0; height: 1px; background: var(--border); }
+    .divider span { background: var(--mid); padding: 0 12px; position: relative; }
+
+    /* Reset password panel */
+    #resetPanel { display: none; }
+    #resetPanel.show { display: block; }
+    #mainPanel { display: block; }
+    #mainPanel.hide { display: none; }
+    .back-btn { background: none; border: none; color: var(--muted); font-size: 13px; cursor: pointer; font-family: 'DM Sans', sans-serif; display: flex; align-items: center; gap: 6px; margin-bottom: 20px; padding: 0; }
+    .back-btn:hover { color: var(--text); }
   </style>
 </head>
 <body>
@@ -51,46 +64,68 @@
         <p>Sign in to your Mag-City Errands account</p>
       </div>
 
-      <div class="tabs">
-        <button class="tab active" onclick="switchTab('login')">Sign In</button>
-        <button class="tab" onclick="switchTab('signup')">Sign Up</button>
-      </div>
-
       <div id="errorMsg" class="error"></div>
       <div id="successMsg" class="success"></div>
 
-      <!-- LOGIN FORM -->
-      <div id="loginForm">
-        <div class="field">
-          <label>Email address</label>
-          <input type="email" id="loginEmail" placeholder="you@example.com" />
+      <!-- MAIN PANEL (login / signup) -->
+      <div id="mainPanel">
+        <div class="tabs">
+          <button class="tab active" onclick="switchTab('login')">Sign In</button>
+          <button class="tab" onclick="switchTab('signup')">Sign Up</button>
         </div>
-        <div class="field">
-          <label>Password</label>
-          <input type="password" id="loginPassword" placeholder="Your password" />
+
+        <!-- LOGIN FORM -->
+        <div id="loginForm">
+          <div class="field">
+            <label>Email address</label>
+            <input type="email" id="loginEmail" placeholder="you@example.com" />
+          </div>
+          <div class="field">
+            <label>Password</label>
+            <input type="password" id="loginPassword" placeholder="Your password" onkeydown="if(event.key==='Enter')handleLogin()" />
+          </div>
+          <div class="forgot-link">
+            <button onclick="showReset()">Forgot password?</button>
+          </div>
+          <button class="btn" id="loginBtn" onclick="handleLogin()">Sign In</button>
         </div>
-        <button class="btn" id="loginBtn" onclick="handleLogin()">Sign In</button>
+
+        <!-- SIGNUP FORM -->
+        <div id="signupForm" style="display:none">
+          <div class="field">
+            <label>Full name</label>
+            <input type="text" id="signupName" placeholder="e.g. Adaeze Okafor" />
+          </div>
+          <div class="field">
+            <label>Email address</label>
+            <input type="email" id="signupEmail" placeholder="you@example.com" />
+          </div>
+          <div class="field">
+            <label>Phone number</label>
+            <input type="tel" id="signupPhone" placeholder="e.g. 08012345678" />
+          </div>
+          <div class="field">
+            <label>Password</label>
+            <input type="password" id="signupPassword" placeholder="Min. 6 characters" onkeydown="if(event.key==='Enter')handleSignup()" />
+          </div>
+          <button class="btn" id="signupBtn" onclick="handleSignup()">Create Account</button>
+        </div>
       </div>
 
-      <!-- SIGNUP FORM -->
-      <div id="signupForm" style="display:none">
-        <div class="field">
-          <label>Full name</label>
-          <input type="text" id="signupName" placeholder="e.g. Adaeze Okafor" />
+      <!-- RESET PASSWORD PANEL -->
+      <div id="resetPanel">
+        <button class="back-btn" onclick="hideReset()">← Back to sign in</button>
+        <div style="margin-bottom:24px">
+          <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:20px;margin-bottom:8px">Reset Password</div>
+          <div style="font-size:13px;color:var(--muted)">Enter your email and we'll send you a reset link.</div>
         </div>
         <div class="field">
           <label>Email address</label>
-          <input type="email" id="signupEmail" placeholder="you@example.com" />
+          <input type="email" id="resetEmail" placeholder="you@example.com" onkeydown="if(event.key==='Enter')handleReset()" />
         </div>
-        <div class="field">
-          <label>Phone number</label>
-          <input type="tel" id="signupPhone" placeholder="e.g. 08012345678" />
-        </div>
-        <div class="field">
-          <label>Password</label>
-          <input type="password" id="signupPassword" placeholder="Min. 6 characters" />
-        </div>
-        <button class="btn" id="signupBtn" onclick="handleSignup()">Create Account</button>
+        <button class="btn" id="resetBtn" onclick="handleReset()">Send Reset Link</button>
+        <div class="divider"><span>or</span></div>
+        <button class="btn-ghost" onclick="hideReset()">Back to Sign In</button>
       </div>
 
       <div class="home-link"><a href="index.html">← Back to home</a></div>
@@ -99,7 +134,7 @@
 
   <script type="module">
     import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js';
-    import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js';
+    import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js';
     import { getFirestore, doc, setDoc, getDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js';
 
     const firebaseConfig = {
@@ -115,23 +150,22 @@
     const auth = getAuth(app);
     const db = getFirestore(app);
 
-    // Check if already logged in
     onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        await redirectByRole(user);
-      }
+      if (user) await redirectByRole(user);
     });
 
     async function redirectByRole(user) {
-      const snap = await getDoc(doc(db, 'users', user.uid));
-      if (snap.exists()) {
-        const role = snap.data().role;
-        if (role === 'admin') window.location.href = 'admin-portal.html';
-        else if (role === 'rider') window.location.href = 'rider-dashboard.html';
-        else window.location.href = 'user-dashboard.html';
-      } else {
-        window.location.href = 'user-dashboard.html';
-      }
+      try {
+        const snap = await getDoc(doc(db, 'users', user.uid));
+        if (snap.exists()) {
+          const role = snap.data().role;
+          if (role === 'admin') window.location.href = 'admin-orders.html';
+          else if (role === 'rider') window.location.href = 'rider-dashboard.html';
+          else window.location.href = 'user-dashboard.html';
+        } else {
+          window.location.href = 'user-dashboard.html';
+        }
+      } catch(e) { window.location.href = 'user-dashboard.html'; }
     }
 
     function showError(msg) {
@@ -139,11 +173,14 @@
       el.textContent = msg; el.style.display = 'block';
       document.getElementById('successMsg').style.display = 'none';
     }
-
     function showSuccess(msg) {
       const el = document.getElementById('successMsg');
       el.textContent = msg; el.style.display = 'block';
       document.getElementById('errorMsg').style.display = 'none';
+    }
+    function clearMsgs() {
+      document.getElementById('errorMsg').style.display = 'none';
+      document.getElementById('successMsg').style.display = 'none';
     }
 
     window.handleLogin = async function() {
@@ -155,8 +192,13 @@
       try {
         const cred = await signInWithEmailAndPassword(auth, email, password);
         await redirectByRole(cred.user);
-      } catch (e) {
-        showError(e.code === 'auth/invalid-credential' ? 'Invalid email or password.' : e.message);
+      } catch(e) {
+        const msg = e.code === 'auth/invalid-credential' || e.code === 'auth/wrong-password' || e.code === 'auth/user-not-found'
+          ? 'Incorrect email or password. Try again or use Forgot Password.'
+          : e.code === 'auth/too-many-requests'
+          ? 'Too many attempts. Please wait a moment or reset your password.'
+          : e.message;
+        showError(msg);
         btn.disabled = false; btn.textContent = 'Sign In';
       }
     };
@@ -172,23 +214,51 @@
       btn.disabled = true; btn.textContent = 'Creating account…';
       try {
         const cred = await createUserWithEmailAndPassword(auth, email, password);
-        await setDoc(doc(db, 'users', cred.user.uid), {
-          name, email, phone, role: 'user', createdAt: serverTimestamp()
-        });
+        await setDoc(doc(db, 'users', cred.user.uid), { name, email, phone, role: 'user', createdAt: serverTimestamp() });
         showSuccess('Account created! Redirecting…');
         setTimeout(() => window.location.href = 'user-dashboard.html', 1200);
-      } catch (e) {
-        showError(e.code === 'auth/email-already-in-use' ? 'This email is already registered.' : e.message);
+      } catch(e) {
+        const msg = e.code === 'auth/email-already-in-use' ? 'This email is already registered. Try signing in instead.' : e.message;
+        showError(msg);
         btn.disabled = false; btn.textContent = 'Create Account';
+      }
+    };
+
+    window.handleReset = async function() {
+      const email = document.getElementById('resetEmail').value.trim();
+      if (!email) { showError('Please enter your email address.'); return; }
+      const btn = document.getElementById('resetBtn');
+      btn.disabled = true; btn.textContent = 'Sending…';
+      try {
+        await sendPasswordResetEmail(auth, email);
+        showSuccess('✅ Reset link sent! Check your inbox (and spam folder) for ' + email);
+        btn.disabled = false; btn.textContent = 'Send Reset Link';
+      } catch(e) {
+        const msg = e.code === 'auth/user-not-found' ? 'No account found with that email.' : e.message;
+        showError(msg);
+        btn.disabled = false; btn.textContent = 'Send Reset Link';
       }
     };
 
     window.switchTab = function(tab) {
       document.getElementById('loginForm').style.display = tab === 'login' ? 'block' : 'none';
       document.getElementById('signupForm').style.display = tab === 'signup' ? 'block' : 'none';
-      document.querySelectorAll('.tab').forEach((t, i) => t.classList.toggle('active', (i === 0 && tab === 'login') || (i === 1 && tab === 'signup')));
-      document.getElementById('errorMsg').style.display = 'none';
-      document.getElementById('successMsg').style.display = 'none';
+      document.querySelectorAll('.tab').forEach((t, i) => t.classList.toggle('active', (i===0&&tab==='login')||(i===1&&tab==='signup')));
+      clearMsgs();
+    };
+
+    window.showReset = function() {
+      document.getElementById('mainPanel').classList.add('hide');
+      document.getElementById('resetPanel').classList.add('show');
+      clearMsgs();
+      const loginEmail = document.getElementById('loginEmail').value.trim();
+      if (loginEmail) document.getElementById('resetEmail').value = loginEmail;
+    };
+
+    window.hideReset = function() {
+      document.getElementById('resetPanel').classList.remove('show');
+      document.getElementById('mainPanel').classList.remove('hide');
+      clearMsgs();
     };
   </script>
 </body>
